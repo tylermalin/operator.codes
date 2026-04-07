@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>operator.codes — Tyler Malin</title>
+<meta name="description" content="Operator.codes is Tyler Malin's thought leadership platform covering AI systems, climate infrastructure, legal engineering, and crypto protocol design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --syne: 'Syne', sans-serif;
+  --mono: 'DM Mono', monospace;
+  --bg: #0b0b0b;
+  --surface: #141414;
+  --surface2: #1a1a1a;
+  --surface3: #222;
+  --border: rgba(255,255,255,0.07);
+  --border-md: rgba(255,255,255,0.13);
+  --border-hi: rgba(255,255,255,0.22);
+  --text: #ede9e3;
+  --muted: #7a7872;
+  --faint: #3d3d3b;
+  --accent: #1D9E75;
+  --accent-lt: #5DCAA5;
+  --accent-dim: rgba(29,158,117,0.09);
+  --accent-border: rgba(29,158,117,0.28);
+  --amber: #EF9F27;
+  --red: #E24B4A;
+  --rad: 12px;
+  --rad-sm: 8px;
+  --nav-h: 56px;
+}
+
+html { background: var(--bg); color: var(--text); font-family: var(--syne); scroll-behavior: smooth; }
+body { min-height: 100vh; }
+
+a { color: inherit; text-decoration: none; }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: rgba(11,11,11,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  padding: 0 2rem;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.nav-link {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s;
+  letter-spacing: 0.02em;
+}
+.nav-link:hover, .nav-link.active { color: var(--text); }
+.nav-link.active { color: var(--accent); }
+.nav-cta {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 0.5px solid var(--accent-border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  margin-left: 1.5rem;
+}
+.nav-cta:hover { background: rgba(29,158,117,0.18); }
+
+.nav-mobile-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px;
+}
+@media (max-width: 680px) {
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .nav-mobile-btn { display: block; }
+  nav { padding: 0 1.25rem; }
+}
+
+/* PAGES */
+.page { display: none; padding-top: var(--nav-h); min-height: 100vh; }
+.page.active { display: block; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.container-narrow { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.6s ease forwards; }
+.fade-up-2 { animation: fadeUp 0.6s 0.12s ease both; }
+.fade-up-3 { animation: fadeUp 0.6s 0.22s ease both; }
+.fade-up-4 { animation: fadeUp 0.6s 0.32s ease both; }
+.fade-up-5 { animation: fadeUp 0.6s 0.42s ease both; }
+
+/* DIVIDER */
+.divider { height: 0.5px; background: var(--border); margin: 0; }
+
+/* SECTION LABEL */
+.sec-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* TAG PILL */
+.tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 0.5px solid var(--border-md);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.tag-accent {
+  background: var(--accent-dim);
+  border-color: var(--accent-border);
+  color: var(--accent-lt);
+}
+
+/* ============================================================
+   HOME PAGE
+   ============================================================ */
+.hero {
+  padding: 6rem 0 5rem;
+  border-bottom: 0.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.4) 70%, transparent 100%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent); }
+
+.hero-title {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--text);
+  margin-bottom: 2rem;
+  position: relative;
+}
+.hero-title em { font-style: normal; color: var(--accent); }
+.hero-title .line2 { color: var(--muted); }
+
+.hero-sub {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 540px;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.btn-primary {
+  font-family: var(--syne);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0b0b0b;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--rad-sm);
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  display: inline-block;
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-ghost {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  background: none;
+  border: 0.5px solid var(--border-md);
+  border-radius: var(--rad-sm);
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  display: inline-block;
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--border-hi); }
+
+/* COMPANIES */
+.companies-section {
+  padding: 5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.companies-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.companies-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad);
+  overflow: hidden;
+}
+@media (max-width: 680px) { .company-grid { grid-template-columns: 1fr; } }
+
+.company-card {
+  background: var(--surface);
+  padding: 2rem 1.75rem;
+  transition: background 0.15s;
+  cursor: default;
+}
+.company-card:hover { background: var(--surface2); }
+.company-tag { margin-bottom: 1.25rem; }
+.company-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  line-height: 1.15;
+}
+.company-domain {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.company-desc {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.company-status {
+  margin-top: 1.25rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 0.05em;
+}
+
+/* ABOUT STRIP */
+.about-strip {
+  padding: 5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 680px) { .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+.about-left-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.about-left-title em { font-style: normal; color: var(--accent); }
+.about-bio {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+.about-creds {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  overflow: hidden;
+}
+.cred-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--border);
+}
+.cred-row:last-child { border-bottom: none; }
+.cred-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--faint);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.cred-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* BUILD SESSIONS PREVIEW */
+.bs-preview {
+  padding: 5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.bs-preview-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+@media (max-width: 680px) { .bs-preview-inner { grid-template-columns: 1fr; gap: 2rem; } }
+
+.bs-preview-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.bs-preview-title em { font-style: normal; color: var(--accent); }
+.bs-preview-desc {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 1.75rem;
+}
+.bs-how-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  overflow: hidden;
+}
+.bs-how-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid var(--border);
+}
+.bs-how-item:last-child { border-bottom: none; }
+.bs-how-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  flex-shrink: 0;
+  min-width: 20px;
+  padding-top: 2px;
+}
+.bs-how-text {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.bs-how-text strong { color: var(--text); font-weight: 500; }
+
+/* NEWSLETTER STRIP */
+.nl-strip {
+  padding: 5rem 0;
+}
+.nl-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+@media (max-width: 680px) { .nl-inner { grid-template-columns: 1fr; gap: 2rem; } }
+.nl-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+.nl-title em { font-style: normal; color: var(--accent); }
+.nl-desc {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.nl-form {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.nl-form input[type="email"] {
+  width: 100%;
+  background: var(--surface);
+  border: 0.5px solid var(--border-md);
+  border-radius: var(--rad-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.nl-form input[type="email"]:focus { border-color: var(--accent); }
+.nl-form input::placeholder { color: var(--faint); }
+.nl-note {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--faint);
+  line-height: 1.5;
+}
+
+/* FOOTER */
+footer {
+  border-top: 0.5px solid var(--border);
+  padding: 2rem;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-brand {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+}
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+.footer-link {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.footer-link:hover { color: var(--text); }
+
+/* ============================================================
+   BUILD SESSIONS PAGE
+   ============================================================ */
+.bs-hero {
+  padding: 5rem 0 4rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.bs-hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bs-hero-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent); }
+
+.bs-hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+.bs-hero-title em { font-style: normal; color: var(--accent); }
+
+.bs-hero-sub {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 560px;
+  margin-bottom: 2.5rem;
+}
+
+.bs-mechanics {
+  padding: 5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.bs-mechanics-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+.mechanics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad);
+  overflow: hidden;
+}
+@media (max-width: 680px) { .mechanics-grid { grid-template-columns: 1fr; } }
+
+.mechanic-card {
+  background: var(--surface);
+  padding: 2rem 1.75rem;
+}
+.mechanic-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+.mechanic-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.mechanic-desc {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.bs-domains {
+  padding: 5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.bs-domains-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+.domains-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 580px) { .domains-grid { grid-template-columns: 1fr; } }
+
+.domain-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad);
+  padding: 1.5rem;
+}
+.domain-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--rad-sm);
+  background: var(--accent-dim);
+  border: 0.5px solid var(--accent-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.domain-icon svg { width: 16px; height: 16px; stroke: var(--accent-lt); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.domain-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+.domain-examples {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.bs-who {
+  padding: 5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.bs-who-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 680px) { .bs-who-grid { grid-template-columns: 1fr; gap: 2rem; } }
+
+.who-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.criteria-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  overflow: hidden;
+}
+.criteria-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 0.5px solid var(--border);
+}
+.criteria-item:last-child { border-bottom: none; }
+.criteria-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; }
+.criteria-text { font-family: var(--mono); font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.6; }
+.criteria-text strong { color: var(--text); font-weight: 500; }
+
+.bs-cta-section {
+  padding: 5rem 0;
+}
+.bs-cta-box {
+  border: 0.5px solid var(--accent-border);
+  border-radius: var(--rad);
+  padding: 3rem 2.5rem;
+  background: var(--accent-dim);
+  text-align: center;
+}
+.bs-cta-box-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+.bs-cta-box-sub {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+/* ============================================================
+   APPLY PAGE
+   ============================================================ */
+.apply-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+.apply-progress-bar {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.apply-seg {
+  height: 2px;
+  width: 32px;
+  background: var(--faint);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.apply-seg.active { background: var(--accent); }
+.apply-seg.done { background: rgba(29,158,117,0.35); }
+
+.apply-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.apply-brand {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.apply-brand span { color: var(--accent); }
+
+.apply-step { display: none; }
+.apply-step.visible { display: block; }
+
+.step-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.step-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--accent); }
+
+.step-h1 {
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+.step-h1 em { font-style: normal; color: var(--accent); }
+
+.step-sub {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 2.5rem;
+}
+
+.field-group { margin-bottom: 1.5rem; }
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.field-hint {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.field-error {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  margin-top: 5px;
+  display: none;
+}
+.field-group.has-error input,
+.field-group.has-error textarea,
+.field-group.has-error select { border-color: var(--red) !important; }
+.field-group.has-error .field-error { display: block; }
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+textarea,
+select {
+  width: 100%;
+  background: var(--surface);
+  border: 0.5px solid var(--border-md);
+  border-radius: var(--rad-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,158,117,0.1); }
+input::placeholder, textarea::placeholder { color: var(--faint); }
+textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+.radio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (max-width: 480px) { .radio-grid { grid-template-columns: 1fr; } }
+
+.radio-card {
+  border: 0.5px solid var(--border-md);
+  border-radius: var(--rad-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--surface);
+}
+.radio-card:hover { border-color: var(--accent-border); background: var(--accent-dim); }
+.radio-card input[type="radio"] { display: none; }
+.radio-card.selected { border-color: var(--accent); background: var(--accent-dim); }
+.radio-card-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; letter-spacing: -0.01em; pointer-events: none; }
+.radio-card-sub { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 300; line-height: 1.4; pointer-events: none; }
+
+.checkbox-list { display: flex; flex-direction: column; gap: 8px; }
+.checkbox-item { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.checkbox-item input[type="checkbox"] { width: 16px; height: 16px; min-width: 16px; margin-top: 1px; accent-color: var(--accent); cursor: pointer; }
+.checkbox-item-label { font-family: var(--mono); font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.5; cursor: pointer; }
+
+.char-count { font-family: var(--mono); font-size: 10px; color: var(--faint); text-align: right; margin-top: 4px; }
+.char-count.warn { color: var(--amber); }
+.char-count.over { color: var(--red); }
+
+.btn-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 2.5rem; }
+.step-counter { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+
+.consent-block {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  padding: 1.25rem 1.5rem;
+}
+.consent-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.consent-text { font-family: var(--mono); font-size: 11px; font-weight: 300; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+
+.review-block {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.review-section-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 16px;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--surface2);
+}
+.review-row { display: flex; padding: 10px 16px; border-bottom: 0.5px solid var(--border); gap: 16px; }
+.review-row:last-child { border-bottom: none; }
+.review-key { font-family: var(--mono); font-size: 11px; color: var(--faint); min-width: 140px; flex-shrink: 0; padding-top: 1px; }
+.review-val { font-family: var(--mono); font-size: 12px; color: var(--text); font-weight: 300; line-height: 1.55; word-break: break-word; }
+
+.submitting-overlay { display: none; text-align: center; padding: 3rem 0; }
+.submitting-overlay.visible { display: block; }
+.spin { width: 32px; height: 32px; border: 2px solid var(--border-md); border-top-color: var(--accent); border-radius: 50%; margin: 0 auto 1rem; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.submitting-text { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+.success-screen { display: none; text-align: center; padding: 3rem 0; }
+.success-screen.visible { display: block; }
+.success-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-dim); border: 0.5px solid var(--accent-border); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+.success-icon svg { width: 24px; height: 24px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.success-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.75rem; }
+.success-sub { font-family: var(--mono); font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.65; max-width: 440px; margin: 0 auto 2rem; }
+.success-links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.success-link { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; border: 0.5px solid var(--border-md); border-radius: var(--rad-sm); padding: 8px 16px; cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+.success-link:hover { color: var(--text); border-color: var(--border-hi); }
+
+/* ============================================================
+   ABOUT PAGE
+   ============================================================ */
+.about-hero {
+  padding: 5rem 0 4rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.about-hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.about-hero-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent); }
+
+.about-hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.about-hero-title em { font-style: normal; color: var(--accent); }
+
+.about-body {
+  padding: 5rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.about-body-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 680px) { .about-body-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+.about-body-text {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.85;
+}
+.about-body-text p { margin-bottom: 1.25rem; }
+.about-body-text p:last-child { margin-bottom: 0; }
+.about-body-text a { color: var(--accent-lt); text-decoration: underline; text-underline-offset: 3px; }
+
+.about-sidebar-section { margin-bottom: 2rem; }
+.about-sidebar-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 0.75rem;
+}
+.about-sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  border-radius: var(--rad-sm);
+  overflow: hidden;
+}
+.about-sidebar-item {
+  padding: 9px 12px;
+  border-bottom: 0.5px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.about-sidebar-item:last-child { border-bottom: none; }
+.about-sidebar-item strong { color: var(--text); font-weight: 500; display: block; }
+
+.nl-section {
+  padding: 5rem 0;
+}
+.nl-section-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+.nl-section-title em { font-style: normal; color: var(--accent); }
+.nl-section-sub {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+.nl-form-row {
+  display: flex;
+  gap: 10px;
+  max-width: 480px;
+}
+.nl-form-row input[type="email"] {
+  flex: 1;
+  background: var(--surface);
+  border: 0.5px solid var(--border-md);
+  border-radius: var(--rad-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 300;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.nl-form-row input[type="email"]:focus { border-color: var(--accent); }
+.nl-form-row input::placeholder { color: var(--faint); }
+.nl-success-msg {
+  display: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  margin-top: 12px;
+}
+.nl-success-msg.visible { display: block; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="navigate('home')">
+      <span class="nav-logo-dot"></span>
+      operator.codes
+    </div>
+    <div class="nav-links">
+      <span class="nav-link" id="nav-home" onclick="navigate('home')">home</span>
+      <span class="nav-link" id="nav-sessions" onclick="navigate('sessions')">build sessions</span>
+      <span class="nav-link" id="nav-about" onclick="navigate('about')">about</span>
+    </div>
+    <span class="nav-cta" onclick="navigate('apply')">apply →</span>
+    <button class="nav-mobile-btn" onclick="toggleMobileMenu()" aria-label="menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" style="display:none;position:fixed;top:56px;left:0;right:0;background:rgba(11,11,11,0.97);border-bottom:0.5px solid var(--border);z-index:99;padding:1.5rem 2rem;flex-direction:column;gap:1.25rem;">
+  <span style="font-family:var(--mono);font-size:13px;color:var(--muted);cursor:pointer;" onclick="navigate('home');toggleMobileMenu()">home</span>
+  <span style="font-family:var(--mono);font-size:13px;color:var(--muted);cursor:pointer;" onclick="navigate('sessions');toggleMobileMenu()">build sessions</span>
+  <span style="font-family:var(--mono);font-size:13px;color:var(--muted);cursor:pointer;" onclick="navigate('about');toggleMobileMenu()">about</span>
+  <span style="font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);cursor:pointer;" onclick="navigate('apply');toggleMobileMenu()">apply →</span>
+</div>
+
+<!-- ============================================================
+     HOME PAGE
+     ============================================================ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="container">
+      <div class="hero-eyebrow fade-up">operator.codes</div>
+      <h1 class="hero-title fade-up-2">Build<br><em>real</em><br><span class="line2">systems.</span></h1>
+      <p class="hero-sub fade-up-3">Tyler Malin's platform for AI infrastructure, climate systems, legal engineering, and protocol design. Thought leadership for operators who build things that matter.</p>
+      <div class="hero-actions fade-up-4">
+        <button class="btn-primary" onclick="navigate('sessions')">Build Sessions →</button>
+        <button class="btn-ghost" onclick="navigate('about')">About Tyler</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="companies-section">
+    <div class="container">
+      <div class="companies-header">
+        <div class="companies-title">Companies</div>
+        <div class="sec-label">active portfolio</div>
+      </div>
+      <div class="company-grid">
+        <div class="company-card">
+          <div class="company-tag"><span class="tag tag-accent">dMRV · climate</span></div>
+          <div class="company-name">Malama Labs</div>
+          <div class="company-domain">malamaproject.org</div>
+          <div class="company-desc">Continuous, automated MRV for high-integrity carbon assets. Replacing episodic manual verification with real-time, sensor-driven permanence monitoring.</div>
+          <div class="company-status">seed stage · CEO & co-founder</div>
+        </div>
+        <div class="company-card">
+          <div class="company-tag"><span class="tag tag-accent">AI · legal · entity design</span></div>
+          <div class="company-name">AgentCorp</div>
+          <div class="company-domain">agentcorp.xyz</div>
+          <div class="company-desc">Delaware Series LLC protocol for AI agents. Legal infrastructure for autonomous systems, enabling agents to hold assets, enter contracts, and operate within defined legal boundaries.</div>
+          <div class="company-status">live · creator</div>
+        </div>
+        <div class="company-card">
+          <div class="company-tag"><span class="tag tag-accent">legal · regulatory</span></div>
+          <div class="company-name">Beneficial Technology</div>
+          <div class="company-domain">legal engineering consultancy</div>
+          <div class="company-desc">Legal engineering at the intersection of emerging technology, securities law, and regulatory frameworks. CFTC, token structure, protocol governance.</div>
+          <div class="company-status">active · principal</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="bs-preview">
+    <div class="container">
+      <div class="bs-preview-inner">
+        <div>
+          <div class="sec-label" style="margin-bottom:1.25rem;">format</div>
+          <div class="bs-preview-title">Build<br><em>Sessions</em></div>
+          <p class="bs-preview-desc">A recorded format where founders and builders work with Tyler live to architect real systems. No budget required. You leave with something built. The session becomes public content.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-primary" onclick="navigate('sessions')">Learn more →</button>
+            <button class="btn-ghost" onclick="navigate('apply')">Apply now</button>
+          </div>
+        </div>
+        <div class="bs-how-list">
+          <div class="bs-how-item">
+            <div class="bs-how-num">01</div>
+            <div class="bs-how-text"><strong>You apply with a real problem.</strong> Not an idea. A specific system that needs to exist.</div>
+          </div>
+          <div class="bs-how-item">
+            <div class="bs-how-num">02</div>
+            <div class="bs-how-text"><strong>We build it live together.</strong> Recorded. Real decisions, real tradeoffs, visible reasoning throughout.</div>
+          </div>
+          <div class="bs-how-item">
+            <div class="bs-how-num">03</div>
+            <div class="bs-how-text"><strong>You leave with a working system.</strong> Code, deployed prototype, or structured framework. Not a slide deck.</div>
+          </div>
+          <div class="bs-how-item">
+            <div class="bs-how-num">04</div>
+            <div class="bs-how-text"><strong>The session publishes.</strong> Distributed across operator.codes, YouTube, and X. That's the exchange.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="about-strip">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <div class="about-left-title">Tyler<br><em>Malin</em></div>
+          <p class="about-bio">Twenty-plus years across startups and Fortune 500. Prior exit to Maker Studios (Inc. 500 #95). Co-founded ReSeed Carbon Assets ($4.6M raised). CFTC regulatory fellowship, Enron enforcement. Litigation at Cravath Swaine & Moore. JD, Fordham Law.</p>
+          <p class="about-bio">Now building at the intersection of AI, climate infrastructure, and legal engineering. Operator.codes is the platform for everything that doesn't fit inside a company.</p>
+          <button class="btn-ghost" onclick="navigate('about')">Full background →</button>
+        </div>
+        <div class="about-creds">
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">CEO & Co-Founder, Malama Labs (dMRV, seed stage)</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">Creator, AgentCorp — Delaware Series LLC protocol for AI agents</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">Principal, Beneficial Technology (legal engineering)</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">CFTC regulatory fellowship — Enron enforcement</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">Litigation, Cravath Swaine & Moore</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">Inc. 500 #95 exit (Idea Farmer → Maker Studios)</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">Co-founded ReSeed Carbon Assets ($4.6M raised)</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">JD, Fordham Law School</div></div>
+          <div class="cred-row"><div class="cred-dot"></div><div class="cred-text">Based in Los Angeles, CA</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="nl-strip">
+    <div class="container">
+      <div class="nl-inner">
+        <div>
+          <div class="nl-title">The<br><em>Operator</em><br>newsletter</div>
+        </div>
+        <div>
+          <p class="nl-desc" style="margin-bottom:1.5rem;">Practical analysis on AI systems, climate infrastructure, legal engineering, and protocol design. Written for builders and operators who need signal, not noise.</p>
+          <div class="nl-form">
+            <input type="email" id="nl-email-home" placeholder="your@email.com">
+            <button class="btn-primary" onclick="subscribeNl('nl-email-home','nl-msg-home')" style="align-self:flex-start;">Subscribe →</button>
+            <div class="nl-note">No cadence promises. Published when there's something worth saying.</div>
+            <div class="nl-success-msg" id="nl-msg-home">You're in. Watch your inbox.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">© 2025 operator.codes · Tyler Malin</div>
+      <div class="footer-links">
+        <span class="footer-link" onclick="navigate('sessions')">build sessions</span>
+        <span class="footer-link" onclick="navigate('apply')">apply</span>
+        <span class="footer-link" onclick="navigate('about')">about</span>
+        <a class="footer-link" href="https://agentcorp.xyz" target="_blank">agentcorp.xyz</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     BUILD SESSIONS PAGE
+     ============================================================ -->
+<div id="page-sessions" class="page">
+  <section class="bs-hero">
+    <div class="container-narrow">
+      <div class="bs-hero-eyebrow">operator.codes / build sessions</div>
+      <h1 class="bs-hero-title">Real problems.<br><em>Live systems.</em><br>No budget required.</h1>
+      <p class="bs-hero-sub">A recorded session format where builders, founders, and creators work with Tyler Malin to architect and ship real systems live. AI infrastructure, agent design, legal structure, climate MRV, token mechanics. If you have a real problem, we build the solution on record.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="navigate('apply')">Apply for a session →</button>
+        <button class="btn-ghost" onclick="document.getElementById('bs-domains-anchor').scrollIntoView({behavior:'smooth'})">See domains</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bs-mechanics">
+    <div class="container-narrow">
+      <div class="bs-mechanics-title">How it works</div>
+      <div class="mechanics-grid">
+        <div class="mechanic-card">
+          <div class="mechanic-num">step 01</div>
+          <div class="mechanic-title">Apply with a real problem</div>
+          <div class="mechanic-desc">A system you need built, a structure you need designed, a workflow that doesn't exist. Not an idea. Applications are screened for specificity and fit.</div>
+        </div>
+        <div class="mechanic-card">
+          <div class="mechanic-num">step 02</div>
+          <div class="mechanic-title">Build it live together</div>
+          <div class="mechanic-desc">Recorded session. Real decisions made in real time. Architecture, tradeoffs, and reasoning visible throughout. No script, no polish.</div>
+        </div>
+        <div class="mechanic-card">
+          <div class="mechanic-num">step 03</div>
+          <div class="mechanic-title">Leave with a working system</div>
+          <div class="mechanic-desc">Code, deployed prototype, or structured framework. Not a slide deck. The session publishes publicly. You retain your IP. The build becomes shared record.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="bs-domains" id="bs-domains-anchor">
+    <div class="container-narrow">
+      <div class="bs-domains-title">Domains</div>
+      <div class="domains-grid">
+        <div class="domain-card">
+          <div class="domain-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="domain-name">AI systems & agent design</div>
+          <div class="domain-examples">Agentic workflows, MCP integrations, eval pipelines, AI-assisted operations, AgentCorp entity structures, LLM orchestration</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div class="domain-name">Climate & carbon infrastructure</div>
+          <div class="domain-examples">dMRV pipeline design, registry strategy, permanence modeling, continuous verification, carbon asset structuring</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="domain-name">Legal & entity engineering</div>
+          <div class="domain-examples">Series LLC design, token structure, SAFE/SAFT mechanics, regulatory positioning, protocol governance, securities analysis</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="domain-name">Crypto & protocol infrastructure</div>
+          <div class="domain-examples">On/off-chain architecture, incentive design, token mechanics, coordination systems, capital formation, settlement</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-icon">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="domain-name">Physical infrastructure systems</div>
+          <div class="domain-examples">Capex/opex modeling, deployment architecture, reliability engineering, operational data pipelines, sensor integration</div>
+        </div>
+        <div class="domain-card" style="border-style:dashed;opacity:0.6;">
+          <div class="domain-icon">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <div class="domain-name">Cross-domain / other</div>
+          <div class="domain-examples">Problems that span multiple categories or don't fit neatly above. If the problem is real and complex, apply and describe it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="bs-who">
+    <div class="container-narrow">
+      <div class="bs-who-grid">
+        <div>
+          <div class="who-title">Who gets selected</div>
+          <div class="criteria-list">
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text"><strong>Real, specific problem.</strong> Not a concept. Constraints already defined: timeline, regulatory, technical, budget. Bonus: you've already tried things and can say what failed.</div></div>
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text"><strong>Domain fit.</strong> The problem sits in AI, climate, legal infrastructure, crypto, or physical systems — where the session creates genuine signal value, not just entertainment.</div></div>
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text"><strong>Skin in the game.</strong> Builder, founder, or creator. The session should matter beyond the content. We're building something you actually need.</div></div>
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text"><strong>Consent to publish.</strong> The session is public record. You get the system. The build becomes shared knowledge. That's the exchange.</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="who-title">What you walk away with</div>
+          <div class="criteria-list">
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text">Working code, deployed prototype, or structured system design — not slides or concepts</div></div>
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text">Full session recording to reference, share, and build from</div></div>
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text">Public documentation of your problem and solution approach</div></div>
+            <div class="criteria-item"><div class="criteria-dot"></div><div class="criteria-text">Visibility with the operator.codes audience across all distribution channels</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bs-cta-section">
+    <div class="container-narrow">
+      <div class="bs-cta-box">
+        <div class="bs-cta-box-title">Apply for a Build Session</div>
+        <div class="bs-cta-box-sub">Free. Recorded. You leave with something real. Tyler reviews every application personally.</div>
+        <button class="btn-primary" onclick="navigate('apply')">Start your application →</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">© 2025 operator.codes · Tyler Malin</div>
+      <div class="footer-links">
+        <span class="footer-link" onclick="navigate('home')">home</span>
+        <span class="footer-link" onclick="navigate('apply')">apply</span>
+        <span class="footer-link" onclick="navigate('about')">about</span>
+        <a class="footer-link" href="https://agentcorp.xyz" target="_blank">agentcorp.xyz</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================================
+     APPLY PAGE
+     ============================================================ -->
+<div id="page-apply" class="page">
+  <div class="apply-wrap">
+    <div class="apply-top">
+      <div class="apply-brand"><span>operator.codes</span> / apply</div>
+      <div class="apply-progress-bar">
+        <div class="apply-seg" id="seg-1"></div>
+        <div class="apply-seg" id="seg-2"></div>
+        <div class="apply-seg" id="seg-3"></div>
+        <div class="apply-seg" id="seg-4"></div>
+        <div class="apply-seg" id="seg-5"></div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="apply-step-1" class="apply-step visible">
+      <div class="step-eyebrow">step 1 of 5 — who you are</div>
+      <h1 class="step-h1">Let's start<br>with <em>you.</em></h1>
+      <p class="step-sub">Basic identity and context. We read every application ourselves, so don't over-polish this.</p>
+
+      <div class="field-group" id="fg-name">
+        <label class="field-label" for="name">Your name</label>
+        <input type="text" id="name" placeholder="First and last" autocomplete="name">
+        <div class="field-error">Required.</div>
+      </div>
+      <div class="field-group" id="fg-email">
+        <label class="field-label" for="email">Email</label>
+        <input type="email" id="email" placeholder="you@domain.com" autocomplete="email">
+        <div class="field-error">Valid email required.</div>
+      </div>
+      <div class="field-group" id="fg-role">
+        <label class="field-label" for="role">How would you describe yourself?</label>
+        <div class="field-hint">Title, role, or just the honest description.</div>
+        <input type="text" id="role" placeholder="e.g. Solo founder building a climate data startup">
+        <div class="field-error">Required.</div>
+      </div>
+      <div class="field-group" id="fg-url">
+        <label class="field-label" for="url">URL (optional)</label>
+        <div class="field-hint">Personal site, LinkedIn, GitHub, project link — whatever is most relevant.</div>
+        <input type="url" id="url" placeholder="https://...">
+      </div>
+      <div class="field-group" id="fg-referred">
+        <label class="field-label" for="referred">How did you hear about Build Sessions?</label>
+        <input type="text" id="referred" placeholder="e.g. operator.codes newsletter, X/Twitter, a friend">
+        <div class="field-error">Required.</div>
+      </div>
+
+      <div class="btn-row">
+        <span class="step-counter">1 / 5</span>
+        <button class="btn-primary" onclick="applyGoTo(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="apply-step-2" class="apply-step">
+      <div class="step-eyebrow">step 2 of 5 — the problem</div>
+      <h1 class="step-h1">What are<br>we <em>building?</em></h1>
+      <p class="step-sub">The most important section. Be specific. Vague problems get deprioritized. Real constraints are welcome.</p>
+
+      <div class="field-group" id="fg-domain">
+        <label class="field-label">Which domain best fits your problem?</label>
+        <div class="radio-grid">
+          <label class="radio-card" onclick="selectRadio(this,'domain','ai')"><input type="radio" name="domain" value="ai"><div class="radio-card-label">AI systems & agents</div><div class="radio-card-sub">Agentic workflows, MCP, eval pipelines, AI ops, AgentCorp structures</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'domain','climate')"><input type="radio" name="domain" value="climate"><div class="radio-card-label">Climate & carbon</div><div class="radio-card-sub">dMRV pipelines, registry strategy, permanence, continuous verification</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'domain','legal')"><input type="radio" name="domain" value="legal"><div class="radio-card-label">Legal & entity engineering</div><div class="radio-card-sub">Series LLC, token structure, SAFE/SAFT, protocol governance</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'domain','crypto')"><input type="radio" name="domain" value="crypto"><div class="radio-card-label">Crypto & protocol infra</div><div class="radio-card-sub">On/off-chain architecture, incentive design, token mechanics</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'domain','infra')"><input type="radio" name="domain" value="infra"><div class="radio-card-label">Physical infrastructure</div><div class="radio-card-sub">Capex/opex modeling, deployment constraints, reliability systems</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'domain','other')"><input type="radio" name="domain" value="other"><div class="radio-card-label">Other / cross-domain</div><div class="radio-card-sub">Intersects multiple areas or doesn't fit neatly above</div></label>
+        </div>
+        <div class="field-error" id="domain-error" style="display:none;">Please select a domain.</div>
+      </div>
+
+      <div class="field-group" id="fg-problem">
+        <label class="field-label" for="problem">Describe the problem in one paragraph</label>
+        <div class="field-hint">What doesn't exist yet? What breaks without it? What have you already tried?</div>
+        <textarea id="problem" rows="5" maxlength="800" placeholder="We're trying to build a system that... The blocker is... We've attempted..." oninput="updateChar('problem',800)"></textarea>
+        <div class="char-count" id="problem-count">0 / 800</div>
+        <div class="field-error">Required. Please describe your problem.</div>
+      </div>
+
+      <div class="field-group" id="fg-outcome">
+        <label class="field-label" for="outcome">What does success look like at the end of the session?</label>
+        <div class="field-hint">Be concrete. "A working prototype of X" or "A structured entity design for Y" beats "clarity on my direction."</div>
+        <textarea id="outcome" rows="3" maxlength="400" placeholder="At the end of the session, I would have..." oninput="updateChar('outcome',400)"></textarea>
+        <div class="char-count" id="outcome-count">0 / 400</div>
+        <div class="field-error">Required.</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="applyGoTo(1)">← Back</button>
+        <button class="btn-primary" onclick="applyGoTo(3)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="apply-step-3" class="apply-step">
+      <div class="step-eyebrow">step 3 of 5 — constraints</div>
+      <h1 class="step-h1">What are<br>the <em>constraints?</em></h1>
+      <p class="step-sub">Real constraints make sessions better. Don't hide them.</p>
+
+      <div class="field-group" id="fg-stage">
+        <label class="field-label">Where is this project right now?</label>
+        <div class="radio-grid">
+          <label class="radio-card" onclick="selectRadio(this,'stage','idea')"><input type="radio" name="stage" value="idea"><div class="radio-card-label">Idea / pre-build</div><div class="radio-card-sub">Defined problem, nothing built yet</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'stage','prototype')"><input type="radio" name="stage" value="prototype"><div class="radio-card-label">Early prototype</div><div class="radio-card-sub">Something exists, needs real architecture</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'stage','live')"><input type="radio" name="stage" value="live"><div class="radio-card-label">Live / in production</div><div class="radio-card-sub">System exists, specific problem to solve</div></label>
+          <label class="radio-card" onclick="selectRadio(this,'stage','stalled')"><input type="radio" name="stage" value="stalled"><div class="radio-card-label">Stalled / blocked</div><div class="radio-card-sub">Was moving, now stuck on something specific</div></label>
+        </div>
+        <div class="field-error" id="stage-error" style="display:none;">Please select a stage.</div>
+      </div>
+
+      <div class="field-group" id="fg-constraints">
+        <label class="field-label" for="constraints">What are the binding constraints?</label>
+        <div class="field-hint">Timeline, regulatory environment, technical stack requirements, team size, budget ceiling.</div>
+        <textarea id="constraints" rows="3" maxlength="500" placeholder="e.g. Must be production-ready in 6 weeks. Stack is Python/Next.js. No budget for paid APIs beyond $50/mo..." oninput="updateChar('constraints',500)"></textarea>
+        <div class="char-count" id="constraints-count">0 / 500</div>
+        <div class="field-error">Required.</div>
+      </div>
+
+      <div class="field-group" id="fg-tried">
+        <label class="field-label" for="tried">What have you already tried or ruled out?</label>
+        <div class="field-hint">Tools, approaches, vendors, architectures. This prevents retreading ground you've already covered.</div>
+        <textarea id="tried" rows="3" maxlength="500" placeholder="e.g. Tried Zapier but can't handle the branching logic. Looked at X protocol but it's too slow..." oninput="updateChar('tried',500)"></textarea>
+        <div class="char-count" id="tried-count">0 / 500</div>
+        <div class="field-error">Required.</div>
+      </div>
+
+      <div class="field-group" id="fg-tech">
+        <label class="field-label" for="tech">Technical stack / tools in use (if applicable)</label>
+        <div class="field-hint">Languages, frameworks, APIs, blockchains, data sources, AI models.</div>
+        <input type="text" id="tech" placeholder="e.g. Python, Next.js, Solidity, OpenAI API, Postgres, Vercel">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="applyGoTo(2)">← Back</button>
+        <button class="btn-primary" onclick="applyGoTo(4)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="apply-step-4" class="apply-step">
+      <div class="step-eyebrow">step 4 of 5 — stakes & fit</div>
+      <h1 class="step-h1">Why does<br>this <em>matter?</em></h1>
+      <p class="step-sub">Sessions are selected based on impact potential and format fit.</p>
+
+      <div class="field-group" id="fg-stakes">
+        <label class="field-label" for="stakes">What's at stake if this doesn't get built?</label>
+        <div class="field-hint">Personal, professional, financial, mission-driven. Be honest about why this matters to you.</div>
+        <textarea id="stakes" rows="3" maxlength="400" placeholder="If we can't solve this, then..." oninput="updateChar('stakes',400)"></textarea>
+        <div class="char-count" id="stakes-count">0 / 400</div>
+        <div class="field-error">Required.</div>
+      </div>
+
+      <div class="field-group" id="fg-audience">
+        <label class="field-label" for="audience">Who would benefit from watching this session?</label>
+        <div class="field-hint">The best sessions solve one person's problem publicly so a hundred people can learn from it.</div>
+        <textarea id="audience" rows="3" maxlength="400" placeholder="e.g. Solo founders trying to structure AI agent companies, climate startups trying to build dMRV pipelines..." oninput="updateChar('audience',400)"></textarea>
+        <div class="char-count" id="audience-count">0 / 400</div>
+        <div class="field-error">Required.</div>
+      </div>
+
+      <div class="field-group" id="fg-anything">
+        <label class="field-label" for="anything">Anything else we should know? (optional)</label>
+        <div class="field-hint">Edge cases, sensitivities, prior work, relevant context that didn't fit above.</div>
+        <textarea id="anything" rows="3" maxlength="400" placeholder="Optional..." oninput="updateChar('anything',400)"></textarea>
+        <div class="char-count" id="anything-count">0 / 400</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Skills you're bringing to the session</label>
+        <div class="field-hint">Check all that apply.</div>
+        <div class="checkbox-list">
+          <label class="checkbox-item"><input type="checkbox" name="skills" value="coding"> <span class="checkbox-item-label">I can write code and will be able to implement what we build</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="skills" value="domain"> <span class="checkbox-item-label">Deep domain expertise in the problem area</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="skills" value="legal"> <span class="checkbox-item-label">Some legal / regulatory background relevant to this</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="skills" value="ops"> <span class="checkbox-item-label">Operator background — have deployed and run real systems</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="skills" value="none"> <span class="checkbox-item-label">Primarily non-technical — need the system explained as well as built</span></label>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="applyGoTo(3)">← Back</button>
+        <button class="btn-primary" onclick="applyGoTo(5)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div id="apply-step-5" class="apply-step">
+      <div class="step-eyebrow">step 5 of 5 — review & consent</div>
+      <h1 class="step-h1">Almost<br><em>there.</em></h1>
+      <p class="step-sub">Review your application, confirm the terms, and submit. Tyler reads every application personally.</p>
+
+      <div class="review-block" id="review-output"></div>
+
+      <div class="consent-block">
+        <div class="consent-title">Publication consent</div>
+        <div class="consent-text">Build Sessions are recorded and published publicly. By submitting, you confirm consent to the session being published on operator.codes, YouTube, and associated distribution channels. The recording, transcript, and artifacts produced during the session may be shared. You retain ownership of your own IP. The session itself is public content.</div>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" id="consent-check">
+            <span class="checkbox-item-label">I understand and consent to the session being published.</span>
+          </label>
+        </div>
+        <div class="field-error" id="consent-error" style="display:none;margin-top:6px;">Consent required to submit.</div>
+      </div>
+
+      <div class="btn-row" style="margin-top:2rem;">
+        <button class="btn-ghost" onclick="applyGoTo(4)">← Back</button>
+        <button class="btn-primary" id="submit-btn" onclick="submitForm()">Submit application →</button>
+      </div>
+    </div>
+
+    <!-- SUBMITTING -->
+    <div class="submitting-overlay" id="submitting">
+      <div class="spin"></div>
+      <div class="submitting-text">Sending your application...</div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success">
+      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h1 class="success-title">Application sent.</h1>
+      <p class="success-sub">Tyler reviews applications personally and responds within a few business days. If selected, you'll receive a scheduling link and a short prep brief. Keep building in the meantime.</p>
+      <div class="success-links">
+        <span class="success-link" onclick="navigate('sessions')">Build Sessions</span>
+        <span class="success-link" onclick="navigate('home')">operator.codes</span>
+        <a class="success-link" href="https://agentcorp.xyz" target="_blank">agentcorp.xyz</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ABOUT PAGE
+     ============================================================ -->
+<div id="page-about" class="page">
+  <section class="about-hero">
+    <div class="container-narrow">
+      <div class="about-hero-eyebrow">operator.codes / about</div>
+      <h1 class="about-hero-title">Tyler<br><em>Malin</em></h1>
+    </div>
+  </section>
+
+  <section class="about-body">
+    <div class="container-narrow">
+      <div class="about-body-grid">
+        <div class="about-body-text">
+          <p>Twenty-plus years building at the intersection of technology, law, and markets. The thread connecting all of it: systems that people said couldn't work, and figuring out how to make them work anyway.</p>
+          <p>Currently CEO and co-founder of <a href="https://malamaproject.org" target="_blank">Malama Labs</a>, a seed-stage dMRV platform replacing manual, episodic carbon verification with continuous, sensor-driven monitoring. The core thesis is that high-integrity carbon markets are a data infrastructure problem, not a standards problem.</p>
+          <p>Creator of <a href="https://agentcorp.xyz" target="_blank">AgentCorp</a> — a Delaware Series LLC protocol designed specifically for AI agents. As autonomous systems begin to hold assets, enter contracts, and generate revenue, they need legal infrastructure that matches their operating reality. AgentCorp is that infrastructure.</p>
+          <p>Principal at Beneficial Technology, a legal engineering consultancy operating at the intersection of emerging technology, securities law, and regulatory frameworks. Background includes a CFTC regulatory fellowship (Enron enforcement) and litigation at Cravath Swaine & Moore.</p>
+          <p>Prior exit: Idea Farmer (Inc. 500 #95, acquired by Maker Studios). Co-founded ReSeed Carbon Assets ($4.6M raised). JD, Fordham Law School.</p>
+          <p>Operator.codes is the platform for everything that doesn't fit neatly inside any one company: analysis, frameworks, and experiments in AI systems, climate infrastructure, legal engineering, and protocol design. The Operator newsletter publishes when there's something worth saying.</p>
+          <p>Based in Los Angeles.</p>
+        </div>
+        <div>
+          <div class="about-sidebar-section">
+            <div class="about-sidebar-label">Current</div>
+            <div class="about-sidebar-list">
+              <div class="about-sidebar-item"><strong>Malama Labs</strong>dMRV platform, seed stage. CEO & co-founder.</div>
+              <div class="about-sidebar-item"><strong>AgentCorp</strong>Delaware Series LLC protocol for AI agents. Creator.</div>
+              <div class="about-sidebar-item"><strong>Beneficial Technology</strong>Legal engineering consultancy. Principal.</div>
+              <div class="about-sidebar-item"><strong>operator.codes</strong>Thought leadership platform. Creator.</div>
+            </div>
+          </div>
+          <div class="about-sidebar-section">
+            <div class="about-sidebar-label">Background</div>
+            <div class="about-sidebar-list">
+              <div class="about-sidebar-item"><strong>CFTC</strong>Regulatory fellowship. Enron enforcement.</div>
+              <div class="about-sidebar-item"><strong>Cravath Swaine & Moore</strong>Litigation.</div>
+              <div class="about-sidebar-item"><strong>Idea Farmer</strong>Inc. 500 #95. Acquired by Maker Studios.</div>
+              <div class="about-sidebar-item"><strong>ReSeed Carbon Assets</strong>Co-founder. $4.6M raised.</div>
+              <div class="about-sidebar-item"><strong>Fordham Law School</strong>JD.</div>
+            </div>
+          </div>
+          <div class="about-sidebar-section">
+            <div class="about-sidebar-label">Domains</div>
+            <div class="about-sidebar-list">
+              <div class="about-sidebar-item">AI systems, agents, automation</div>
+              <div class="about-sidebar-item">Climate & carbon markets, dMRV</div>
+              <div class="about-sidebar-item">Legal engineering, securities law</div>
+              <div class="about-sidebar-item">Crypto, tokens, protocol design</div>
+              <div class="about-sidebar-item">Physical infrastructure</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="nl-section">
+    <div class="container-narrow">
+      <div class="nl-section-title">The <em>Operator</em> newsletter</div>
+      <p class="nl-section-sub">Practical analysis on AI systems, climate infrastructure, legal engineering, and protocol design. Written for builders and operators who need signal, not noise. No cadence promises — published when there's something worth saying.</p>
+      <div class="nl-form-row">
+        <input type="email" id="nl-email-about" placeholder="your@email.com">
+        <button class="btn-primary" onclick="subscribeNl('nl-email-about','nl-msg-about')">Subscribe →</button>
+      </div>
+      <div class="nl-success-msg" id="nl-msg-about">You're in. Watch your inbox.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">© 2025 operator.codes · Tyler Malin</div>
+      <div class="footer-links">
+        <span class="footer-link" onclick="navigate('home')">home</span>
+        <span class="footer-link" onclick="navigate('sessions')">build sessions</span>
+        <span class="footer-link" onclick="navigate('apply')">apply</span>
+        <a class="footer-link" href="https://agentcorp.xyz" target="_blank">agentcorp.xyz</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+var pages = ['home','sessions','apply','about'];
+
+function navigate(page) {
+  pages.forEach(function(p) {
+    var el = document.getElementById('page-' + p);
+    var nav = document.getElementById('nav-' + p);
+    if (el) el.className = 'page' + (p === page ? ' active' : '');
+    if (nav) nav.className = 'nav-link' + (p === page ? ' active' : '');
+  });
+  window.scrollTo(0, 0);
+  if (page === 'apply') updateApplyProgress(applyStep);
+}
+
+window.addEventListener('load', function() {
+  navigate('home');
+  updateApplyProgress(1);
+});
+
+function toggleMobileMenu() {
+  var m = document.getElementById('mobile-menu');
+  m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+}
+
+/* ============================================================
+   APPLY FORM
+   ============================================================ */
+var applyStep = 1;
+var applyTotal = 5;
+var selectedDomain = '';
+var selectedStage = '';
+
+function updateApplyProgress(step) {
+  for (var i = 1; i <= applyTotal; i++) {
+    var seg = document.getElementById('seg-' + i);
+    if (!seg) continue;
+    if (i < step) seg.className = 'apply-seg done';
+    else if (i === step) seg.className = 'apply-seg active';
+    else seg.className = 'apply-seg';
+  }
+}
+
+function showApplyStep(n) {
+  for (var i = 1; i <= applyTotal; i++) {
+    var el = document.getElementById('apply-step-' + i);
+    if (el) el.className = 'apply-step' + (i === n ? ' visible' : '');
+  }
+  updateApplyProgress(n);
+  if (n === 5) buildReview();
+}
+
+function selectRadio(card, name, value) {
+  var cards = card.parentElement.querySelectorAll('.radio-card');
+  cards.forEach(function(c) { c.classList.remove('selected'); });
+  card.classList.add('selected');
+  if (name === 'domain') selectedDomain = value;
+  if (name === 'stage') selectedStage = value;
+}
+
+function updateChar(id, max) {
+  var el = document.getElementById(id);
+  var count = document.getElementById(id + '-count');
+  if (!el || !count) return;
+  var len = el.value.length;
+  count.textContent = len + ' / ' + max;
+  count.className = 'char-count' + (len > max * 0.9 ? ' warn' : '') + (len >= max ? ' over' : '');
+}
+
+function clearError(fgId) { var fg = document.getElementById(fgId); if (fg) fg.classList.remove('has-error'); }
+function setError(fgId) { var fg = document.getElementById(fgId); if (fg) fg.classList.add('has-error'); }
+function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function validateStep(n) {
+  var ok = true;
+  if (n === 1) {
+    if (!val('name')) { setError('fg-name'); ok = false; } else clearError('fg-name');
+    var em = val('email');
+    if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { setError('fg-email'); ok = false; } else clearError('fg-email');
+    if (!val('role')) { setError('fg-role'); ok = false; } else clearError('fg-role');
+    if (!val('referred')) { setError('fg-referred'); ok = false; } else clearError('fg-referred');
+  }
+  if (n === 2) {
+    if (!selectedDomain) { document.getElementById('domain-error').style.display = 'block'; ok = false; } else document.getElementById('domain-error').style.display = 'none';
+    if (!val('problem')) { setError('fg-problem'); ok = false; } else clearError('fg-problem');
+    if (!val('outcome')) { setError('fg-outcome'); ok = false; } else clearError('fg-outcome');
+  }
+  if (n === 3) {
+    if (!selectedStage) { document.getElementById('stage-error').style.display = 'block'; ok = false; } else document.getElementById('stage-error').style.display = 'none';
+    if (!val('constraints')) { setError('fg-constraints'); ok = false; } else clearError('fg-constraints');
+    if (!val('tried')) { setError('fg-tried'); ok = false; } else clearError('fg-tried');
+  }
+  if (n === 4) {
+    if (!val('stakes')) { setError('fg-stakes'); ok = false; } else clearError('fg-stakes');
+    if (!val('audience')) { setError('fg-audience'); ok = false; } else clearError('fg-audience');
+  }
+  return ok;
+}
+
+function applyGoTo(n) {
+  if (n > applyStep && !validateStep(applyStep)) return;
+  applyStep = n;
+  showApplyStep(n);
+  window.scrollTo(0, 0);
+}
+
+function domainLabel(v) {
+  var map = { ai: 'AI systems & agents', climate: 'Climate & carbon', legal: 'Legal & entity engineering', crypto: 'Crypto & protocol infra', infra: 'Physical infrastructure', other: 'Other / cross-domain' };
+  return map[v] || v;
+}
+function stageLabel(v) {
+  var map = { idea: 'Idea / pre-build', prototype: 'Early prototype', live: 'Live / in production', stalled: 'Stalled / blocked' };
+  return map[v] || v;
+}
+function getSkills() {
+  var checks = document.querySelectorAll('input[name="skills"]:checked');
+  var labels = { coding: 'Can implement code', domain: 'Deep domain expertise', legal: 'Legal/regulatory background', ops: 'Operator background', none: 'Primarily non-technical' };
+  var out = [];
+  checks.forEach(function(c) { out.push(labels[c.value] || c.value); });
+  return out.join(', ') || 'None selected';
+}
+
+function buildReview() {
+  var rows = [
+    { section: 'Identity', items: [['Name', val('name')], ['Email', val('email')], ['Role', val('role')], ['URL', val('url') || '—'], ['Referred by', val('referred')]] },
+    { section: 'Problem', items: [['Domain', domainLabel(selectedDomain)], ['Problem', val('problem')], ['Success looks like', val('outcome')]] },
+    { section: 'Constraints', items: [['Stage', stageLabel(selectedStage)], ['Constraints', val('constraints')], ['Already tried', val('tried')], ['Tech stack', val('tech') || '—']] },
+    { section: 'Stakes & fit', items: [['Stakes', val('stakes')], ['Audience', val('audience')], ['Other context', val('anything') || '—'], ['Skills', getSkills()]] }
+  ];
+  var html = '';
+  rows.forEach(function(sec) {
+    html += '<div class="review-section-title">' + sec.section + '</div>';
+    sec.items.forEach(function(item) {
+      html += '<div class="review-row"><div class="review-key">' + item[0] + '</div><div class="review-val">' + item[1].replace(/\n/g,'<br>') + '</div></div>';
+    });
+  });
+  document.getElementById('review-output').innerHTML = html;
+}
+
+function submitForm() {
+  var consentCheck = document.getElementById('consent-check');
+  var consentErr = document.getElementById('consent-error');
+  if (!consentCheck.checked) { consentErr.style.display = 'block'; return; }
+  consentErr.style.display = 'none';
+
+  document.getElementById('apply-step-5').className = 'apply-step';
+  document.getElementById('submitting').className = 'submitting-overlay visible';
+
+  var body = [
+    '=== BUILD SESSIONS APPLICATION ===','',
+    '-- IDENTITY --',
+    'Name: ' + val('name'), 'Email: ' + val('email'), 'Role: ' + val('role'),
+    'URL: ' + (val('url') || '—'), 'Referred by: ' + val('referred'), '',
+    '-- PROBLEM --', 'Domain: ' + domainLabel(selectedDomain), '',
+    'Problem description:', val('problem'), '',
+    'Success looks like:', val('outcome'), '',
+    '-- CONSTRAINTS --', 'Project stage: ' + stageLabel(selectedStage), '',
+    'Binding constraints:', val('constraints'), '',
+    'Already tried / ruled out:', val('tried'), '',
+    'Tech stack: ' + (val('tech') || '—'), '',
+    '-- STAKES & FIT --', "What's at stake:", val('stakes'), '',
+    'Who would benefit from watching:', val('audience'), '',
+    'Other context:', (val('anything') || '—'), '',
+    'Skills brought: ' + getSkills(), '',
+    '-- CONSENT --', 'Publication consent: YES', '',
+    '=== END OF APPLICATION ==='
+  ].join('\n');
+
+  fetch('https://formspree.io/f/xpwzgvrl', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      _subject: '[Build Sessions] Application — ' + val('name') + ' / ' + domainLabel(selectedDomain),
+      _replyto: val('email'),
+      name: val('name'), email: val('email'), role: val('role'),
+      url: val('url') || '—', referred: val('referred'),
+      domain: domainLabel(selectedDomain), stage: stageLabel(selectedStage),
+      problem: val('problem'), outcome: val('outcome'),
+      constraints: val('constraints'), tried: val('tried'),
+      tech: val('tech') || '—', stakes: val('stakes'),
+      audience: val('audience'), anything: val('anything') || '—',
+      skills: getSkills(), consent: 'YES', full_application: body
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function() {
+    document.getElementById('submitting').className = 'submitting-overlay';
+    document.getElementById('success').className = 'success-screen visible';
+    window.scrollTo(0, 0);
+  })
+  .catch(function() {
+    document.getElementById('submitting').className = 'submitting-overlay';
+    document.getElementById('apply-step-5').className = 'apply-step visible';
+    alert('Submission failed. Please email tyler@malamaproject.org directly with your application.');
+  });
+}
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+function subscribeNl(inputId, msgId) {
+  var email = document.getElementById(inputId).value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById(inputId).style.borderColor = 'var(--red)';
+    return;
+  }
+  document.getElementById(inputId).style.borderColor = '';
+  fetch('https://formspree.io/f/xpwzgvrl', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ _subject: '[operator.codes] Newsletter signup', email: email, type: 'newsletter' })
+  }).then(function() {
+    document.getElementById(msgId).className = 'nl-success-msg visible';
+    document.getElementById(inputId).value = '';
+  }).catch(function() {
+    document.getElementById(msgId).className = 'nl-success-msg visible';
+  });
+}
+</script>
+</body>
+</html>
