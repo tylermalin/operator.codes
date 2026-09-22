@@ -1,34 +1,9 @@
+import { FigureFrame, SvgBlock } from "@/components/figures/figure-frame";
+
 // Essay figures for Your Agent Can Sign. Rendered as light plates on
 // the dark page, matching the hero-illustration treatment. SVG markup
 // is static trusted content authored for this essay; injected raw to
 // avoid a lossy hand-conversion to JSX attributes.
-
-function FigurePlate({
-  label,
-  badge,
-  svg,
-}: {
-  label: string;
-  badge: string;
-  svg: string;
-}) {
-  return (
-    <figure className="my-10 rounded-2xl bg-[#f4f2ed] p-5 sm:p-6">
-      <figcaption className="flex items-center justify-between gap-3 border-b border-stone-300/70 pb-3 mb-4">
-        <span className="font-mono text-xs font-medium text-stone-500">
-          {label}
-        </span>
-        <span className="font-mono text-[11px] bg-stone-200 text-stone-600 px-2 py-0.5 rounded whitespace-nowrap">
-          {badge}
-        </span>
-      </figcaption>
-      <div
-        className="flex justify-center [&_svg]:w-full [&_svg]:h-auto [&_svg]:max-w-2xl"
-        dangerouslySetInnerHTML={{ __html: svg }}
-      />
-    </figure>
-  );
-}
 
 const containmentMeshSvg = `<svg viewBox="0 0 700 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: one master Delaware LLC above three protected series, each holding its own wallet, limits, and scope, each with firewalled liabilities">
   <rect x="150" y="10" width="400" height="48" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
@@ -118,20 +93,22 @@ const pipelineSvg = `<svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/sv
 
 export function SeriesContainmentMesh() {
   return (
-    <FigurePlate
+    <FigureFrame
       label="Figure 1.0 // Delaware Series Containment Mesh"
       badge="Delaware LLC Act &sect; 18-215"
-      svg={containmentMeshSvg}
-    />
+    >
+      <SvgBlock svg={containmentMeshSvg} />
+    </FigureFrame>
   );
 }
 
 export function AgentCorpPipeline() {
   return (
-    <FigurePlate
+    <FigureFrame
       label="Figure 2.0 // AgentCorp Architectural Pipeline"
       badge="Runtime to Legal Wrapper"
-      svg={pipelineSvg}
-    />
+    >
+      <SvgBlock svg={pipelineSvg} />
+    </FigureFrame>
   );
 }

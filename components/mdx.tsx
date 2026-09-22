@@ -3,6 +3,7 @@ import {
   SeriesContainmentMesh,
   AgentCorpPipeline,
 } from "@/components/figures/agent-can-sign";
+import { ControlBoundary } from "@/components/figures/own-what-you-host";
 
 // The registration point for anything an essay embeds beyond prose:
 // illustrations, figures, charts, interactives. Add a component here,
@@ -45,4 +46,5 @@ export const mdxComponents = {
   Figure,
   SeriesContainmentMesh,
   AgentCorpPipeline,
+  ControlBoundary,
 };
