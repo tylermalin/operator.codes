@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServiceClient } from "@/lib/supabase/server";
+import { subscribeContact, sendWelcomeEmail } from "@/lib/email";
 
-// Writes to the `subscribers` table (email only, no account) via the
-// service-role client, since subscribers has no public insert policy.
-// Actual dispatch (Resend/Loops) still needs wiring in lib/email.ts;
-// this route only handles capture, not delivery.
+// Resend is the subscriber database. No Supabase dependency here:
+// Supabase stays reserved for login/premium-dashboard/API keys/
+// purchases, provisioned later, but subscriber capture doesn't wait
+// on that. Resend's Contacts model (global, keyed by email, upsert
+// on re-add) is a complete subscriber list on its own.
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
 
@@ -12,25 +13,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  const supabase = createServiceClient();
-  if (!supabase) {
-    // Supabase isn't provisioned yet. Fail loudly in dev rather than
-    // silently pretending the subscribe worked.
-    console.warn("subscribe: Supabase not configured, dropping", email);
-    return NextResponse.json(
-      { error: "Subscribe is not configured yet" },
-      { status: 503 },
-    );
-  }
-
-  const { error } = await supabase
-    .from("subscribers")
-    .upsert({ email, unsubscribed_at: null }, { onConflict: "email" });
-
-  if (error) {
-    console.error("subscribe error:", error);
+  const result = await subscribeContact(email);
+  if (!result.ok) {
+    if (result.reason === "not_configured") {
+      console.warn("subscribe: Resend not configured, dropping", email);
+      return NextResponse.json(
+        { error: "Subscribe is not configured yet" },
+        { status: 503 },
+      );
+    }
     return NextResponse.json({ error: "Could not subscribe" }, { status: 500 });
   }
+
+  // Best-effort: they're subscribed per Resend regardless of whether
+  // the welcome email itself succeeds.
+  await sendWelcomeEmail(email);
 
   return NextResponse.json({ ok: true });
 }

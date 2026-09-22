@@ -3,10 +3,10 @@
 -- into the SQL editor.
 --
 -- Deviations from the original PRD schema, and why:
---   1. `subscribers` is new. The PRD only had `profiles`, tied 1:1 to
---      auth.users. That forces a full account signup for the free
---      newsletter, which kills conversion. Free subscribes go here
---      instead: email only, no auth required.
+--   1. No `subscribers` table. Free newsletter capture lives entirely
+--      in Resend (Contacts/Segments), not here — Tyler: not using
+--      Supabase for that. This schema is reserved for what still
+--      needs a real account: paid tier, API keys, purchases.
 --   2. `products` is new. The PRD's `purchases.product_id` referenced
 --      nothing. Added the minimal table it needs to actually be a
 --      foreign key.
@@ -33,20 +33,6 @@ create policy "profiles: read own row"
 create policy "profiles: update own row"
   on profiles for update
   using (auth.uid() = id);
-
--- ---------------------------------------------------------------
--- subscribers: free newsletter, email only, no account required
--- ---------------------------------------------------------------
-create table subscribers (
-  id uuid default gen_random_uuid() primary key,
-  email text unique not null,
-  subscribed_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  unsubscribed_at timestamp with time zone
-);
-
-alter table subscribers enable row level security;
--- No public select/update policy: this table is written to only via
--- the service-role client from /api/subscribe, never read by clients.
 
 -- ---------------------------------------------------------------
 -- api_keys: developer portal, Module 3
