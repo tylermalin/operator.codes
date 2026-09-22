@@ -9,6 +9,7 @@ import { mdxComponents } from "@/components/mdx";
 import { getViewerTier } from "@/lib/auth";
 import { resolveAccess, truncateForPreview } from "@/lib/paywall";
 import ShareBar from "@/components/share-bar";
+import EssaySubscribeCta from "@/components/essay-subscribe-cta";
 
 // Gating depends on per-request session state, so this route can't be
 // statically generated. Named as a real tradeoff in the plan: every
@@ -100,6 +101,7 @@ export default async function EssayPage({
           {access === "preview" && (
             <PaywallBlock title={essay.title} isPreview />
           )}
+          {access === "full" && <EssaySubscribeCta />}
         </>
       )}
     </article>

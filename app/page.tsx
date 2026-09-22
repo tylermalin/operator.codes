@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { getAllEssays } from "@/lib/essays";
 import EssayCard from "@/components/essay-card";
 import HeroGlobe from "@/components/hero-globe";
+import SubscribeForm from "@/components/subscribe-form";
+import Link from "next/link";
 
 export default function HomePage() {
   const essays = getAllEssays().slice(0, 4);
@@ -22,18 +23,13 @@ export default function HomePage() {
           Analysis and frameworks on AI systems, climate infrastructure,
           legal engineering, and protocol design, from Tyler Malin.
         </p>
-        <div className="relative flex gap-4 mt-10">
-          <Link
-            href="/subscribe"
-            className="btn-primary rounded-full px-6 py-3 text-sm font-medium"
-          >
-            Subscribe
-          </Link>
+        <div className="relative mt-10">
+          <SubscribeForm />
           <Link
             href="/build-sessions"
-            className="btn-secondary rounded-full px-6 py-3 text-sm"
+            className="link-underline inline-block mt-5 font-mono text-xs text-muted"
           >
-            Build Sessions
+            Or book a Build Session
           </Link>
         </div>
       </section>
