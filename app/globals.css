@@ -150,6 +150,22 @@ body {
   font-size: 0.9em;
 }
 
+.prose-essay pre {
+  background: var(--surface-2);
+  border: 1px solid var(--border-md);
+  border-radius: 12px;
+  padding: 1.25em 1.5em;
+  margin: 2em 0;
+  overflow-x: auto;
+}
+
+.prose-essay pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85em;
+  white-space: pre;
+}
+
 .prose-essay table {
   width: 100%;
   border-collapse: collapse;
