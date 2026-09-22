@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllEssays } from "@/lib/essays";
+import EssayCard from "@/components/essay-card";
 
 export default function HomePage() {
   const essays = getAllEssays().slice(0, 4);
@@ -49,20 +50,7 @@ export default function HomePage() {
         ) : (
           <div className="flex flex-col gap-16">
             {essays.map((essay) => (
-              <Link key={essay.slug} href={`/essays/${essay.slug}`} className="group">
-                <p className="font-mono text-xs text-muted mb-3">
-                  {essay.domain}
-                </p>
-                <h3 className="link-underline inline text-2xl sm:text-3xl font-normal tracking-tight leading-snug">
-                  {essay.title}
-                </h3>
-                <p className="text-muted mt-3 max-w-xl leading-relaxed">
-                  {essay.description}
-                </p>
-                <p className="font-mono text-xs text-faint mt-4">
-                  {essay.date} · {essay.readingTime}
-                </p>
-              </Link>
+              <EssayCard key={essay.slug} essay={essay} headingLevel="h3" />
             ))}
           </div>
         )}
