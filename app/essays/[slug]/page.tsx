@@ -8,6 +8,7 @@ import { getEssay } from "@/lib/essays";
 import { mdxComponents } from "@/components/mdx";
 import { getViewerTier } from "@/lib/auth";
 import { resolveAccess, truncateForPreview } from "@/lib/paywall";
+import ShareBar from "@/components/share-bar";
 
 // Gating depends on per-request session state, so this route can't be
 // statically generated. Named as a real tradeoff in the plan: every
@@ -62,12 +63,17 @@ export default async function EssayPage({
       <h1 className="text-4xl sm:text-5xl font-normal tracking-tight leading-[1.1] mb-5">
         {essay.title}
       </h1>
-      <p className="font-mono text-xs text-faint mb-16">
+      <p className="font-mono text-xs text-faint mb-8">
         {essay.date} · {essay.readingTime}
         {essay.tier !== "free" && (
           <span className="ml-2 text-amber">· {essay.tier}</span>
         )}
       </p>
+
+      <ShareBar
+        url={`https://operator.codes/essays/${slug}`}
+        title={essay.title}
+      />
 
       {essay.image && (
         <Image
