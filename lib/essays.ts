@@ -5,12 +5,15 @@ import readingTime from "reading-time";
 
 const ESSAYS_DIR = path.join(process.cwd(), "content", "essays");
 
+export type Tier = "free" | "preview" | "premium";
+
 export type EssayMeta = {
   slug: string;
   title: string;
   description: string;
   date: string;
   domain: string;
+  tier: Tier;
   readingTime: string;
 };
 
@@ -42,6 +45,7 @@ export function getEssayMeta(slug: string): EssayMeta | null {
     description: data.description ?? "",
     date: data.date ?? "",
     domain: data.domain ?? "general",
+    tier: (data.tier as Tier) ?? "free",
     readingTime: readingTime(content).text,
   };
 }
@@ -57,6 +61,7 @@ export function getEssay(slug: string): Essay | null {
     description: data.description ?? "",
     date: data.date ?? "",
     domain: data.domain ?? "general",
+    tier: (data.tier as Tier) ?? "free",
     readingTime: readingTime(content).text,
     content,
   };
