@@ -4,86 +4,55 @@ description: "The law already lets an agent form a contract. It just binds you, 
 date: "2026-09-22"
 domain: "AI systems"
 tier: "free"
-draft: true
 image: "/images/essays/agent-can-sign/hero.jpg"
 ---
 
-<!--
-OUTLINE, not a draft. Replace this comment and the sections below with
-real prose before publishing. This is the sharpened version: the claim
-is NOT "agents can't form contracts" (UETA sec. 14 and E-SIGN settled
-formation two decades ago and a sophisticated reader knows it). The
-claim is that formation binds the wrong thing: attribution without a
-liability boundary.
+An agent negotiates a price, executes the transaction, delivers the work. Every step functioned. Then something goes wrong, and the first legal question has no answer: who is bound?
 
-1. Open on the gap, concretely
-   - An agent negotiates a price, executes the transaction, delivers
-     the work. Every step functioned. Then something goes wrong, and
-     the first legal question has no answer: who is bound?
-   - The instinct is that this is a technology problem waiting on
-     better AI. It isn't. The models are ahead of the paperwork.
-   - [Tyler: real war story or near-miss here if one exists, beats
-     the hypothetical.]
+The instinct is that this is a technology problem waiting on better AI. It isn't. The models are ahead of the paperwork.
 
-2. Preempt the lawyer's objection
-   - Contracts formed by automated systems are already enforceable.
-     UETA and E-SIGN settled that for shopping carts and EDI.
-   - Those statutes work by attribution: the contract binds whoever
-     deployed the system. The agent is treated as a tool, a fax
-     machine with opinions.
-   - Attribution breaks both directions for autonomous agents. No
-     identifiable principal: binds no one, counterparties have no
-     recourse, rational ones won't deal. Attributed to you personally:
-     binds you completely, no boundary between the agent's decisions
-     and your entire balance sheet.
-   - Formation was never the problem. Attribution without containment
-     is.
+## The attribution trap
 
-3. What an operating agent actually needs
-   - Hold assets: a wallet that is someone's property in a way a
-     court recognizes.
-   - Transact: counterparties who can verify what they're dealing
-     with and sue something if it breaks.
-   - Fail safely: liability that stops at the agent's own activities.
-   - Be taxed, banked, insured: a classification existing
-     institutions can process.
-   - None of this is "legal personhood for AI." Name the strawman
-     directly. This is containment engineering, same reason shipping
-     companies put each vessel in its own subsidiary.
+Yes, contracts formed by automated systems are already enforceable. UETA and E-SIGN settled that two decades ago for shopping carts and EDI.
 
-4. The mechanism: Delaware Series LLC
-   - One master filing; individual series under it, each with its own
-     assets, liabilities, governance, walled off by statute (DE LLC
-     Act sec. 18-215).
-   - Why this shape fits agents: series are cheap and fast to create,
-     so one-agent-one-series scales the way agents deploy, in numbers.
-   - The wrapper: a human-owned series holds the agent's wallet and
-     contracts. The operating agreement encodes authority in writing:
-     what it can sign, spending limits, counterparty classes. The
-     agent acts as an authorized agent of the series in the ordinary
-     legal sense.
-   - One agent's bad trade is contained to that series' assets. The
-     counterparty gets a real defendant. The owner gets a firewall.
-   - [Tyler: AgentCorp specifics worth naming, registered vs
-     protected series choice, how authority encoding ships.]
+But those statutes work by attribution: the contract binds the person who deployed the system. The agent is treated as a tool, like a fax machine with opinions.
 
-5. Failure modes, stated honestly
-   - Series shields are Delaware-tested, not everywhere-tested; some
-     states' courts haven't ruled on internal series walls, and
-     California taxes each series separately anyway.
-   - Bankruptcy treatment of an individual series is thin case law.
-     Certainty here is a sales pitch, not a legal opinion.
-   - Authority drift: an agent acting beyond its encoded scope
-     creates apparent-authority exposure; operating-agreement limits
-     are only as good as the counterparty's notice of them.
-   - None of these kill the model. They define its current edges.
+That attribution model breaks in both directions for autonomous agents:
 
-6. Close: what AgentCorp actually is
-   - One paragraph, mechanism not pitch: standardized series
-     formation, authority encoding, operational scaffolding.
-   - Larger frame: every prior wave of economic actors got entity
-     infrastructure built for it. Corporations for industrial
-     capital, LLCs for small operators, SPVs for structured finance.
-     Agents are next, and the sequence has never once waited for
-     philosophical consensus about what the actor "is."
--->
+- **Under-attribution.** An agent with no identifiable principal binds no one, so counterparties have no recourse and rational ones won't deal.
+- **Over-attribution.** An agent attributed to you personally binds you completely, with no liability boundary between the agent's decisions and your entire balance sheet.
+
+The real issue: formation was never the problem. Attribution without containment is.
+
+## What an operating agent actually needs
+
+- **To hold assets:** a wallet that is someone's property in a way a court recognizes.
+- **To transact:** counterparties who can verify what they're dealing with and sue something if it breaks.
+- **To fail safely:** liability that stops at the agent's own activities instead of reaching everything its owner touches.
+- **To be taxed, banked, insured:** an entity classification that existing institutions can process.
+
+Nothing in that list is "legal personhood for AI." Nobody serious is asking a court to treat a model as a person, and this argument doesn't need them to. This is standard containment engineering, the same reason shipping companies put each vessel in its own subsidiary.
+
+## The mechanism: the Delaware Series LLC
+
+One master LLC filing. Under it, individual series, each with its own assets, liabilities, and internal governance, walled off from the others by statute (Delaware LLC Act §18-215).
+
+Why this shape fits agents specifically: series are cheap and fast to create (no separate state filing per protected series), so one-agent-one-series scales the way agents actually get deployed, in numbers.
+
+The wrapper logic: a human-owned series holds the agent's wallet and contracts. The operating agreement encodes the agent's authority in writing: what it can sign, spending limits, counterparty classes. The agent acts as an authorized agent of the series in the ordinary legal sense of the word.
+
+One agent's tort or bad trade is contained to that series' assets. The counterparty gets a real defendant. The owner gets a firewall.
+
+## Failure modes, stated honestly
+
+- Series liability shields are Delaware-tested, not everywhere-tested. Some states' courts haven't ruled on respecting internal series walls, and California taxes each series as a separate entity anyway.
+- Bankruptcy treatment of an individual series is thin case law. Anyone claiming certainty here is selling something.
+- Authority drift: an agent acting beyond its encoded scope creates apparent-authority exposure. The operating agreement limits are only as good as the counterparty's notice of them.
+
+None of these kill the model. They define its current edges, and pretending the edges don't exist is how this space gets a bad name.
+
+## What AgentCorp actually is
+
+[AgentCorp](https://agentcorp.business) is this wrapper productized: standardized series formation, authority encoding, and the operational scaffolding that makes it usable by an agent rather than delivered as a law firm engagement.
+
+Every prior wave of economic actors got entity infrastructure built for it: corporations for industrial capital, LLCs for small operators, SPVs for structured finance. Agents are next in that sequence, and the sequence has never once waited for philosophical consensus about what the actor "is."
