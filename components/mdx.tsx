@@ -1,4 +1,8 @@
 import Image from "next/image";
+import {
+  SeriesContainmentMesh,
+  AgentCorpPipeline,
+} from "@/components/figures/agent-can-sign";
 
 // The registration point for anything an essay embeds beyond prose:
 // illustrations, figures, charts, interactives. Add a component here,
@@ -39,4 +43,6 @@ export function Figure({
 
 export const mdxComponents = {
   Figure,
+  SeriesContainmentMesh,
+  AgentCorpPipeline,
 };
