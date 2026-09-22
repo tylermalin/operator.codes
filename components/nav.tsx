@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const links = [
   { href: "/essays", label: "essays" },
@@ -12,9 +13,15 @@ export default function Nav() {
       <div className="max-w-5xl mx-auto h-full flex items-center justify-between px-6">
         <Link
           href="/"
-          className="flex items-center gap-2 font-mono text-sm tracking-tight"
+          className="flex items-center gap-2.5 font-mono text-sm tracking-tight"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
+          <Image
+            src="/brand/operator-mark-light.png"
+            alt=""
+            width={506}
+            height={320}
+            className="h-4 w-auto"
+          />
           operator.codes
         </Link>
         <div className="hidden sm:flex items-center gap-8">

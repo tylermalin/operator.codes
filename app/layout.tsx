@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     title: "Operator · Tyler Malin",
     description:
       "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design.",
+    images: [{ url: "/brand/og-default.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",

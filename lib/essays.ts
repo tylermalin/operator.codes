@@ -15,6 +15,7 @@ export type EssayMeta = {
   domain: string;
   tier: Tier;
   draft: boolean;
+  image?: string;
   readingTime: string;
 };
 
@@ -51,6 +52,7 @@ export function getEssayMeta(slug: string): EssayMeta | null {
     domain: data.domain ?? "general",
     tier: (data.tier as Tier) ?? "free",
     draft: data.draft === true,
+    image: data.image,
     readingTime: readingTime(content).text,
   };
 }
@@ -68,6 +70,7 @@ export function getEssay(slug: string): Essay | null {
     domain: data.domain ?? "general",
     tier: (data.tier as Tier) ?? "free",
     draft: data.draft === true,
+    image: data.image,
     readingTime: readingTime(content).text,
     content,
   };

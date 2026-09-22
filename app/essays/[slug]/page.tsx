@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import type { Metadata } from "next";
 import { getEssay } from "@/lib/essays";
+import { mdxComponents } from "@/components/mdx";
 import { getViewerTier } from "@/lib/auth";
 import { resolveAccess, truncateForPreview } from "@/lib/paywall";
 
@@ -21,7 +23,22 @@ export async function generateMetadata({
   const { slug } = await params;
   const essay = getEssay(slug);
   if (!essay) return {};
-  return { title: essay.title, description: essay.description };
+  return {
+    title: essay.title,
+    description: essay.description,
+    openGraph: {
+      type: "article",
+      title: essay.title,
+      description: essay.description,
+      images: essay.image ? [{ url: essay.image }] : undefined,
+    },
+    twitter: {
+      card: essay.image ? "summary_large_image" : "summary",
+      title: essay.title,
+      description: essay.description,
+      images: essay.image ? [essay.image] : undefined,
+    },
+  };
 }
 
 export default async function EssayPage({
@@ -52,6 +69,17 @@ export default async function EssayPage({
         )}
       </p>
 
+      {essay.image && (
+        <Image
+          src={essay.image}
+          alt={essay.title}
+          width={1200}
+          height={655}
+          priority
+          className="rounded-2xl w-full h-auto mb-16"
+        />
+      )}
+
       {access === "blocked" ? (
         <PaywallBlock title={essay.title} />
       ) : (
@@ -59,6 +87,7 @@ export default async function EssayPage({
           <div className="prose-essay">
             <MDXRemote
               source={displayContent}
+              components={mdxComponents}
               options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
             />
           </div>
