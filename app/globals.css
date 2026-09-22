@@ -68,36 +68,10 @@ body {
   border-radius: 4px;
 }
 
-/* The site's one non-user-triggered animation. A slow, ambient glow behind
-   the home hero. Everything else responds to hover or click only. */
-.ambient-glow {
-  position: absolute;
-  pointer-events: none;
-  border-radius: 999px;
-  background: radial-gradient(
-    circle,
-    var(--accent-dim) 0%,
-    rgba(109, 168, 140, 0) 70%
-  );
-  filter: blur(40px);
-  animation: breathe 14s ease-in-out infinite alternate;
-}
-
-@keyframes breathe {
-  from {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-
+/* The site's one non-user-triggered animation lives in
+   components/hero-globe.tsx (canvas). Everything else responds to
+   hover or click only. */
 @media (prefers-reduced-motion: reduce) {
-  .ambient-glow {
-    animation: none;
-  }
   * {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;

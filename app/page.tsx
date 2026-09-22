@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAllEssays } from "@/lib/essays";
 import EssayCard from "@/components/essay-card";
+import HeroGlobe from "@/components/hero-globe";
 
 export default function HomePage() {
   const essays = getAllEssays().slice(0, 4);
@@ -8,10 +9,7 @@ export default function HomePage() {
   return (
     <div className="max-w-5xl mx-auto px-6">
       <section className="relative pt-28 pb-24 overflow-hidden">
-        <div
-          className="ambient-glow w-[560px] h-[560px] -top-40 -left-20"
-          aria-hidden="true"
-        />
+        <HeroGlobe />
         <p className="relative font-mono text-sm text-muted mb-6">
           operator.codes
         </p>
