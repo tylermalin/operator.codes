@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-border">
       <div className="max-w-5xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted">
-        <span className="font-mono">operator.codes — Tyler Malin</span>
+        <span className="font-mono">operator.codes · Tyler Malin</span>
         <div className="flex gap-5">
           <Link href="/essays" className="hover:text-foreground transition-colors">
             essays

@@ -20,15 +20,15 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://operator.codes"),
   title: {
-    default: "Operator — Tyler Malin",
-    template: "%s — Operator",
+    default: "Operator · Tyler Malin",
+    template: "%s · Operator",
   },
   description:
     "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design, from Tyler Malin.",
   openGraph: {
     type: "website",
     url: "https://operator.codes/",
-    title: "Operator — Tyler Malin",
+    title: "Operator · Tyler Malin",
     description:
       "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design.",
   },
