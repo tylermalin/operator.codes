@@ -21,6 +21,12 @@ export default function Footer() {
           >
             x.com/tylermalin
           </a>
+          <Link href="/terms" className="hover:text-foreground transition-colors">
+            terms
+          </Link>
+          <Link href="/privacy" className="hover:text-foreground transition-colors">
+            privacy
+          </Link>
         </div>
       </div>
     </footer>
