@@ -82,3 +82,36 @@ body {
   border-radius: 4px;
   font-size: 0.9em;
 }
+
+.prose-essay table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: 0.9em;
+}
+
+.prose-essay th,
+.prose-essay td {
+  text-align: left;
+  padding: 0.6em 1em;
+  border-bottom: 1px solid var(--border-md);
+}
+
+.prose-essay th {
+  font-family: var(--font-mono), monospace;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.prose-essay ol,
+.prose-essay ul {
+  margin: 0 0 1.25em 1.25em;
+  line-height: 1.7;
+}
+
+.prose-essay li {
+  margin-bottom: 0.4em;
+}

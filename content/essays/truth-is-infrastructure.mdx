@@ -1,32 +1,64 @@
 ---
 title: "Truth Is Infrastructure"
-description: "Most verification systems run on estimates. That gap gets expensive at scale."
+description: "Provenance isn't a footnote to a climate number. It's the only axis that tells you whether the number is real."
 date: "2026-09-22"
 domain: "climate infrastructure"
 tier: "free"
-draft: true
 ---
 
-<!--
-OUTLINE, not a draft. Replace this comment and the bullets below with
-real prose before publishing.
+Most verification systems run on estimates. Voluntary carbon markets price credits off modeled counterfactuals. Corporate ESG accounting aggregates unaudited spreadsheets. AI compute emissions get derived from regional grid averages multiplied by nominal server draw.
 
-- Most systems today rely on estimates: carbon markets, ESG reporting,
-  AI energy disclosures.
-- The gap isn't data volume. It's that almost none of the data is tied
-  to reality at the point of measurement.
-- Introduce Provenance: what it shows (live environmental/energy data
-  colored by how the number was produced, not what it says), why
-  provenance is the axis that matters more than the value itself.
-- Connect to Malama's thesis: dMRV replaces episodic manual audits with
-  continuous, sensor-driven monitoring. Same argument, protocol scale.
-- Close: verification infrastructure is the missing layer under every
-  market that claims environmental integrity.
-- Link out to the live demo: provenance-sandy.vercel.app
--->
+The problem isn't data volume. Registries, satellite feeds, and compliance disclosures produce petabytes of numbers every year. The problem is that almost none of that data carries the physical history of how it was produced.
 
-Most systems today rely on estimates. Carbon markets, ESG reporting, supply chains, increasingly AI energy disclosures.
+When a number can be modeled, interpolated, or inferred without carrying the mechanical or cryptographic trail of its own origin, the market built on top of it has no floor.
 
-The problem is not a lack of data. The problem is that very little of the data is cryptographically tied to reality at the point of measurement.
+## The value isn't the axis. The method is.
 
-That gap becomes expensive at scale.
+Ask two different questions about the same number: what is it, and how was it produced.
+
+In most climate registries and corporate disclosures, an entry like 1,420 tCO2e removed renders identically whether it came from:
+
+1. A hardware-signed gas analyzer on site, streaming continuous telemetry.
+2. A quarterly manual meter reading, written down on a clipboard.
+3. A regional proxy model running inside a vendor's black box.
+
+[Provenance](https://provenance-sandy.vercel.app), the live demo I built, changes the axis. Instead of coloring data by the value (green for low emissions, red for high), it colors data by where the number came from:
+
+| Source | Ingestion pattern | Trust tier |
+|---|---|---|
+| Hardware-signed telemetry | Cryptographically bound | High-assurance |
+| Batch sensor sync | Periodic ingestion | Attested |
+| Modeled or static proxy | Derived extrapolation | Unanchored |
+
+The realization is immediate once you see it this way: provenance carries more economic weight than the value itself.
+
+500 kg CO2, hardware-attested and timestamped to a specific grid node, is verifiable collateral. 450 kg CO2, averaged quarterly across three countries, is an unhedged liability wearing a lower number. In a compliance market, the first is an asset. The second is a lawsuit waiting on discovery.
+
+## Continuous verification, not episodic audits
+
+This is the operating thesis behind digital MRV: replace periodic manual audits with continuous, sensor-driven verification. It's the same thesis Mālama Labs is building at company scale, stated here at the protocol level instead.
+
+Traditional MRV sends a consultant team to a facility once every 12 to 24 months, runs spot checks, and produces a retroactive PDF. That model breaks at institutional scale for three reasons.
+
+**High latency.** Time to issuance runs months to years, tying up project financing and adding counterparty risk the whole way through.
+
+**Fragile trust anchors.** Verifiers audit the paperwork about the measurement, not the measurement itself.
+
+**Episodic blindness.** Leaks, shutdowns, and reversal events between audit cycles get smoothed out of the annual number entirely.
+
+dMRV moves verification from a retroactive opinion to an active protocol layer. Physical sensors, open ingestion pipelines, and hardware signatures combine to produce continuous proof of state, asserted at the edge and pushed to a ledger no one can quietly edit.
+
+## The missing substrate
+
+| | Legacy carbon & ESG | Hardware-anchored dMRV |
+|---|---|---|
+| Data ingestion | Annualized manual reports and proxies | Continuous telemetry from edge hardware |
+| Audit cadence | Episodic, every 12 to 24 months | Real-time state updates |
+| Trust model | Trust in third-party paper attestations | Cryptographic hardware attestation |
+| Traceability | Static PDF certifications | Queryable pipeline, sensor to ledger |
+
+Without this substrate, carbon credits, RECs, and compute-energy disclosures are unsecured credit lines issued against goodwill. If a buyer can't trace the chain of custody from the physical sensor to the registry balance, the asset has no floor under it.
+
+Markets can't price what they can't trust, and they can't trust a number whose production history is invisible. Building the provenance layer isn't a sustainability nice-to-have. It's the prerequisite for treating climate metrics as real financial primitives.
+
+[See the live Provenance demo](https://provenance-sandy.vercel.app) to compare sensor-attested numbers against proxy models in real time.

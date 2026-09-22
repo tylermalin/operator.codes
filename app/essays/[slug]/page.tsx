@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import type { Metadata } from "next";
 import { getEssay } from "@/lib/essays";
 import { getViewerTier } from "@/lib/auth";
@@ -58,7 +59,10 @@ export default async function EssayPage({
       ) : (
         <>
           <div className="prose-essay">
-            <MDXRemote source={displayContent} />
+            <MDXRemote
+              source={displayContent}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+            />
           </div>
           {access === "preview" && (
             <PaywallBlock title={essay.title} isPreview />
