@@ -4,11 +4,13 @@ export const metadata: Metadata = { title: "About" };
 
 export default function AboutPage() {
   return (
-    <div className="max-w-3xl mx-auto px-6 py-16">
-      <p className="font-mono text-sm text-accent-light mb-4">
+    <div className="max-w-3xl mx-auto px-6 py-24">
+      <p className="font-mono text-sm text-muted mb-6">
         operator.codes / about
       </p>
-      <h1 className="text-4xl font-bold mb-8">Tyler Malin</h1>
+      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight mb-12">
+        Tyler Malin
+      </h1>
       <div className="prose-essay">
         <p>
           Twenty-plus years building at the intersection of technology,

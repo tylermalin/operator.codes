@@ -40,14 +40,12 @@ export default async function EssayPage({
     access === "preview" ? truncateForPreview(essay.content) : essay.content;
 
   return (
-    <article className="max-w-3xl mx-auto px-6 py-16">
-      <p className="font-mono text-xs text-accent-light mb-3">
-        {essay.domain}
-      </p>
-      <h1 className="text-4xl font-bold leading-tight mb-3">
+    <article className="max-w-3xl mx-auto px-6 py-24">
+      <p className="font-mono text-xs text-muted mb-4">{essay.domain}</p>
+      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight leading-[1.1] mb-5">
         {essay.title}
       </h1>
-      <p className="font-mono text-xs text-faint mb-12">
+      <p className="font-mono text-xs text-faint mb-16">
         {essay.date} · {essay.readingTime}
         {essay.tier !== "free" && (
           <span className="ml-2 text-amber">· {essay.tier}</span>
@@ -81,18 +79,18 @@ function PaywallBlock({
   isPreview?: boolean;
 }) {
   return (
-    <div className="mt-8 border border-accent-border bg-accent-dim rounded-xl p-8 text-center">
-      <p className="font-semibold mb-2">
+    <div className="mt-10 border border-accent-border bg-accent-dim rounded-2xl p-10 text-center">
+      <p className="font-normal text-lg mb-2">
         {isPreview
           ? `The rest of "${title}" is for pro subscribers.`
           : `"${title}" is for pro subscribers.`}
       </p>
-      <p className="text-sm text-muted mb-6">
+      <p className="text-sm text-muted mb-7">
         Upgrade to read the full archive.
       </p>
       <Link
         href="/subscribe"
-        className="inline-block bg-accent text-background font-medium rounded-full px-5 py-2.5 text-sm hover:bg-accent-light transition-colors"
+        className="btn-primary inline-block rounded-full px-6 py-3 text-sm font-medium"
       >
         Upgrade to pro
       </Link>

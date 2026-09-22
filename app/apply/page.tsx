@@ -33,9 +33,11 @@ export default function ApplyPage() {
 
   if (status === "done") {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-24 text-center">
-        <h1 className="text-3xl font-bold mb-4">Application sent.</h1>
-        <p className="text-muted">
+      <div className="max-w-2xl mx-auto px-6 py-32 text-center">
+        <h1 className="text-3xl sm:text-4xl font-normal tracking-tight mb-5">
+          Application sent.
+        </h1>
+        <p className="text-muted text-lg">
           If it&apos;s a fit, you&apos;ll hear back directly.
         </p>
       </div>
@@ -43,9 +45,11 @@ export default function ApplyPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-16">
-      <h1 className="text-4xl font-bold mb-2">Apply for a session</h1>
-      <p className="text-muted mb-10">
+    <div className="max-w-2xl mx-auto px-6 py-24">
+      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight mb-4">
+        Apply for a session
+      </h1>
+      <p className="text-muted mb-12 text-lg leading-relaxed">
         Not an idea. A specific problem you need built or structured.
       </p>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -66,7 +70,7 @@ export default function ApplyPage() {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="bg-accent text-background font-medium rounded-full px-6 py-3 text-sm hover:bg-accent-light transition-colors disabled:opacity-50"
+          className="btn-primary rounded-full px-6 py-3 text-sm font-medium disabled:opacity-50"
         >
           {status === "loading" ? "Sending..." : "Submit application"}
         </button>
@@ -90,10 +94,10 @@ function Field({
   required?: boolean;
 }) {
   const baseClass =
-    "w-full bg-surface border border-border-md rounded-lg px-4 py-3 text-sm placeholder:text-faint focus:outline-none focus:border-accent-border";
+    "w-full bg-surface border border-border-md rounded-lg px-4 py-3 text-sm placeholder:text-faint transition-colors focus:border-accent-border";
   return (
     <div>
-      <label htmlFor={name} className="block text-sm font-medium mb-2">
+      <label htmlFor={name} className="block text-sm mb-2">
         {label}
       </label>
       {type === "textarea" ? (

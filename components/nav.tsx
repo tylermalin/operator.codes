@@ -17,19 +17,19 @@ export default function Nav() {
           <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
           operator.codes
         </Link>
-        <div className="hidden sm:flex items-center gap-6">
+        <div className="hidden sm:flex items-center gap-8">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-muted hover:text-foreground transition-colors"
+              className="link-underline text-sm text-muted hover:text-foreground transition-colors"
             >
               {link.label}
             </Link>
           ))}
           <Link
             href="/subscribe"
-            className="text-sm font-medium text-accent-light border border-accent-border rounded-full px-4 py-1.5 hover:bg-accent-dim transition-colors"
+            className="btn-secondary text-sm px-4 py-1.5 rounded-full"
           >
             subscribe
           </Link>

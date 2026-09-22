@@ -33,24 +33,24 @@ export default function SubscribeForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 max-w-sm">
+    <form onSubmit={handleSubmit} className="flex gap-3 max-w-sm">
       <input
         type="email"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@company.com"
-        className="flex-1 bg-surface border border-border-md rounded-full px-4 py-2.5 text-sm placeholder:text-faint focus:outline-none focus:border-accent-border"
+        className="flex-1 bg-surface border border-border-md rounded-full px-5 py-3 text-sm placeholder:text-faint transition-colors focus:border-accent-border"
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="bg-accent text-background font-medium rounded-full px-5 py-2.5 text-sm hover:bg-accent-light transition-colors disabled:opacity-50"
+        className="btn-primary rounded-full px-6 py-3 text-sm font-medium disabled:opacity-50"
       >
         {status === "loading" ? "..." : "Subscribe"}
       </button>
       {status === "error" && (
-        <p className="text-red text-xs absolute mt-12">
+        <p className="text-red text-xs absolute mt-14">
           Something broke. Try again.
         </p>
       )}

@@ -31,13 +31,15 @@ export default async function DashboardPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-      <p className="text-muted mb-10">{user.email}</p>
+    <div className="max-w-2xl mx-auto px-6 py-24">
+      <h1 className="text-3xl sm:text-4xl font-normal tracking-tight mb-2">
+        Dashboard
+      </h1>
+      <p className="text-muted mb-12">{user.email}</p>
 
-      <div className="border border-border rounded-xl p-6 mb-10">
-        <p className="font-mono text-xs text-muted mb-1">Current tier</p>
-        <p className="text-xl font-semibold capitalize">
+      <div className="border border-border rounded-2xl p-8 mb-12">
+        <p className="font-mono text-xs text-muted mb-2">Current tier</p>
+        <p className="text-xl font-normal capitalize">
           {profile?.tier ?? "free"}
         </p>
         {profile?.tier !== "pro" && (
@@ -45,9 +47,7 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      <h2 className="font-mono text-sm text-muted uppercase tracking-wide mb-4">
-        API keys
-      </h2>
+      <h2 className="font-mono text-sm text-muted mb-6">API keys</h2>
       <KeyManager initialKeys={initialKeys ?? []} />
     </div>
   );

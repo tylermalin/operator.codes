@@ -20,7 +20,7 @@ export default function UpgradeButton() {
     <button
       onClick={handleClick}
       disabled={loading}
-      className="mt-4 bg-accent text-background font-medium rounded-full px-5 py-2 text-sm hover:bg-accent-light transition-colors disabled:opacity-50"
+      className="btn-primary mt-4 rounded-full px-5 py-2 text-sm font-medium disabled:opacity-50"
     >
       {loading ? "..." : "Upgrade to pro"}
     </button>

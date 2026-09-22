@@ -1,30 +1,33 @@
 @import "tailwindcss";
 
-/* ---- Operator design tokens ---- */
-/* Ported from the legacy static site (_legacy-static/index.html). */
-/* Dark, editorial, one accent color. No light mode: intentional, not an oversight. */
+/* ---- Operator design tokens: Resonant Stark ---- */
+/* Soft gradients instead of flat fills. A desaturated moss accent instead of */
+/* an acid-green single accent. Thin type earned by scale, not by default. */
+/* One ambient motion moment on the hero; everything else answers a hover. */
 
 :root {
-  --background: #0b0b0b;
-  --surface: #141414;
-  --surface-2: #1a1a1a;
-  --surface-3: #222222;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-md: rgba(255, 255, 255, 0.13);
-  --border-hi: rgba(255, 255, 255, 0.22);
-  --foreground: #ede9e3;
-  --muted: #7a7872;
-  --faint: #3d3d3b;
-  --accent: #1d9e75;
-  --accent-light: #5dcaa5;
-  --accent-dim: rgba(29, 158, 117, 0.09);
-  --accent-border: rgba(29, 158, 117, 0.28);
-  --amber: #ef9f27;
-  --red: #e24b4a;
+  --background: #121113;
+  --background-deep: #0a0a0b;
+  --surface: #1a1918;
+  --surface-2: #201f1d;
+  --surface-3: #262523;
+  --border: rgba(237, 234, 226, 0.06);
+  --border-md: rgba(237, 234, 226, 0.12);
+  --border-hi: rgba(237, 234, 226, 0.2);
+  --foreground: #edeae2;
+  --muted: #8c897f;
+  --faint: #47443d;
+  --accent: #6da88c;
+  --accent-light: #a8d3bc;
+  --accent-dim: rgba(109, 168, 140, 0.09);
+  --accent-border: rgba(109, 168, 140, 0.26);
+  --amber: #d9a455;
+  --red: #d9615f;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-deep: var(--background-deep);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
@@ -45,10 +48,99 @@
   --font-mono: var(--font-dm-mono);
 }
 
-body {
+html {
   background: var(--background);
+}
+
+body {
+  background: radial-gradient(
+    ellipse 120% 80% at 50% -10%,
+    var(--background) 0%,
+    var(--background-deep) 70%
+  );
   color: var(--foreground);
   font-family: var(--font-display), sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* The site's one non-user-triggered animation. A slow, ambient glow behind
+   the home hero. Everything else responds to hover or click only. */
+.ambient-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    var(--accent-dim) 0%,
+    rgba(109, 168, 140, 0) 70%
+  );
+  filter: blur(40px);
+  animation: breathe 14s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Hover-triggered underline draw-in, used instead of a static underline
+   or a color-only hover state. */
+.link-underline {
+  background-image: linear-gradient(var(--accent-light), var(--accent-light));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.3s ease;
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* Soft gradient primary button, glows outward on hover rather than just
+   swapping fill color. */
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, #5c9678 100%);
+  color: var(--background-deep);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 24px var(--accent-dim);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  border: 1px solid var(--border-md);
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+.btn-secondary:hover {
+  border-color: var(--border-hi);
+  background: var(--surface-2);
 }
 
 .prose-essay {
@@ -63,10 +155,11 @@ body {
 
 .prose-essay h2 {
   font-family: var(--font-display), sans-serif;
-  font-weight: 700;
-  font-size: 1.5rem;
-  margin-top: 2.5em;
-  margin-bottom: 0.75em;
+  font-weight: 500;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  margin-top: 3em;
+  margin-bottom: 0.85em;
 }
 
 .prose-essay a {
@@ -86,14 +179,14 @@ body {
 .prose-essay table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2em 0;
+  margin: 2.5em 0;
   font-size: 0.9em;
 }
 
 .prose-essay th,
 .prose-essay td {
   text-align: left;
-  padding: 0.6em 1em;
+  padding: 0.7em 1em;
   border-bottom: 1px solid var(--border-md);
 }
 
@@ -102,7 +195,6 @@ body {
   color: var(--muted);
   font-weight: 500;
   font-size: 0.85em;
-  text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
@@ -110,6 +202,14 @@ body {
 .prose-essay ul {
   margin: 0 0 1.25em 1.25em;
   line-height: 1.7;
+}
+
+.prose-essay ol {
+  list-style: decimal;
+}
+
+.prose-essay ul {
+  list-style: disc;
 }
 
 .prose-essay li {

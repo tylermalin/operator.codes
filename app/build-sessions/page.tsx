@@ -42,44 +42,42 @@ const domains = [
 
 export default function BuildSessionsPage() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
-      <p className="font-mono text-sm text-accent-light mb-4">
+    <div className="max-w-5xl mx-auto px-6 py-24">
+      <p className="font-mono text-sm text-muted mb-6">
         operator.codes / build sessions
       </p>
-      <h1 className="text-4xl font-bold max-w-2xl leading-tight mb-6">
+      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight max-w-2xl leading-[1.1] mb-7">
         Real problems. Live systems. No budget required.
       </h1>
-      <p className="text-muted max-w-xl mb-8">
+      <p className="text-muted max-w-xl mb-10 text-lg leading-relaxed">
         A recorded session format where builders, founders, and creators
         work with Tyler to architect and ship real systems live. If you
         have a real problem, we build the solution on record.
       </p>
       <Link
         href="/apply"
-        className="inline-block bg-accent text-background font-medium rounded-full px-5 py-2.5 text-sm hover:bg-accent-light transition-colors"
+        className="btn-primary inline-block rounded-full px-6 py-3 text-sm font-medium"
       >
-        Apply for a session →
+        Apply for a session
       </Link>
 
-      <div className="grid sm:grid-cols-3 gap-8 mt-20">
+      <div className="grid sm:grid-cols-3 gap-10 mt-28">
         {steps.map((step) => (
           <div key={step.n}>
-            <p className="font-mono text-xs text-faint mb-2">{step.n}</p>
-            <h3 className="font-semibold mb-2">{step.title}</h3>
-            <p className="text-sm text-muted">{step.body}</p>
+            <p className="font-mono text-xs text-faint mb-3">{step.n}</p>
+            <h3 className="font-medium mb-2">{step.title}</h3>
+            <p className="text-sm text-muted leading-relaxed">{step.body}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-20 border-t border-border pt-12">
-        <h2 className="font-mono text-sm text-muted uppercase tracking-wide mb-8">
-          Domains
-        </h2>
-        <div className="grid sm:grid-cols-3 gap-8">
+      <div className="mt-28 border-t border-border pt-14">
+        <h2 className="font-mono text-sm text-muted mb-10">Domains</h2>
+        <div className="grid sm:grid-cols-3 gap-10">
           {domains.map((d) => (
             <div key={d.title}>
-              <h3 className="font-semibold mb-2">{d.title}</h3>
-              <p className="text-sm text-muted">{d.body}</p>
+              <h3 className="font-medium mb-2">{d.title}</h3>
+              <p className="text-sm text-muted leading-relaxed">{d.body}</p>
             </div>
           ))}
         </div>

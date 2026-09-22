@@ -88,7 +88,7 @@ export default function KeyManager({
       <button
         onClick={handleCreate}
         disabled={creating}
-        className="border border-border-md rounded-full px-4 py-2 text-sm hover:border-border-hi transition-colors disabled:opacity-50"
+        className="btn-secondary rounded-full px-4 py-2 text-sm disabled:opacity-50"
       >
         {creating ? "..." : "Generate new key"}
       </button>
