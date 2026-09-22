@@ -82,7 +82,7 @@ create table products (
   id text primary key, -- slug, e.g. 'operator-field-guide'
   name text not null,
   price_cents int not null,
-  r2_object_key text not null, -- path inside the R2 bucket
+  blob_pathname text not null, -- pathname inside the Vercel Blob private store
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 

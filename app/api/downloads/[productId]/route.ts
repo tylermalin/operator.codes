@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getPresignedDownloadUrl } from "@/lib/r2";
+import { getPresignedDownloadUrl } from "@/lib/blob";
 
 export async function GET(
   req: NextRequest,
@@ -39,7 +39,7 @@ export async function GET(
 
   const { data: product } = await supabase
     .from("products")
-    .select("r2_object_key")
+    .select("blob_pathname")
     .eq("id", productId)
     .single();
 
@@ -47,7 +47,7 @@ export async function GET(
     return NextResponse.json({ error: "Unknown product" }, { status: 404 });
   }
 
-  const url = await getPresignedDownloadUrl(product.r2_object_key);
+  const url = await getPresignedDownloadUrl(product.blob_pathname);
   if (!url) {
     return NextResponse.json(
       { error: "Storage is not configured yet" },
