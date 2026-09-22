@@ -75,3 +75,11 @@ export function getEssay(slug: string): Essay | null {
     content,
   };
 }
+
+// For the weekly digest: essays published within [since, until]
+// (both inclusive, ISO date strings, until defaults to today). Draft
+// essays are already excluded by getAllEssays().
+export function getEssaysBetween(since: string, until?: string): EssayMeta[] {
+  const untilDate = until ?? new Date().toISOString().slice(0, 10);
+  return getAllEssays().filter((e) => e.date >= since && e.date <= untilDate);
+}
