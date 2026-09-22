@@ -1,4 +1,6 @@
 import { Resend } from "resend";
+import { signUnsubscribeToken } from "@/lib/unsubscribe-token";
+import { WelcomeEmail } from "@/components/emails/welcome";
 
 // Newsletter ESP and subscriber database, both. Decision: Resend
 // over Loops (API-first Contacts/Segments/Broadcasts fits a
@@ -51,11 +53,16 @@ export async function subscribeContact(email: string): Promise<SubscribeResult> 
 export async function sendWelcomeEmail(email: string): Promise<void> {
   if (!client) return;
 
+  const token = signUnsubscribeToken(email);
+  const unsubscribeUrl = token
+    ? `https://operator.codes/api/unsubscribe?email=${encodeURIComponent(email)}&token=${token}`
+    : undefined;
+
   const { error } = await client.emails.send({
     from: fromAddress,
     to: email,
     subject: "You're subscribed to Operator",
-    html: `<p>You're on the list. New essays on AI systems, climate infrastructure, legal engineering, and protocol design land in your inbox as they're published.</p><p><a href="https://operator.codes/essays">Read the archive</a> in the meantime.</p>`,
+    react: WelcomeEmail({ unsubscribeUrl }),
   });
 
   if (error) {
