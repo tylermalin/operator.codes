@@ -1,0 +1,143 @@
+---
+title: "AI Agents Need a Legal Body"
+description: "AI agents can book travel, negotiate prices, and move money. What they can't do is own anything, sign anything in their own name, or be held responsible for anything. That gap is legal, not technical."
+date: "2026-10-01"
+domain: "AI systems"
+tier: "free"
+image: "/images/essays/ai-agents-need-a-legal-body/two-meanings.png"
+---
+
+AI agents can now book travel, negotiate prices, write and deploy code, move money, and run multi-step workflows for days without a human touching them. What they cannot do is own anything, sign anything in their own name, or be held responsible for anything.
+
+That gap is not a technical limitation. The tech already does it. It is a legal one. The law has no category for an actor that is neither a person nor property.
+
+Most of the conversation about agents focuses on capability. The more interesting question is structure. If agents are going to take on economic roles, holding budgets, entering contracts, earning revenue, they need what every other economic actor has: a legal body. Something that can hold assets, carry liabilities, and be sued.
+
+We have solved this problem before. Here is what the law says today, where it breaks, and what the fix looks like.
+
+*Disclosure: I'm building AgentCorp, which forms legal entities for AI agents. The argument below is why I think that layer matters, not a pitch for one way to build it.*
+
+## What the law says today
+
+The law sorts economic actors into a few buckets. People. Entities like corporations and LLCs. Property. An AI agent fits none of them.
+
+{/* pending figure: three bins labeled person, corporation, and property, with an AI agent outside all of them */}
+
+It is not a person, so it cannot hold rights or owe duties. It is not an entity, so it cannot own assets or be sued. And treating it as property, a tool, means everything it does lands on whoever owns it.
+
+That last point is roughly where current law sits. The Restatement (Third) of Agency takes the position that a computer program is not capable of acting as a principal or an agent under the common law. So when an AI agent "acts on your behalf," agency law does not treat it as your agent at all. It treats it as your instrument. You own the result.
+
+Contract law got partway there earlier. The Uniform Electronic Transactions Act, promulgated in 1999 and adopted by nearly every state, recognizes that a contract can be formed by electronic agents, even when no human reviews each action. Software making binding deals is not new. Automated trading and procurement systems have done it for decades.
+
+What changed is the scope. Those systems ran narrow, predefined rules. Today's agents choose their own steps toward a goal. The legal frame built for vending machines is now covering something closer to an employee.
+
+### Same word, different meanings
+
+Much of the confusion comes from vocabulary.
+
+<Figure
+  src="/images/essays/ai-agents-need-a-legal-body/two-meanings.png"
+  alt="A legal agent tethered to a principal by duties of loyalty and care, beside a software agent with no principal attached"
+  caption="Same word, different meanings."
+  width={1600}
+  height={900}
+/>
+
+In law, an agent owes duties to a principal: loyalty, obedience, care, disclosure. Those duties are what make delegation safe. In AI, an agent is software that takes actions. It owes nothing to anyone.
+
+Most confusion about AI liability comes from assuming the second carries the duties of the first. It does not. If you want those duties, you have to build a structure that creates them.
+
+## The missing layer is authority
+
+The hard problem with agents is not intelligence. It is authority.
+
+<Figure
+  src="/images/essays/ai-agents-need-a-legal-body/authority-chain.png"
+  alt="A chain running from principal to grant to action, with the scope link in the middle missing"
+  caption="The grant of authority is the missing link."
+  width={1600}
+  height={900}
+/>
+
+Every agent action raises three questions. What was this agent allowed to do? Who granted that permission? Can anyone prove it after the fact?
+
+In most deployments today, the answers live in a system prompt, an API key's scope, and some application logs. That is enough for a demo. It is not enough for a dispute. When an agent signs a vendor contract, overspends a budget, or makes a commitment to a customer, the first thing a court or counterparty will ask is whether the action was authorized. Without a clean record of the grant and its limits, every agent action becomes a dispute waiting to happen.
+
+Human organizations solved this long ago with boards, officers, signing authority, and delegation matrices. Agents need the same thing, expressed in a form software can check and a court can read.
+
+### Identity for agentic payments
+
+Payments make the gap concrete. Give an AI agent a crypto wallet and it can pay anyone in seconds. It still cannot pass KYC, because there is no legal identity behind it.
+
+That forces a choice. Either every agent payment routes through a human's identity, which turns the human into the liable party for everything the agent does, or the agent operates inside an entity that can be identified, verified, and held accountable on its own.
+
+Agentic payments do not have a technology problem. They have an identity problem.
+
+## We've built artificial persons before
+
+The idea of giving a non-human actor legal standing sounds radical. It is one of the oldest moves in commercial law.
+
+<Figure
+  src="/images/essays/ai-agents-need-a-legal-body/artificial-persons.png"
+  alt="A classical columned building constructed from the same connected nodes as a network diagram"
+  caption="Corporations were the first artificial persons."
+  width={1600}
+  height={900}
+/>
+
+Corporations were the first artificial persons. For much of history, forming one required a specific act of a legislature or a royal charter. In the 1800s, general incorporation statutes changed that. Anyone who met the requirements could form a corporation by filing paperwork.
+
+That shift unlocked enormous economic activity, because it solved a coordination problem. Investors could pool capital without risking everything they owned. Contracts could outlive the people who signed them. A business could hold property, sue, and be sued in its own name.
+
+None of that required pretending a corporation was a human. It required a legal wrapper with clear rules about who controls it, what it owns, and who is liable for what.
+
+### States are already experimenting
+
+The wrapper for non-human actors is already being written, quietly, at the state level. In 2021, Wyoming passed a DAO LLC law that allows a limited liability company to be managed, in whole or in part, by algorithm through smart contracts.
+
+It was built for DAOs. It may matter more for AI agents. It established something important: a state can recognize an entity whose management is software, as long as the structure around it defines rights, obligations, and accountability.
+
+## Structure: contain the failure
+
+If agents are going to operate at scale, the structure has to assume some of them will fail. The question is how far the damage travels.
+
+<Figure
+  src="/images/essays/ai-agents-need-a-legal-body/series-llc.png"
+  alt="One parent entity divided into separate series compartments, with a crack contained inside a single compartment"
+  caption="Contain the failure to one compartment."
+  width={1600}
+  height={900}
+/>
+
+This is where the Series LLC fits. Delaware's LLC Act allows a single LLC to establish separate series, each with its own members, assets, and liabilities. When the statute's requirements are met, including keeping separate records for each series, the debts of one series are enforceable only against that series' assets, not the others or the parent.
+
+Map that onto agents. One parent entity. Each agent operates in its own series, with its own budget, its own contracts, and its own liability. If one agent makes a bad commitment or gets exploited, the damage stays inside its series. Liability segregation is what lets you run many agents at once without every agent putting every other one at risk.
+
+The series structure also gives the authority problem a home. Each series' operating terms can define what that agent may do, who can change its permissions, and what gets recorded. The grant of authority stops living in a system prompt and starts living in a governing document.
+
+### Uninsurable things don't scale
+
+There is one more test any structure has to pass: can it be insured?
+
+Underwriters price risk from data. What happened, how often, how bad. An agent that cannot produce a reliable record of its actions and authority is impossible to underwrite, and uninsurable activity does not get deployed at scale by any serious company.
+
+The structure that wins will be the one that makes agent behavior legible to the institutions that carry risk: insurers, auditors, counterparties, and courts.
+
+## Agents need a body before they need more intelligence
+
+Put it together and the gaps line up:
+
+1. **No legal category.** Agents are not persons, entities, or ordinary property, so the law defaults to treating them as tools.
+2. **No duties.** A software agent owes nothing to anyone unless a structure creates obligations around it.
+3. **No proof of authority.** Permissions live in prompts and keys, not in records a court can read.
+4. **No identity.** Agents cannot pass KYC, so every payment runs through a human who becomes liable for everything.
+5. **No containment.** Without segregated liability, one failed agent puts every other one at risk.
+6. **No insurability.** Without a record of actions and authority, nobody can price the risk.
+
+Each of these has a precedent. The corporation solved the first and fifth. Agency law solved the second. Signing authority and delegation matrices solved the third. KYC frameworks solved the fourth for entities. Insurance markets solved the sixth once the data existed.
+
+What is missing is not new law so much as the assembly of existing law into a structure built for actors that are software.
+
+The agent economy will not be held back by model capability. It will be held back by the absence of a legal body that can hold assets, carry liability, prove authority, and be trusted by the institutions that move real money.
+
+That is ultimately an infrastructure problem. The teams that build that layer, carefully and in a way courts and regulators can recognize, will decide how fast agents move from demos into the economy.

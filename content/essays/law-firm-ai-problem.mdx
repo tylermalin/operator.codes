@@ -1,0 +1,131 @@
+---
+title: "The Law Firm AI Problem Isn't the Model"
+description: "Every firm will have access to roughly the same models. What separates them in five years is the incentive, verification, and training infrastructure built around those models, not the models themselves."
+date: "2026-10-01"
+domain: "legal engineering"
+tier: "free"
+image: "/images/essays/law-firm-ai-problem/billable-hour.png"
+---
+
+Most law firms are asking which AI model to buy. That is the least important decision they will make.
+
+The models are good and getting better every quarter. They draft, summarize, compare, and search at a level that would have seemed absurd three years ago. Any firm can license that capability by Friday.
+
+What no vendor can sell is the layer underneath. Who decides what. What gets checked before it leaves the building. How the firm gets paid when the work takes a tenth of the time. How a second-year associate learns judgment when the first-year work is gone.
+
+Those are not technology questions. They are incentive, verification, and structure questions. Lawyers are better positioned to answer them than any engineer, because the profession already built most of the rules. It just wrote them in prose.
+
+This is ultimately an infrastructure problem. Here is what that infrastructure looks like.
+
+## Hallucination is a model problem. Filing it is a process problem.
+
+Most people remember Mata v. Avianca (S.D.N.Y. 2023) as the case where ChatGPT invented citations. The real lesson was simpler. Nobody checked.
+
+Models will keep making errors. Every tool does. Courts did not sanction the model. They sanctioned lawyers who filed work they had not verified. That distinction is the foundation of every sensible AI policy: the failure is not that the machine was wrong, it is that the process had no checkpoint.
+
+The interesting part is that lawyers have trusted automated verification for 150 years. Shepard's citators, first published in 1873, flagged when a case had been reversed or overruled. That is diagnostics for broken references, long before software. Nobody argued citators would make lawyers lazy. They became part of how competent work gets done.
+
+Legal AI does not need lawyers to trust something new. It needs the same thing citators provided: a reliable way to check the work, built into the workflow so that skipping it takes more effort than doing it.
+
+## The incentive comes first
+
+The billable hour pays for time. AI removes time. That is the whole conflict, and most AI strategies skip past it.
+
+<Figure
+  src="/images/essays/law-firm-ai-problem/billable-hour.png"
+  alt="A bar chart showing hours billed falling from ten bars to one, while value delivered stays the same height"
+  caption="AI removes time. The billable hour pays for it."
+  width={1600}
+  height={900}
+/>
+
+Take a task that used to take ten hours. With a well-built workflow it takes one. The client gets the same result. Under hourly billing, the firm just cut its revenue on that task by 90%.
+
+No partner says this out loud, but the incentive is clear. Every hour saved is an hour not billed. Adoption stalls not because lawyers fear technology, but because the compensation system punishes the efficiency it is supposed to deliver.
+
+The firms that move first will change how they price before they change how they work. Fixed fees for defined matters. Subscription pricing for recurring advisory work. Value-based pricing tied to outcomes. None of this is new. What is new is that AI makes the gap between hours worked and value delivered impossible to ignore.
+
+Adoption follows incentives. Pricing comes first.
+
+## The ethics rules already exist
+
+Most people assume the profession needs a new rulebook for AI. It mostly does not.
+
+ABA Model Rule 5.3 covers a lawyer's duty to supervise nonlawyer assistance. Comment 8 to Rule 1.1 has asked lawyers to keep up with relevant technology since 2012. In July 2024, ABA Formal Opinion 512 applied that existing framework to generative AI: competence, confidentiality, communication with clients, supervision, and reasonable fees.
+
+Read together, the message is consistent. AI is allowed. The lawyer stays responsible for what it produces.
+
+So the real question for a firm is not whether it may use AI. It is whether the firm can show that it supervised the output. Who reviewed this draft? What did they check? Was client data handled under the engagement terms? Can the firm answer those questions six months later, when a client or a court asks?
+
+That is a systems question, not a policy memo. A twelve-page AI policy that nobody can audit against is a statement of intent. A workflow that records who approved what, at which risk level, is evidence.
+
+## Licenses are not adoption
+
+Most firms measure AI adoption by seats purchased. The better metric is how many workflows actually changed.
+
+<Figure
+  src="/images/essays/law-firm-ai-problem/licenses-vs-workflows.png"
+  alt="Seven unopened license boxes on the left beside a single connected network of changed workflow nodes on the right"
+  caption="A tool without a process is a subscription."
+  width={1600}
+  height={900}
+/>
+
+A tool nobody built a process around is a subscription, not a capability. The pattern is familiar from every prior wave of legal technology: a firm-wide rollout, a training session, a spike in logins, then a slow drift back to how things were done before.
+
+The firms pulling ahead start smaller and go deeper. They pick one practice group. They map its work end to end: intake, research, first draft, review, sign-off, filing. They find the steps that repeat and the decisions that require judgment. Then they automate the first category and build better support for the second.
+
+### The asset firms can't find
+
+The most valuable thing a law firm owns is its past work product. Decades of briefs, negotiated deal terms, closing sets, memos, and positions taken with specific counterparties.
+
+<Figure
+  src="/images/essays/law-firm-ai-problem/work-product-archive.png"
+  alt="A large grid of document records with a search beam from the left illuminating only the first few rows"
+  caption="Can the firm find what it already knows?"
+  width={1600}
+  height={900}
+/>
+
+Most firms cannot search it in any meaningful way. Knowledge lives in a document management system organized by matter number, in partners' memories, and in the inboxes of associates who left years ago.
+
+Before any AI strategy, the real issue is whether the firm can find what it already knows. A model connected to a well-structured archive of the firm's own work is a competitive advantage no vendor can replicate. A model connected to nothing is a better search engine for public law.
+
+## The training pipeline problem
+
+If AI does first-year associate work, how do lawyers learn judgment?
+
+<Figure
+  src="/images/essays/law-firm-ai-problem/training-pipeline.png"
+  alt="A staircase whose lower steps are dashed and missing, with solid steps rising toward judgment at the top"
+  caption="Automate the work, and you remove the training."
+  width={1600}
+  height={900}
+/>
+
+Doc review, first drafts, and diligence checklists were never just output. They were training. A junior lawyer who reviews ten thousand documents learns what matters in a case. One who drafts fifty indemnification clauses learns which ones get negotiated and why.
+
+The second-order effect is easy to miss. A firm that automates the bottom of the staircase saves money for five years. Then it discovers it has partners who learned on the old system and mid-levels who never climbed the lower steps.
+
+The fix is not to keep the busywork. It is to redesign how juniors learn. Have them review and correct AI output against the senior lawyer's markup. Make them explain why a draft is wrong, not just fix it. Rotate them through the judgment calls the system flags as uncertain. The work changes. The apprenticeship has to change with it, on purpose.
+
+## The missing layer is legal engineering
+
+Legal engineering is not prompt writing. It is not buying a tool and holding a training session either.
+
+{/* pending figure: tangled practice lines passing through a structured grid, exiting as clean parallel lines */}
+
+It is mapping how legal work actually moves through a firm: who decides, what they check, what gets recorded. Then building systems that respect that structure instead of flattening it.
+
+That is also what a law firm Director of AI should be doing. Not picking the vendor. Knowing which decisions in the firm can be delegated to a system, which need a lawyer's sign-off, and how to prove which was which after the fact. Half technologist, half risk officer. Very few people have done both.
+
+Put the pieces together and the shape of the work is clear:
+
+1. **Price for value**, so efficiency stops being a revenue problem.
+2. **Build verification into the workflow**, so checking the work is the default.
+3. **Record supervision**, so the firm can prove what it already promises under the ethics rules.
+4. **Start with one practice group**, mapped end to end, before any firm-wide rollout.
+5. **Make the firm's own knowledge findable**, because that is the advantage no vendor sells.
+6. **Redesign the apprenticeship**, so the next generation of partners still learns judgment.
+
+The model is the easy part. Every firm will have access to roughly the same ones. What separates firms in five years will be the layer they built around them, and the people who knew how to build it.

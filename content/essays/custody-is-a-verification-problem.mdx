@@ -1,0 +1,132 @@
+---
+title: "Custody Is a Verification Problem"
+description: "Every custody rule, proof-of-reserves dashboard, and stablecoin attestation is an answer to one question: who verifies? Most current answers are estimates with a signature on them."
+date: "2026-10-01"
+domain: "digital assets"
+tier: "free"
+image: "/images/essays/custody-is-a-verification-problem/proof-of-reserves.png"
+---
+
+On October 1, 2026, the SEC proposed new custody rules for crypto assets held by registered investment advisers and regulated funds. As reported, the proposal would let advisers self-custody crypto in some circumstances, allow state trust companies to act as custodians, and open the door to a wider range of crypto strategies in regulated funds.
+
+The headlines called it a win for crypto. That reading is incomplete.
+
+A proposal is not a rule. A 60-day comment period follows publication in the Federal Register, and the conditions attached to self-custody will decide whether this is a real opening or a narrow exception. More important, the proposal surfaces a question the industry has spent a decade avoiding.
+
+Who verifies?
+
+Every custody rule, every proof-of-reserves dashboard, every stablecoin attestation, and every market structure bill is an answer to that one question. Most of the current answers are estimates with a signature on them. The market is starting to realize that is not good enough.
+
+## The custody rule was never about storage
+
+The adviser custody rule has been on the books for decades. Its modern shape came after Madoff. In 2009, the SEC amended it to require surprise examinations by independent accountants for many advisers with custody of client assets.
+
+{/* pending figure: an adviser and the assets, connected through an independent check */}
+
+The lesson of Madoff was not that assets were stored badly. It was that the person reporting the assets and the person holding them were effectively the same, and nobody independent ever looked. Statements were generated. Returns were reported. None of it was verified against reality.
+
+So the custody rule's real function is separation. Someone other than the adviser confirms the assets exist and belong to clients.
+
+That is why self-custody is the most important word in the new proposal. Removing the third party does not remove the need for verification. It moves the burden somewhere else. If the adviser holds the keys, then the proof has to come from key management controls, on-chain evidence, and independent checks that run more often than an annual surprise exam.
+
+The conditions in the final rule will decide whether that burden is met or just described.
+
+## Half a balance sheet proves almost nothing
+
+After FTX, proof of reserves became the industry's answer to trust. Exchanges published wallet addresses and Merkle trees showing what they held.
+
+<Figure
+  src="/images/essays/custody-is-a-verification-problem/proof-of-reserves.png"
+  alt="A balance scale with reserves shown on one side and liabilities left blank and unmarked on the other"
+  caption="Solvency is the gap between the two."
+  width={1600}
+  height={900}
+/>
+
+The problem is that reserves are only half the question. Showing what you hold is easy. Showing what you owe is the hard part. An exchange can hold $10 billion in assets and still be insolvent if it owes $12 billion. Solvency is the gap between the two, and a reserves-only report cannot see it.
+
+FTX itself was not a crypto failure. It was commingling, one of the oldest frauds in finance. Futures markets have required firms to segregate customer funds for decades. New technology did not create the risk. It made it easier to skip the controls.
+
+### A stablecoin is a promise
+
+Stablecoins have the same structure in a different form. Each token is a promise: this is redeemable for one dollar. The reserves backing that promise are typically confirmed through periodic attestations.
+
+<Figure
+  src="/images/essays/custody-is-a-verification-problem/stablecoin-attestation.png"
+  alt="A timeline of continuous redemptions with periodic attestation checkpoints marked as occasional spikes"
+  caption="Verify as often as the money moves."
+  width={1600}
+  height={900}
+/>
+
+An attestation checks the promise at a moment in time. Redemptions happen every second. Between checks, the holder is trusting a snapshot.
+
+The missing layer is verification that runs as often as the money moves. That does not require new law as much as new infrastructure: reserve data tied to its source, published continuously, checkable by anyone. Measured, not estimated.
+
+## Market structure is mostly unbundling
+
+In traditional finance, the exchange, the broker, and the custodian are separate entities. That separation is not bureaucratic habit. It exists to manage conflicts of interest.
+
+<Figure
+  src="/images/essays/custody-is-a-verification-problem/unbundling.png"
+  alt="Three overlapping circles fused together on the left, the same three functions separated into distinct circles on the right labeled exchange, broker, and custodian"
+  caption="Market structure is mostly unbundling."
+  width={1600}
+  height={900}
+/>
+
+The exchange matches orders and has an interest in volume. The broker executes for customers and has an interest in commissions. The custodian holds assets and has an interest in safekeeping. When one entity plays all three roles, it can trade against its customers, lend their assets, and report whatever balances it chooses. Each conflict is manageable on its own. Bundled, they become invisible.
+
+Most crypto platforms bundled all three from day one, because it was faster and nobody required otherwise.
+
+Read through the noise and most market structure legislation, from the CLARITY Act debates in the US to the FCA's new authorisation regime in the UK, is about unbundling them. Who can do which function. Which regulator oversees each. What has to be kept separate, and how anyone confirms that it was.
+
+That last part is where the next round of compliance cost will land. Rules that require separation are only as good as the evidence that separation happened.
+
+### Rules vs enforcement
+
+For years, US crypto policy ran mostly through enforcement actions. That approach produces a specific incentive: firms learn to avoid getting caught, not what compliance looks like.
+
+Written rules change the incentive. They tell firms what good looks like, and they make oversight measurable. Clear rules do not reduce oversight. They make it checkable.
+
+## A token is a record of a right, not the right
+
+Tokenization is the other place the verification gap shows up. A token representing a building, a bond, or a carbon credit is a record that someone holds a right. The right itself lives in a legal document: a deed, an indenture, a registry entry, an operating agreement.
+
+<Figure
+  src="/images/essays/custody-is-a-verification-problem/token-vs-right.png"
+  alt="A small token positioned in front of a larger document labeled legal right"
+  caption="A token is a record of a right, not the right."
+  width={1600}
+  height={900}
+/>
+
+When the legal object and the token do not match, the token loses. Courts enforce the legal document, not the ledger. If the operating agreement says transfers require manager consent and the token moves freely on-chain, the on-chain holder may own nothing a court will recognize.
+
+The same logic applies to smart contracts. Code executes. Contract law decides what the code meant. When a contract does something nobody intended, the dispute does not end on-chain. It moves to a courtroom that reads intent. Smart contracts automate performance, not agreement.
+
+Most tokenization projects spend their effort on the token and very little on the legal object behind it. That is backwards.
+
+### Self-custody is a liability choice
+
+This brings us back to the SEC proposal. Self-custody sounds like a technical choice. It is a liability choice.
+
+Whoever holds the keys holds the risk. If keys are lost, stolen, or misused by an insider, the question is who answers for it and how anyone proves what happened. For a registered adviser, that means documented key management, separation of duties, access logs, and recovery procedures that an examiner can actually test.
+
+Key management is the custody rule now.
+
+## Measured, not estimated
+
+Step back and the pattern is the same everywhere in digital assets. The rule assumes a fact. Nobody can easily prove the fact.
+
+- The custody rule assumes client assets exist. Self-custody removes the independent party who used to confirm it.
+- Proof of reserves assumes solvency. It shows only half the balance sheet.
+- Stablecoin rules assume backing. Attestations confirm it once a month.
+- Market structure rules assume separation. Separation has to be evidenced, not declared.
+- Tokenization assumes the token and the right match. Often nobody checked.
+
+The last decade of crypto regulation was about whether these assets are allowed. The next decade is about whether anyone can prove what the rules assume.
+
+That is ultimately an infrastructure problem. The firms that build continuous, independent, checkable evidence into custody, reserves, and settlement will not just comply more cheaply. They will be the ones institutions trust with real money.
+
+The SEC's comment period is 60 days. If you work in this space, it is worth writing in. The conditions on self-custody are where the verification question gets answered, and the people who comment are the ones who shape the answer.
