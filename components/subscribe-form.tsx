@@ -42,7 +42,7 @@ export default function SubscribeForm() {
               placeholder="name@example.com"
               aria-invalid={status === "error"}
               aria-describedby={error ? `${id}-error` : undefined}
-              className="field h-11 flex-1 rounded-full px-5 text-[15px]"
+              className="field h-11 w-full shrink-0 rounded-full px-5 text-[15px] sm:w-auto sm:flex-1"
             />
             <button
               type="submit"

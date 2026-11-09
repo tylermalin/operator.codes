@@ -25,9 +25,24 @@ Monochrome on near-black. The words carry the page. Tokens live in
 
 ## Type
 
+EB Garamond for anything you read as writing; Inter for anything you scan or click.
+
 | Role | Face | Class | Use |
 |---|---|---|---|
-| Title | Instrument Serif 400 | `.type-title` + a clamp size | Page titles, essay titles, plate titles, CTA headline |
+| Masthead | EB Garamond caps, 0.08em tracking, hairlines both sides | `.masthead` + `.type-title` | Home page only |
+| Title | EB Garamond 400, -0.012em, 1.08 leading, old-style figures | `.type-title` + a clamp size | Page, essay, and card titles; CTA headlines |
+| Dek | Inter, muted | `.type-dek` | One-sentence summary under a title |
+| Meta | Inter 12px, 500, uppercase, 0.06em | `.type-meta` | "NOV 9, 2026 IN AI SYSTEMS", bylines, section labels |
+| Body | EB Garamond 21px / 1.6, 64ch, centered column | `.prose-essay` | Essay text |
+| Prose h2 / h3 | Garamond 500 30px / Inter caps label | in `.prose-essay` | Section heads / sub-labels |
+| Tables, captions, embeds | Inter | in `.prose-essay` | Anything tabular or UI-like inside an essay |
+| Code | Geist Mono | `code`, `pre` | Code only |
+| UI | Inter 15px | Tailwind | Nav, buttons, chips, forms |
+
+Essay headers are centered: meta line, title, dek, byline, share row between hairlines.
+
+---|---|---|---|
+| Title | EB Garamond 400 | `.type-title` + a clamp size | Page titles, essay titles, plate titles, CTA headline |
 | Dek | Geist | `.type-dek` | One-sentence summary under a title |
 | Body | Geist 19px / 1.75 | `.prose-essay` | Essay text, 66ch measure |
 | Heading in prose | Geist 600 | `h2`, `h3` in `.prose-essay` | Sans so the outline scans |
@@ -108,7 +123,8 @@ The archive was a single column of text rows with mixed illustration thumbnails.
 - `EssayCard` (row layout): replaced by `PostCard`.
 - Typeset plates as the default thumbnail: replaced by essay images; kept as fallback.
 - Gradient primary button with glow and hover lift: replaced by the flat inverted pill.
-- Syne and DM Mono: replaced by Instrument Serif, Geist, Geist Mono.
+- Syne and DM Mono, then Instrument Serif and Geist: replaced by EB Garamond and Inter (Geist Mono kept for code).
+- Topic pill over card images: topic moved into the uppercase meta line.
 
 ---
 

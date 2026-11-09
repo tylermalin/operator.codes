@@ -32,7 +32,7 @@ export default async function EssaysPage({
     <div className="mx-auto max-w-6xl px-5 pb-8 pt-16 sm:px-8 sm:pt-24">
       <header className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="type-title text-[clamp(3.5rem,9vw,6.5rem)]">Essays</h1>
+          <h1 className="type-title text-[clamp(3.25rem,8vw,5.75rem)]">Essays</h1>
           <p className="type-dek mt-4 max-w-xl">
             Systems, incentives, and infrastructure across AI, law, digital assets, and climate.
           </p>
@@ -56,7 +56,7 @@ export default async function EssaysPage({
 
       {rest.length > 0 && (
         <section aria-labelledby="latest" className="mt-20 border-t border-border pt-10">
-          <h2 id="latest" className="text-[15px] font-medium text-muted">
+          <h2 id="latest" className="type-meta text-foreground">
             More essays
           </h2>
           <div className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">

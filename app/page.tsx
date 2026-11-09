@@ -18,9 +18,13 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8">
-      <section className="pb-20 pt-16 sm:pb-28 sm:pt-28">
-        <p className="type-meta">Operator · Tyler Malin</p>
-        <h1 className="type-title mt-6 max-w-4xl text-[clamp(2.75rem,7vw,5.5rem)]">
+      <div className="masthead pt-12 sm:pt-16">
+        <p className="type-title text-[clamp(2.75rem,8vw,5.5rem)] uppercase tracking-[0.08em]">
+          Operator
+        </p>
+      </div>
+      <section className="pb-20 pt-10 text-center sm:pb-24">
+        <h1 className="type-title mx-auto max-w-[24ch] text-[clamp(1.875rem,3.6vw,2.875rem)]">
           <BlurWords text="Systems, incentives, and infrastructure." />{" "}
           <BlurWords
             text="Written by someone who builds them."
@@ -28,11 +32,11 @@ export default function HomePage() {
             start={280}
           />
         </h1>
-        <p className="type-dek fade-up mt-7 max-w-2xl" style={{ animationDelay: "750ms" }}>
+        <p className="type-dek fade-up mx-auto mt-5 max-w-[52ch]" style={{ animationDelay: "750ms" }}>
           Essays on AI systems, legal engineering, digital assets, and climate
           infrastructure, by Tyler Malin. New essays by email.
         </p>
-        <div className="fade-up mt-9" style={{ animationDelay: "950ms" }}>
+        <div className="fade-up mt-8 flex justify-center" style={{ animationDelay: "950ms" }}>
           <SubscribeForm />
         </div>
       </section>
@@ -40,10 +44,10 @@ export default function HomePage() {
       {featured.length > 0 && (
         <section aria-labelledby="latest" className="border-t border-border pt-10">
           <div className="flex items-baseline justify-between">
-            <h2 id="latest" className="text-[15px] font-medium text-muted">
-              Latest
+            <h2 id="latest" className="type-meta text-foreground">
+              Latest essays
             </h2>
-            <Link href="/essays" className="link-underline text-[15px] text-muted hover:text-foreground">
+            <Link href="/essays" className="type-meta link-underline hover:text-foreground">
               All essays →
             </Link>
           </div>
@@ -64,7 +68,7 @@ export default function HomePage() {
 
       {GUIDES.length > 0 && (
         <section aria-labelledby="guides" className="mt-24 border-t border-border pt-10">
-          <h2 id="guides" className="text-[15px] font-medium text-muted">
+          <h2 id="guides" className="type-meta text-foreground">
             Field guides
           </h2>
           <ul className="mt-6 divide-y divide-border border-y border-border">

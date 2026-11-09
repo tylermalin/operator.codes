@@ -104,32 +104,34 @@ export default async function EssayPage({
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <header>
-        <Link
-          href={`/essays?topic=${topicSlug(essay.domain)}`}
-          className="chip h-8 px-3 text-[13px]"
-        >
-          {topicLabel(essay.domain)}
-        </Link>
-        <h1 className="type-title mt-6 text-[clamp(2.5rem,6.4vw,4.25rem)]">
+      <header className="text-center">
+        <p className="type-meta">
+          <time dateTime={essay.date}>{formatDate(essay.date)}</time>
+          <span className="text-faint"> in </span>
+          <Link
+            href={`/essays?topic=${topicSlug(essay.domain)}`}
+            className="link-underline text-foreground/85"
+          >
+            {topicLabel(essay.domain)}
+          </Link>
+          {essay.tier !== "free" && (
+            <span className="ml-2 text-amber">· {essay.tier}</span>
+          )}
+        </p>
+        <h1 className="type-title mx-auto mt-5 max-w-[22ch] text-[clamp(2.5rem,6.2vw,4.5rem)]">
           {essay.title}
         </h1>
         {essay.description && (
-          <p className="type-dek mt-5">{essay.description}</p>
+          <p className="type-dek mx-auto mt-5 max-w-[52ch]">{essay.description}</p>
         )}
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-y border-border py-4">
-          <p className="text-[15px] text-muted">
-            <Link href="/about" rel="author" className="link-underline text-foreground">
-              {AUTHOR.name}
-            </Link>
-            <span className="mx-2 text-faint">·</span>
-            <time dateTime={essay.date}>{formatDate(essay.date)}</time>
-            <span className="mx-2 text-faint">·</span>
-            {essay.readingTime}
-            {essay.tier !== "free" && (
-              <span className="ml-2 text-amber">· {essay.tier}</span>
-            )}
-          </p>
+        <p className="type-meta mt-6">
+          <Link href="/about" rel="author" className="link-underline text-foreground">
+            {AUTHOR.name}
+          </Link>
+          <span className="mx-2 text-faint">·</span>
+          {essay.readingTime}
+        </p>
+        <div className="mt-6 flex justify-center border-y border-border py-3">
           <ShareBar
             url={`https://operator.codes/essays/${slug}`}
             title={essay.title}

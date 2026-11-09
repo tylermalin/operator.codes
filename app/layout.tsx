@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Geist, Geist_Mono } from "next/font/google";
+import { EB_Garamond, Inter, Geist_Mono } from "next/font/google";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
 import "./globals.css";
 
-// Three faces, three jobs: serif for titles, sans for reading and UI,
-// mono for metadata. See docs/design-system.md.
-const serif = Instrument_Serif({
+// Two faces, clear jobs: EB Garamond for titles and essay text, Inter
+// for summaries, UI, and uppercase metadata. Geist Mono only for code.
+// See docs/design-system.md.
+const serif = EB_Garamond({
   subsets: ["latin"],
-  weight: "400",
+  weight: "variable",
   style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
+  variable: "--font-garamond",
   display: "swap",
 });
 
-const sans = Geist({
+const sans = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
   display: "swap",
 });
 
