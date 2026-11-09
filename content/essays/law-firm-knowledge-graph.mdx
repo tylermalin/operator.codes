@@ -1,0 +1,129 @@
+---
+title: "Law Firm AI Has a Links Problem"
+description: "Law firm AI fails on precedent because it can't see how matters, clauses, and lawyers connect, or which ethical walls it must not cross. A legal knowledge graph fixes the retrieval layer."
+date: "2026-11-09"
+domain: "legal engineering"
+tier: "free"
+image: "/images/essays/law-firm-knowledge-graph/hero.jpg"
+keyPoints:
+  - "Stanford researchers found leading legal AI research tools gave incorrect answers more than 17% of the time, and traced some errors to retrieval, not the model."
+  - "A legal knowledge graph indexes how matters, documents, clauses, and lawyers connect, so a partner's multi-part question becomes a query instead of a guess."
+  - "ABA Formal Opinion 512 warns that firm AI tools can leak across ethical walls. Permissions have to filter retrieval itself, not the results afterward."
+---
+
+Most law firms don't have a knowledge problem. They have a links problem.
+
+Decades of work product sit in the document management system. Executed agreements, markups, opinions, settlement letters. The knowledge that makes a firm valuable lives in how those pieces connect: this indemnity carve-out was conceded because of that cross-default clause in a facility signed two years earlier, approved by this partner, against that firm across the table.
+
+The AI tools most firms are deploying can't see any of those links. They read the archive as a pile.
+
+*Disclosure: I run [Beneficial Technology](https://beneficial.technology), a legal engineering consultancy that advises on systems like the one described here.*
+
+## The tools already fail at retrieval
+
+In 2024, Stanford researchers ran more than 200 legal queries through the leading AI research products. [Lexis+ AI and Ask Practical Law AI produced incorrect information more than 17% of the time. Westlaw AI-Assisted Research did so more than 34% of the time](https://hai.stanford.edu/news/ai-trial-legal-models-hallucinate-1-out-6-or-more-benchmarking-queries).
+
+These were not chatbots guessing from memory. They were retrieval-augmented systems, built to answer from real sources. The [authors](https://arxiv.org/abs/2405.20362) note that some of the errors happened for a plain reason: the retrieval step failed.
+
+That's the layer this essay is about. Not the model. The machinery that decides what the model gets to read.
+
+## The pile and the map
+
+Standard retrieval works like this. Split every document into passages of a few hundred words. Turn each passage into a vector. When a lawyer asks a question, find the passages that look most similar and hand them to the model.
+
+That works when the answer sits inside one passage. It breaks when the answer is a relationship.
+
+A definition on page 4 is cut off from the covenant on page 82 that depends on it. The governing law clause lives in the boilerplate, nowhere near the carve-out. Who approved the carve-out isn't in the document at all. It's in the staffing records.
+
+Stuffing more passages into the prompt doesn't fix it either. Models [use information at the start and end of a long context best, and lose track of what sits in the middle](https://arxiv.org/abs/2307.03172). A bigger pile is still a pile.
+
+Take a real partner question and count the facts it has to satisfy.
+
+<HopCounter />
+
+Every fact outside the clause text is a join. Passage retrieval has to stumble onto each one. The more joins, the more the model is left to guess how the pieces relate, and guessing is where fabricated connections come from.
+
+## What a legal knowledge graph is
+
+A legal knowledge graph is an index of the firm's work product that stores the connections explicitly. It doesn't move or copy the files. It reads them through the document system's own interface and records what it finds:
+
+- **Things** (nodes): clients, matters, documents, clauses, people. Start with those five and resist adding more until they work.
+- **Relationships** (edges): this client retained the firm for this matter. This matter produced this document. This document contains this clause, which is governed by Delaware law, amends that clause, and supersedes that draft. This partner approved it.
+
+Each node keeps a pointer back to the source file. Every answer can show its path.
+
+The labels matter as much as the structure. "Indemnity cap," "aggregate liability basket," and "limitation of liability" often do the same job. A graph maps them to one clause type, so a search for one finds all three. Firms don't have to invent this vocabulary. The [SALI Alliance](https://sali.org/) publishes an open standard for labeling legal matters, and academic work like [LKIF](https://en.wikipedia.org/wiki/Legal_Knowledge_Interchange_Format) has modeled legal concepts formally for years.
+
+The partner's question from above, written against a graph, looks like this:
+
+```
+MATCH (m:Matter)-[:PRODUCED]->(d:Document)-[:CONTAINS]->(c:Clause {type: "Non-Solicitation"})
+MATCH (d)-[:GOVERNED_BY]->(:Jurisdiction {code: "DE"})
+MATCH (m)-[:IN_PRACTICE]->(:PracticeArea {name: "M&A"})
+MATCH (p:Person)-[:APPROVED]->(d)
+MATCH (m)-[:OPPOSED_BY]->(oc:Firm)
+WHERE d.is_executed = true AND c.deviation > 0.15
+RETURN c.text, m.title, p.name, oc.name, d.dms_uri
+```
+
+Every condition is explicit. Nothing is inferred from proximity.
+
+A note on the buzzword. "GraphRAG" is often used for any of this, but [Microsoft's paper that coined it](https://arxiv.org/abs/2404.16130) describes something narrower: building a graph from a corpus, summarizing clusters of related entities, and using those summaries to answer broad questions like "what are the main themes here?" It reports better comprehensiveness and diversity on that kind of question. Partner questions are a different kind. They need filters and joins. In practice, the useful pattern is hybrid. Similarity search finds the starting points. The graph walks from there under exact constraints. The model writes the answer from what the walk returns.
+
+## The ethical wall is the real spec
+
+The hard part isn't the retrieval. It's permissions.
+
+In [ABA Formal Opinion 512](https://www.lawnext.com/wp-content/uploads/2024/07/aba-formal-opinion-512.pdf), issued July 29, 2024, the ABA's ethics committee spelled out the risk. A generative AI tool used only inside one firm can still disclose information relating to a representation "to persons in the firm who either are prohibited from access to said information because of an ethical wall" or who could use one client's information to help another.
+
+That's a retrieval problem, and the duty is concrete. In New York, Rule 1.10(c)(2) has let firms avoid imputing a lateral's conflict since January 1, 2025, but only if they "effectively screen that lawyer from that matter." The [New York City Bar's Formal Opinion 2026-1](https://www.nycbar.org/reports/formal-opinion-2026-1-using-new-yorks-screening-notification-rule-to-avoid-imputation-of-a-lateral-attorneys-conflicts-to-other-lawyers-in-the-firm/) walks through what that takes. A firm-wide AI tool that can pull a screened matter into a prompt makes the screen a policy on paper.
+
+Most retrieval systems handle permissions the cheap way. Search everything, then drop what the user can't see. Here's what that costs.
+
+<WallFilter />
+
+The walled matters are often the most relevant ones. That's why the wall exists: same client, same counterparty, same deal. Filtering afterward means the pipeline reads exactly the documents it should never touch, then throws them away. Before it threw them away, they passed through rerankers, caches, logs, and prompts.
+
+Three rules follow:
+
+1. **Filter during traversal, not after.** A path the lawyer can't see is never walked.
+2. **Walls are breaks, not penalties.** No relevance score can outweigh an active screen.
+3. **Sync permissions. Don't copy them.** The graph reads access rights from the document system every time they change. A permission copied once goes stale, and the stale window is where the leak happens.
+
+## Failure modes, stated first
+
+A graph fixes the retrieval layer. It brings its own risks, and a firm should price them before it signs anything.
+
+- **Extraction errors become facts.** If the parser labels a clause wrong, the graph states the wrong label with full confidence. Clause extraction needs sampling and human review, permanently.
+- **The vocabulary decays.** Practice groups invent new structures. Someone has to own the clause taxonomy. That's a knowledge lawyer's job, not IT's.
+- **Drafts pollute precedent.** The graph has to know executed from draft and default to executed.
+- **The model can still misstate what it's given.** A graph constrains what the model reads, not what it writes. Every answer still needs the verification step I argued for in [The Law Firm AI Problem Isn't the Model](/essays/law-firm-ai-problem).
+- **Expertise search can turn into surveillance.** Ranking lawyers by the clauses they drafted is useful for staffing and easy to misuse in comp reviews. Decide the boundary before launch.
+
+None of these kill the approach. They define the operating budget.
+
+## Start with one practice group
+
+Firms that try to map everything at once end up with a schema committee and no product. The disciplined version picks one transaction-heavy group with consistent documents, sets hard dates, and decides in advance what counts as success.
+
+The center of it is a golden set: real partner questions with partner-approved answers. Every stage is measured against it. Did the system find the precedents the partners expected? Can every sentence be traced to a document? Did any walled matter appear in any context, ever?
+
+<PilotPlan />
+
+## What it's for
+
+Three uses justify the build.
+
+**Onboarding a matter.** A lateral partner inherits a client. Today that means days of unbillable digging through folders. With the graph, it's a briefing assembled from the executed agreements, with every claim linked to its source.
+
+**Precedent by concept.** An associate searching "uncapped environmental indemnity" finds the deal that structured the same protection as a special indemnity for excluded liabilities, because the graph knows they're the same thing.
+
+**Expertise from the work itself.** "Who here has negotiated warrants in a private credit deal under German law?" gets answered from the documents people actually drafted, not from bios nobody updates.
+
+## The links are the asset
+
+Every firm will license roughly the same models. I made that case in [The Law Firm AI Problem Isn't the Model](/essays/law-firm-ai-problem), and it holds here too. The model is rented. The map of the firm's own work isn't.
+
+A firm that builds the graph owns something that compounds. Each closed matter makes it more useful, and it encodes its permissions the way the profession's rules already require. A firm that doesn't build it is renting a faster search box over a pile, and hoping the model guesses the links right.
+
+This is ultimately an infrastructure problem, the same one I keep running into in [legal engineering](/essays/legal-engineering-systems-design) and in [climate data](/essays/truth-is-infrastructure). Systems that act on claims have to know where each claim came from and who is allowed to see it. Law firms have been keeping that record by hand for a century. The work now is to make it machine-readable without breaking a single wall.
