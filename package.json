@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-essays.mjs && next build",
     "start": "next start",
     "lint": "eslint",
-    "weekly:draft": "tsx --env-file=.env.local scripts/create-weekly-draft.ts"
+    "weekly:draft": "tsx --env-file=.env.local scripts/create-weekly-draft.ts",
+    "check:essays": "node scripts/check-essays.mjs"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",

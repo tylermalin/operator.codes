@@ -27,7 +27,7 @@ export default function LoginPage() {
   if (status === "sent") {
     return (
       <div className="max-w-md mx-auto px-6 py-32 text-center">
-        <h1 className="text-2xl sm:text-3xl font-normal tracking-tight mb-4">
+        <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-4">
           Check your email.
         </h1>
         <p className="text-muted">Click the link to sign in.</p>
@@ -37,7 +37,7 @@ export default function LoginPage() {
 
   return (
     <div className="max-w-md mx-auto px-6 py-32">
-      <h1 className="text-2xl sm:text-3xl font-normal tracking-tight mb-8">
+      <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-8">
         Sign in
       </h1>
       <form onSubmit={handleSubmit} className="flex gap-3">

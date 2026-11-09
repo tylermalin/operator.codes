@@ -1,20 +1,30 @@
 import type { Metadata } from "next";
-import { Syne, DM_Mono } from "next/font/google";
+import { EB_Garamond, Inter, Geist_Mono } from "next/font/google";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
 import "./globals.css";
 
-const syne = Syne({
+// Two faces, clear jobs: EB Garamond for titles and essay text, Inter
+// for summaries, UI, and uppercase metadata. Geist Mono only for code.
+// See docs/design-system.md.
+const serif = EB_Garamond({
   subsets: ["latin"],
-  variable: "--font-syne",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "variable",
+  style: ["normal", "italic"],
+  variable: "--font-garamond",
+  display: "swap",
 });
 
-const dmMono = DM_Mono({
+const sans = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-mono",
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const mono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -52,10 +62,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${syne.variable} ${dmMono.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body>
         <Nav />
-        <main className="pt-14 min-h-screen">{children}</main>
+        <main className="pt-16 min-h-screen">{children}</main>
         <Footer />
       </body>
     </html>

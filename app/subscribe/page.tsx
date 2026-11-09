@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function SubscribePage() {
   return (
-    <div className="max-w-3xl mx-auto px-6 py-24">
-      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight mb-5">
+    <div className="mx-auto max-w-3xl px-5 pb-8 pt-16 sm:px-8 sm:pt-24">
+      <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-5">
         Subscribe
       </h1>
       <p className="text-muted mb-10 max-w-lg text-lg leading-relaxed">

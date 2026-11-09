@@ -42,17 +42,17 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-24">
+    <div className="mx-auto max-w-3xl px-5 pb-8 pt-16 sm:px-8 sm:pt-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <p className="font-mono text-sm text-muted mb-6">
-        operator.codes / about
+      <p className="type-meta mb-6">
+        About
       </p>
-      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight mb-12">
+      <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-12">
         Tyler Malin
       </h1>
       <div className="prose-essay">

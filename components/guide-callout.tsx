@@ -23,9 +23,9 @@ export function GuideCallout({
     .map((t) => t.trim())
     .filter(Boolean);
   return (
-    <aside className="not-prose my-12 rounded-2xl border border-accent-border bg-accent-dim p-6 sm:p-8">
-      <p className="font-mono text-xs text-muted mb-3">interactive field guide</p>
-      <p className="text-xl sm:text-2xl font-normal tracking-tight leading-snug mb-3">
+    <aside className="not-prose my-12 rounded-[14px] border border-border-md bg-surface p-6 sm:p-8">
+      <p className="type-meta mb-3">Interactive field guide</p>
+      <p className="type-title mb-3 text-[2rem]">
         {title}
       </p>
       <p className="text-muted leading-relaxed mb-5">{summary}</p>
@@ -34,7 +34,7 @@ export function GuideCallout({
           {toolList.map((t) => (
             <li
               key={t}
-              className="font-mono text-[11px] text-muted border border-accent-border rounded px-2 py-0.5"
+              className="font-mono text-[11px] text-muted border border-border-md rounded-full px-2.5 py-0.5"
             >
               {t}
             </li>
@@ -43,7 +43,7 @@ export function GuideCallout({
       )}
       <a
         href={href}
-        className="btn-primary inline-block rounded-full px-6 py-3 text-sm font-medium no-underline"
+        className="btn-primary inline-flex h-11 items-center rounded-full px-6 text-[15px] no-underline"
       >
         Open the field guide →
       </a>
