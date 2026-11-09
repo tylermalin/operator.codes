@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import SubscribeForm from "@/components/subscribe-form";
 
-export const metadata: Metadata = { title: "Subscribe" };
+export const metadata: Metadata = {
+  title: "Subscribe",
+  alternates: { canonical: "/subscribe" },
+};
 
 export default function SubscribePage() {
   return (

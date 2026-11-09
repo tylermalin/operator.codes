@@ -10,6 +10,7 @@ import { getViewerTier } from "@/lib/auth";
 import { resolveAccess, truncateForPreview } from "@/lib/paywall";
 import ShareBar from "@/components/share-bar";
 import EssaySubscribeCta from "@/components/essay-subscribe-cta";
+import { AUTHOR, SITE_NAME, absoluteUrl } from "@/lib/site";
 
 // Gating depends on per-request session state, so this route can't be
 // statically generated. Named as a real tradeoff in the plan: every
@@ -25,13 +26,21 @@ export async function generateMetadata({
   const { slug } = await params;
   const essay = getEssay(slug);
   if (!essay) return {};
+  const url = `/essays/${slug}`;
   return {
     title: essay.title,
     description: essay.description,
+    authors: [{ name: AUTHOR.name, url: AUTHOR.url }],
+    alternates: { canonical: url },
     openGraph: {
       type: "article",
+      url,
+      siteName: SITE_NAME,
       title: essay.title,
       description: essay.description,
+      publishedTime: essay.date,
+      authors: [AUTHOR.url],
+      section: essay.domain,
       images: essay.image ? [{ url: essay.image }] : undefined,
     },
     twitter: {
@@ -58,14 +67,51 @@ export default async function EssayPage({
   const displayContent =
     access === "preview" ? truncateForPreview(essay.content) : essay.content;
 
+  // Article structured data. States plainly who wrote this, when, and
+  // whether it's free to read; it isn't a ranking lever on its own.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: essay.title,
+    description: essay.description,
+    datePublished: essay.date,
+    dateModified: essay.date,
+    url: absoluteUrl(`/essays/${slug}`),
+    mainEntityOfPage: absoluteUrl(`/essays/${slug}`),
+    image: essay.image ? absoluteUrl(essay.image) : undefined,
+    articleSection: essay.domain,
+    isAccessibleForFree: essay.tier === "free",
+    author: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: AUTHOR.url,
+      sameAs: AUTHOR.sameAs,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: absoluteUrl("/"),
+      logo: absoluteUrl("/brand/operator-logo.png"),
+    },
+  };
+
   return (
     <article className="max-w-3xl mx-auto px-6 py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <p className="font-mono text-xs text-muted mb-4">{essay.domain}</p>
       <h1 className="text-4xl sm:text-5xl font-normal tracking-tight leading-[1.1] mb-5">
         {essay.title}
       </h1>
       <p className="font-mono text-xs text-faint mb-8">
-        {essay.date} · {essay.readingTime}
+        <Link href="/about" rel="author" className="link-underline text-muted">
+          {AUTHOR.name}
+        </Link>{" "}
+        · <time dateTime={essay.date}>{essay.date}</time> · {essay.readingTime}
         {essay.tier !== "free" && (
           <span className="ml-2 text-amber">· {essay.tier}</span>
         )}

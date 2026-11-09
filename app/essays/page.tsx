@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { getAllEssays } from "@/lib/essays";
 import EssayCard from "@/components/essay-card";
 
-export const metadata: Metadata = { title: "Essays" };
+export const metadata: Metadata = {
+  title: "Essays",
+  description:
+    "Every Operator essay: AI systems, climate infrastructure, legal engineering, and protocol design, by Tyler Malin.",
+  alternates: { canonical: "/essays" },
+};
 
 export default function EssaysPage() {
   const essays = getAllEssays();

@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Build Sessions",
   description:
     "A recorded format where founders and builders work with Tyler Malin live to architect real systems. No budget required.",
+  alternates: { canonical: "/build-sessions" },
 };
 
 const steps = [
