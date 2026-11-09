@@ -7,7 +7,8 @@ on:
 
 # Vercel names the environment "Production – <project>", and two Vercel
 # projects deploy this repo, so one deploy fires this twice. The
-# concurrency group drops the duplicate; resubmitting is harmless anyway.
+# concurrency group runs them one after the other; IndexNow treats a
+# repeat submission of the same URLs as harmless.
 concurrency:
   group: indexnow-${{ github.event.deployment.sha }}
   cancel-in-progress: false
