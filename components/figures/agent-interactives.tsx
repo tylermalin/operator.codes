@@ -363,8 +363,8 @@ export function SeriesCost() {
           <details className="text-[14px]">
             <summary className="cursor-pointer text-muted hover:text-foreground">Fee assumptions</summary>
             <div className="mt-3 space-y-4">
-              <Slider label="Delaware annual tax per LLC" value={deTax} set={setDeTax} min={300} max={400} step={100} />
-              <Slider label="Delaware annual tax per registered series" value={regTax} set={setRegTax} min={0} max={200} step={25} />
+              <Slider label="Delaware annual tax per LLC (2025: $300, 2026 on: $400)" value={deTax} set={setDeTax} min={300} max={400} step={100} />
+              <Slider label="Delaware annual tax per registered series (2025: $75, 2026 on: $100)" value={regTax} set={setRegTax} min={75} max={100} step={25} />
             </div>
           </details>
         </div>
@@ -392,19 +392,21 @@ export function SeriesCost() {
         </div>
       </div>
       <Note>
-        Annual taxes only; formation and registered-agent fees excluded. Sources:{" "}
-        <a className="link-underline text-foreground" href="https://corp.delaware.gov/alt-entitytaxinstructions/">
-          Delaware tax instructions
-        </a>{" "}
-        list $400 per LLC, while Delaware&apos;s{" "}
-        <a className="link-underline text-foreground" href="https://corp.delaware.gov/taxfaq/">
-          tax FAQ
-        </a>{" "}
-        still says $300, so both are selectable; confirm before filing.{" "}
-        <a className="link-underline text-foreground" href="https://corpfiles.delaware.gov/LLC_Forms/LLC%20Registered%20Series%20Formation.pdf">
-          Registered series form
+        Annual taxes only; formation and registered-agent fees excluded. Delaware&apos;s HB 400 raised the LLC annual tax
+        from $300 to $400 and the registered series tax from $75 to $100, starting with tax year 2026; the higher bills
+        first come due in 2027 (
+        <a className="link-underline text-foreground" href="https://www.withum.com/resources/delaware-businesses-face-increased-annual-taxes-and-filing-costs/">
+          Withum
         </a>
-        : $100 a year per series.{" "}
+        ). That is why Delaware&apos;s{" "}
+        <a className="link-underline text-foreground" href="https://corp.delaware.gov/alt-entitytaxinstructions/">
+          tax instructions
+        </a>{" "}
+        say $400 while its{" "}
+        <a className="link-underline text-foreground" href="https://corp.delaware.gov/taxfaq/">
+          FAQ
+        </a>{" "}
+        still says $300: pick $300 to model 2025.{" "}
         <a className="link-underline text-foreground" href="https://www.ftb.ca.gov/forms/2025/2025-568-booklet.html">
           California Form 568 instructions
         </a>
