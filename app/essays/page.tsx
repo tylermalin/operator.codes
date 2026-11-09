@@ -1,29 +1,22 @@
 import type { Metadata } from "next";
 import { getAllEssays } from "@/lib/essays";
-import { getTopics, topicSlug } from "@/lib/topics";
+import { getTopics } from "@/lib/topics";
 import PostCard from "@/components/cards/post-card";
 import TopicChips from "@/components/cards/topic-chips";
 import SubscribeButton from "@/components/subscribe/subscribe-button";
 
-// Filtered views share the archive's canonical, so ?topic= pages never
-// compete with /essays in search.
+// The full archive. Topic views live at /topics/[slug]; old
+// /essays?topic= links redirect there (next.config.ts).
 export const metadata: Metadata = {
   title: "Essays",
   description:
-    "Every Operator essay: AI systems, climate infrastructure, legal engineering, and protocol design, by Tyler Malin.",
+    "Every Operator essay by Tyler Malin: AI systems, legal engineering, digital assets, climate infrastructure, and capital markets. Sourced, with interactive tools.",
   alternates: { canonical: "/essays" },
 };
 
-export default async function EssaysPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ topic?: string }>;
-}) {
-  const { topic } = await searchParams;
-  const all = getAllEssays();
-  const topics = getTopics(all);
-  const active = topics.some((t) => t.slug === topic) ? topic : undefined;
-  const essays = active ? all.filter((e) => topicSlug(e.domain) === active) : all;
+export default function EssaysPage() {
+  const essays = getAllEssays();
+  const topics = getTopics(essays);
 
   const featured = essays.slice(0, 2);
   const rest = essays.slice(2);
@@ -43,7 +36,7 @@ export default async function EssaysPage({
       </header>
 
       <div className="mt-12">
-        <TopicChips topics={topics} active={active} />
+        <TopicChips topics={topics} />
       </div>
 
       {featured.length > 0 && (

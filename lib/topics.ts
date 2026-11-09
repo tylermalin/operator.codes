@@ -1,9 +1,23 @@
 import type { EssayMeta } from "@/lib/essays";
 
 // Topics come from each essay's `domain` frontmatter. Slugs are derived,
-// so adding an essay with a new domain adds a chip automatically.
+// so adding an essay with a new domain adds a hub automatically; add an
+// intro here to give that hub its own description.
 
 export type Topic = { slug: string; label: string; count: number };
+
+export const TOPIC_INTROS: Record<string, string> = {
+  "ai-systems":
+    "How autonomous software gets legal standing, authority, and accountability, and how AI answer engines decide what to cite.",
+  "legal-engineering":
+    "Contracts, entities, and professional duties treated as systems: where they fail under stress, and how to design them so they don't.",
+  "digital-assets":
+    "Custody, reserves, stablecoins, and tokenization through one question: who verifies, and how often?",
+  "climate-infrastructure":
+    "Data centers, carbon markets, and the physical systems behind climate numbers: who carries the cost, and whether the data is real.",
+  "capital-markets":
+    "How early-stage capital is priced right now, from Carta's data, and how founders should raise in a market that concentrates.",
+};
 
 export function topicSlug(domain: string): string {
   return domain
@@ -14,6 +28,10 @@ export function topicSlug(domain: string): string {
 
 export function topicLabel(domain: string): string {
   return domain.charAt(0).toUpperCase() + domain.slice(1);
+}
+
+export function topicHref(domain: string): string {
+  return `/topics/${topicSlug(domain)}`;
 }
 
 export function getTopics(essays: EssayMeta[]): Topic[] {

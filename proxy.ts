@@ -8,7 +8,8 @@ import { NextResponse, type NextRequest } from "next/server";
 // script, no IP or user identifiers logged: only bot name or referrer
 // host, and the path. Covered by the privacy policy's server-logs line.
 //
-// It never blocks or alters a request.
+// Apart from the old topic-filter redirect below, it never blocks or
+// alters a request.
 
 const AI_BOTS: [RegExp, string][] = [
   [/OAI-SearchBot/i, "OAI-SearchBot"],
@@ -36,6 +37,15 @@ const AI_REFERRERS: [RegExp, string][] = [
 
 export function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
+
+  // Topic filters used to live at /essays?topic=<slug>, sharing the
+  // archive's canonical. Each topic now has its own hub. Redirected here
+  // rather than in next.config so the old query string isn't carried
+  // onto the new URL.
+  const topic = path === "/essays" ? req.nextUrl.searchParams.get("topic") : null;
+  if (topic && /^[a-z0-9-]+$/.test(topic)) {
+    return NextResponse.redirect(new URL(`/topics/${topic}`, req.url), 308);
+  }
   const ua = req.headers.get("user-agent") ?? "";
 
   const bot = AI_BOTS.find(([re]) => re.test(ua))?.[1];

@@ -1,7 +1,9 @@
-// Build gate: every published essay must have an `image` in frontmatter
-// that exists under public/. Cards across the site use it as the
-// thumbnail and social cards use it as the preview, so a missing image
-// fails the build instead of shipping a broken card.
+// Build gate for essay frontmatter:
+// - `image` must exist under public/ and stay under 1 MB. Cards use it
+//   as the thumbnail and social cards as the preview.
+// - `keyPoints` must hold 2 to 4 sentences. They render as the "Key
+//   points" block and the Article abstract, the part answer engines are
+//   most likely to quote, so an essay can't ship without them.
 //
 // Runs before `next build` (see package.json). Drafts are checked too:
 // they're one frontmatter flip from public.
@@ -16,6 +18,12 @@ const problems = [];
 for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"))) {
   const { data } = matter(fs.readFileSync(path.join(dir, file), "utf8"));
   const slug = file.replace(/\.mdx$/, "");
+  const kp = data.keyPoints;
+  if (!Array.isArray(kp) || kp.length < 2 || kp.length > 4) {
+    problems.push(`${slug}: "keyPoints" needs 2 to 4 items`);
+  } else if (kp.some((p) => typeof p !== "string" || p.length > 240)) {
+    problems.push(`${slug}: each key point must be one sentence or two, under 240 characters`);
+  }
   if (!data.image) {
     problems.push(`${slug}: no "image" in frontmatter`);
     continue;
@@ -32,7 +40,7 @@ for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"))) {
 }
 
 if (problems.length) {
-  console.error("Essay image check failed:\n  " + problems.join("\n  "));
+  console.error("Essay check failed:\n  " + problems.join("\n  "));
   process.exit(1);
 }
-console.log("Essay image check passed.");
+console.log("Essay check passed.");
