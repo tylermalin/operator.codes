@@ -46,9 +46,11 @@ export default function FenceLineGuide() {
     datePublished: UPDATED,
     dateModified: UPDATED,
     url: absoluteUrl(PATH),
-    author: { "@type": "Person", name: AUTHOR.name, url: AUTHOR.url },
-    publisher: { "@type": "Organization", name: SITE_NAME, url: absoluteUrl("/") },
+    author: { "@type": "Person", "@id": `${AUTHOR.url}#person`, name: AUTHOR.name, url: AUTHOR.url },
+    publisher: { "@type": "Organization", "@id": `${absoluteUrl("/")}#organization`, name: SITE_NAME, url: absoluteUrl("/") },
     citation: Object.values(SOURCES).map((s) => s.url),
+    isPartOf: { "@id": `${absoluteUrl("/")}#website` },
+    about: { "@type": "Thing", name: "Data center siting and host community governance" },
   };
 
   return (
@@ -61,7 +63,7 @@ export default function FenceLineGuide() {
       <header className="mx-auto max-w-3xl text-center">
         <p className="type-meta">
           Field guide <span className="text-faint">in</span>{" "}
-          <Link href="/essays?topic=climate-infrastructure" className="link-underline text-foreground/85">
+          <Link href="/topics/climate-infrastructure" className="link-underline text-foreground/85">
             Climate infrastructure
           </Link>
         </p>

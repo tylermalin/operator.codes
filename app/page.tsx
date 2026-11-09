@@ -2,7 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { getAllEssays } from "@/lib/essays";
-import { AUTHOR, GUIDES } from "@/lib/site";
+import { AUTHOR, GUIDES, SITE_DESCRIPTION, SITE_NAME, absoluteUrl } from "@/lib/site";
+import { TOPIC_INTROS, getTopics } from "@/lib/topics";
 import PostCard from "@/components/cards/post-card";
 import SubscribeForm from "@/components/subscribe-form";
 import BlurWords from "@/components/blur-words";
@@ -17,9 +18,53 @@ export default function HomePage() {
   const essays = getAllEssays();
   const featured = essays.slice(0, 2);
   const more = essays.slice(2, 5);
+  const topics = getTopics(essays);
+
+  // The site's entity graph: the publication, who publishes it, and the
+  // person behind it, linked by @id so every page's Article can point
+  // back to one record instead of restating it.
+  const home = absoluteUrl("/");
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${home}#website`,
+        url: home,
+        name: SITE_NAME,
+        description: SITE_DESCRIPTION,
+        inLanguage: "en-US",
+        publisher: { "@id": `${home}#organization` },
+        author: { "@id": `${AUTHOR.url}#person` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${home}#organization`,
+        name: SITE_NAME,
+        url: home,
+        logo: absoluteUrl("/brand/operator-logo.png"),
+        founder: { "@id": `${AUTHOR.url}#person` },
+        publishingPrinciples: absoluteUrl("/standards"),
+        correctionsPolicy: absoluteUrl("/standards#corrections"),
+      },
+      {
+        "@type": "Person",
+        "@id": `${AUTHOR.url}#person`,
+        name: AUTHOR.name,
+        url: AUTHOR.url,
+        image: absoluteUrl(AUTHOR.image),
+        jobTitle: AUTHOR.jobTitle,
+        sameAs: AUTHOR.sameAs,
+      },
+    ],
+  };
 
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <div className="masthead pt-12 sm:pt-16">
         <p className="type-title text-[clamp(2.75rem,8vw,5.5rem)] uppercase tracking-[0.08em]">
           Operator
@@ -121,6 +166,25 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      <section aria-labelledby="topics" className="mt-24 border-t border-border pt-10">
+        <h2 id="topics" className="type-meta text-foreground">
+          Topics
+        </h2>
+        <ul className="mt-8 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+          {topics.map((t) => (
+            <li key={t.slug}>
+              <Link href={`/topics/${t.slug}`} className="group block">
+                <span className="type-title text-[26px]">
+                  <span className="link-underline">{t.label}</span>
+                </span>
+                <span className="type-meta ml-2 text-faint">{t.count}</span>
+                <span className="mt-2 block text-[15px] leading-relaxed text-muted">{TOPIC_INTROS[t.slug]}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

@@ -5,6 +5,10 @@ date: "2026-11-09"
 domain: "AI systems"
 tier: "free"
 image: "/images/essays/measured-not-ranked/hero.jpg"
+keyPoints:
+  - "In a randomized experiment, organic clicks fell 39.8% when Google showed an AI Overview. Plan for 40 to 60% fewer clicks on informational queries."
+  - "Sourced claims, third-party mentions, and first-hand data move AI citations. llms.txt and AI-specific schema failed their first real tests."
+  - "Track how often you appear across a fixed prompt set, run monthly. A single AI rank is noise."
 ---
 
 Search used to point. Now it answers.
@@ -22,9 +26,9 @@ I built a field guide to sort what the evidence supports from what it doesn't. E
 
 ## The click is no longer the unit
 
-The first randomized test of Google's AI Overviews hid them from 1,065 US desktop users in early 2026. When an Overview appeared, organic clicks fell 39.8%. Satisfaction didn't change. More than 95% of participants never noticed their results were different.
+The [first randomized test](https://ppc.land/researchers-find-google-ai-overviews-cut-publisher-clicks-39-8/) of Google's AI Overviews hid them from 1,065 US desktop users in early 2026. When an Overview appeared, organic clicks fell 39.8%. Satisfaction didn't change. More than 95% of participants never noticed their results were different.
 
-Ahrefs, Pew and Seer measured the same effect with different methods and landed in the same direction. For planning, assume 40 to 60% fewer clicks on informational queries that trigger an AI answer. Treat any recovery as upside.
+[Ahrefs](https://ahrefs.com/blog/ai-overviews-reduce-clicks-update), [Pew](https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/) and [Seer](https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-2026-update) measured the same effect with different methods and landed in the same direction. For planning, assume 40 to 60% fewer clicks on informational queries that trigger an AI answer. Treat any recovery as upside.
 
 Demand didn't shrink. It moved. People now read and act on your content without ever visiting the page it came from.
 
@@ -34,19 +38,19 @@ The market responded the way markets do. Package the anxiety, sell a checklist. 
 
 Here is what the evidence says so far:
 
-- Server logs show 97% of llms.txt files get no requests from AI crawlers.
-- The one controlled test of adding schema found no citation lift.
-- Run the same brand-recommendation prompt twice and the two lists match less than once in 100 tries. A single "AI rank" is mostly noise.
+- Server logs show [97% of llms.txt files](https://ppc.land/llms-txt-adoption-rises-8-8x-but-97-of-files-get-zero-ai-requests/) get no requests from AI crawlers.
+- The one [controlled test of adding schema](https://ahrefs.com/blog/schema-ai-citations/) found no citation lift.
+- Run the same brand-recommendation prompt twice and the two lists [match less than once in 100 tries](https://searchengineland.com/ai-recommendation-lists-rarely-repeat-study-468076). A single "AI rank" is mostly noise.
 
-Some of what's being sold is worse than useless. Microsoft's Defender team found more than 50 hidden prompt injections from 31 companies, many tucked into "Summarize with AI" buttons. That is being catalogued as an attack, not a growth tactic. Anything you wouldn't want a journalist to find in your page source is off limits.
+Some of what's being sold is worse than useless. Microsoft's Defender team [found more than 50 hidden prompt injections](https://www.searchenginejournal.com/microsoft-summarize-with-ai-buttons-used-to-poison-ai-recommendations/541183) from 31 companies, many tucked into "Summarize with AI" buttons. That is being catalogued as an attack, not a growth tactic. Anything you wouldn't want a journalist to find in your page source is off limits.
 
 ## What actually moves a citation
 
-The paper that named the field, the GEO study out of Princeton and collaborators, rewrote sources nine different ways and measured how much of an AI answer each one earned. Adding citations to the fifth-ranked page lifted its visibility 115%. The top-ranked page lost 30% under the same treatment.
+The paper that named the field, the [GEO study](https://arxiv.org/abs/2311.09735) out of Princeton and collaborators, rewrote sources nine different ways and measured how much of an AI answer each one earned. Adding citations to the fifth-ranked page lifted its visibility 115%. The top-ranked page lost 30% under the same treatment.
 
 Sourced claims beat keywords. Lower-ranked pages gained the most.
 
-The off-site data points the same way. Across 75,000 brands, branded web mentions correlated with AI Overview visibility about three times as strongly as backlinks. And a brand cited inside an Overview gets 120% more organic clicks per impression than one left out.
+The off-site data points the same way. [Across 75,000 brands](https://ahrefs.com/blog/ai-overview-brand-correlation/), branded web mentions correlated with AI Overview visibility about three times as strongly as backlinks. And on informational queries, a brand cited inside an Overview gets [120% more organic clicks per impression](https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-2026-update) than one left out, though Seer notes that stronger brands are also more likely to be cited.
 
 Read it as a pattern, not a trick list. Statistics and named sources lift visibility because they can be checked. Third-party mentions predict inclusion because they corroborate. First-hand content wins because the model doesn't already have it.
 
@@ -54,7 +58,7 @@ Read it as a pattern, not a trick list. Statistics and named sources lift visibi
 
 Most people assume answer engines are a better ranking algorithm. They aren't. They're a different business with a different risk profile.
 
-An engine that answers in its own voice carries the risk of being wrong. One academic measurement already finds about one claim in nine unsupported by the pages an Overview cites. Every operator of an answer engine has a reason to close that gap.
+An engine that answers in its own voice carries the risk of being wrong. One [academic measurement](https://arxiv.org/abs/2605.14021) of 98,020 claims found 11% unsupported by the pages the Overview cited: about one in nine. Every operator of an answer engine has a reason to close that gap.
 
 So the engine favors sources it can safely repeat. That's the whole mechanism, and everything in the evidence lines up behind it.
 

@@ -6,7 +6,7 @@
 export const SITE_URL = "https://operator.codes";
 export const SITE_NAME = "Operator";
 export const SITE_DESCRIPTION =
-  "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design, from Tyler Malin.";
+  "Sourced essays and interactive field guides on AI systems, legal engineering, digital assets, climate infrastructure, and capital markets, by Tyler Malin.";
 
 export const AUTHOR = {
   name: "Tyler Malin",

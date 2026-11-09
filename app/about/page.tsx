@@ -28,6 +28,7 @@ export default function AboutPage() {
     url: absoluteUrl("/about"),
     mainEntity: {
       "@type": "Person",
+      "@id": `${AUTHOR.url}#person`,
       name: AUTHOR.name,
       url: AUTHOR.url,
       image: absoluteUrl(AUTHOR.image),
