@@ -26,6 +26,7 @@ export const GUIDES = [
   {
     slug: "measured-not-ranked",
     title: "Measured, Not Ranked",
+    blurb: "Interactive guide to AI search · 6 tools · 27 sources",
     date: "2026-11-09",
   },
 ];

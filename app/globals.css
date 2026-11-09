@@ -1,28 +1,47 @@
 @import "tailwindcss";
 
-/* ---- Operator design tokens: Resonant Stark ---- */
-/* Soft gradients instead of flat fills. A desaturated moss accent instead of */
-/* an acid-green single accent. Thin type earned by scale, not by default. */
-/* One ambient motion moment on the hero; everything else answers a hover. */
+/* ---- Operator design tokens: Ink ----
+   Monochrome on near-black. The words carry the page.
+   - One serif for titles (Instrument Serif), one sans for everything you
+     read or click (Geist), one mono for metadata (Geist Mono).
+   - Primary action is an inverted pill: paper on ink. No gradients, no
+     glows, no hover lifts.
+   - Moss is reserved for state (success, focus), never decoration.
+   - Nothing moves unless the reader asks it to. */
 
 :root {
-  --background: #121113;
-  --background-deep: #0a0a0b;
-  --surface: #1a1918;
-  --surface-2: #201f1d;
-  --surface-3: #262523;
-  --border: rgba(237, 234, 226, 0.06);
-  --border-md: rgba(237, 234, 226, 0.12);
-  --border-hi: rgba(237, 234, 226, 0.2);
-  --foreground: #edeae2;
-  --muted: #8c897f;
-  --faint: #47443d;
-  --accent: #6da88c;
-  --accent-light: #a8d3bc;
-  --accent-dim: rgba(109, 168, 140, 0.09);
-  --accent-border: rgba(109, 168, 140, 0.26);
+  /* Surfaces */
+  --background: #0b0b0c;
+  --background-deep: #070708;
+  --surface: #131315;
+  --surface-2: #19191c;
+  --surface-3: #212124;
+
+  /* Lines: opacity on paper, so they read the same on any surface */
+  --border: rgba(237, 236, 232, 0.08);
+  --border-md: rgba(237, 236, 232, 0.13);
+  --border-hi: rgba(237, 236, 232, 0.24);
+
+  /* Ink. Body text sits at foreground; muted passes 4.5:1 on background */
+  --foreground: #edece8;
+  --muted: #9b9a95;
+  --faint: #66655f;
+
+  /* State only */
+  --accent: #7fb39a;
+  --accent-light: #b4d8c4;
+  --accent-dim: rgba(127, 179, 154, 0.1);
+  --accent-border: rgba(127, 179, 154, 0.28);
   --amber: #d9a455;
-  --red: #d9615f;
+  --red: #e0706d;
+
+  /* Radii */
+  --radius-card: 14px;
+  --radius-control: 999px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur: 160ms;
 }
 
 @theme inline {
@@ -44,33 +63,40 @@
   --color-amber: var(--amber);
   --color-red: var(--red);
 
-  --font-display: var(--font-syne);
-  --font-mono: var(--font-dm-mono);
+  --font-serif: var(--font-instrument-serif);
+  --font-sans: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
+  /* Legacy alias: older markup asks for --font-display */
+  --font-display: var(--font-geist);
 }
 
 html {
   background: var(--background);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: radial-gradient(
-    ellipse 120% 80% at 50% -10%,
-    var(--background) 0%,
-    var(--background-deep) 70%
-  );
+  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(237, 236, 232, 0.9);
+  color: var(--background);
 }
 
 :focus-visible {
   outline: 2px solid var(--accent-light);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* The site's one non-user-triggered animation lives in
-   components/hero-globe.tsx (canvas). Everything else responds to
-   hover or click only. */
 @media (prefers-reduced-motion: reduce) {
   * {
     transition-duration: 0.01ms !important;
@@ -78,120 +104,284 @@ body {
   }
 }
 
-/* Hover-triggered underline draw-in, used instead of a static underline
-   or a color-only hover state. */
+/* ---- Type roles ---- */
+
+/* Page and essay titles. Serif, tight, never bold. */
+.type-title {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+/* Dek: the one-sentence summary under a title */
+.type-dek {
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* Metadata: dates, topics, read time */
+.type-meta {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+/* ---- Links ---- */
+
+/* Quiet link: underline appears on hover, in ink, not color */
 .link-underline {
-  background-image: linear-gradient(var(--accent-light), var(--accent-light));
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 0% 1px;
-  transition: background-size 0.3s ease;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--dur) var(--ease);
 }
 .link-underline:hover {
-  background-size: 100% 1px;
+  text-decoration-color: currentColor;
 }
 
-/* Soft gradient primary button, glows outward on hover rather than just
-   swapping fill color. */
+/* ---- Buttons ---- */
+
+/* Primary: paper on ink. One per view. */
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent) 0%, #5c9678 100%);
-  color: var(--background-deep);
-  transition:
-    box-shadow 0.3s ease,
-    transform 0.2s ease;
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: 500;
+  transition: background var(--dur) var(--ease);
 }
 .btn-primary:hover {
-  box-shadow: 0 0 24px var(--accent-dim);
-  transform: translateY(-1px);
+  background: #ffffff;
+}
+.btn-primary:disabled {
+  background: var(--surface-3);
+  color: var(--muted);
+  cursor: not-allowed;
 }
 
+/* Secondary: outlined, used for Subscribe in chrome and quiet actions */
 .btn-secondary {
   background: var(--surface);
   border: 1px solid var(--border-md);
+  color: var(--foreground);
+  font-weight: 500;
   transition:
-    border-color 0.25s ease,
-    background 0.25s ease;
+    border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
 }
 .btn-secondary:hover {
   border-color: var(--border-hi);
   background: var(--surface-2);
 }
 
-.prose-essay {
-  max-width: 68ch;
+/* ---- Form fields ---- */
+.field {
+  background: var(--surface-2);
+  border: 1px solid var(--border-md);
+  color: var(--foreground);
+  transition: border-color var(--dur) var(--ease);
+}
+.field::placeholder {
+  color: var(--faint);
+}
+.field:focus {
+  outline: none;
+  border-color: var(--border-hi);
 }
 
-.prose-essay p {
-  margin-bottom: 1.25em;
-  line-height: 1.7;
+/* ---- Chips (topic filters) ---- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 2.25rem;
+  padding: 0 1rem;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--border-md);
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  transition:
+    border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+.chip:hover {
+  border-color: var(--border-hi);
+}
+.chip[aria-current="page"] {
+  background: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--background);
+  font-weight: 500;
+}
+
+/* ---- Title plate (card thumbnail) ----
+   A typeset cover, not a picture: topic pill + serif title on an ink
+   plate with fine grain. The --plate-x / --plate-y custom properties
+   move the light per essay so a grid never looks stamped. */
+.plate {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(
+      90% 70% at var(--plate-x, 30%) var(--plate-y, 20%),
+      rgba(237, 236, 232, 0.13) 0%,
+      rgba(237, 236, 232, 0.035) 45%,
+      transparent 75%
+    ),
+    var(--background-deep);
+  transition: border-color var(--dur) var(--ease);
+}
+.plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.group:hover .plate {
+  border-color: var(--border-hi);
+}
+
+/* ---- Toast ---- */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.toast {
+  animation: toast-in 200ms var(--ease);
+}
+
+/* ---- Essay prose ----
+   Reading-grade defaults: 19px sans, 1.75 leading, ~66 characters per
+   line. Headings switch to semibold sans so the outline scans. */
+.prose-essay {
+  max-width: 66ch;
+  font-size: 1.1875rem;
+  line-height: 1.75;
   color: var(--foreground);
 }
 
+.prose-essay > * + * {
+  margin-top: 1.4em;
+}
+
+.prose-essay p {
+  text-wrap: pretty;
+}
+
 .prose-essay h2 {
-  font-family: var(--font-display), sans-serif;
-  font-weight: 500;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin-top: 2.6em;
+  text-wrap: balance;
+}
+
+.prose-essay h3 {
+  font-size: 1.1875rem;
+  font-weight: 600;
   letter-spacing: -0.01em;
-  margin-top: 3em;
-  margin-bottom: 0.85em;
+  margin-top: 2em;
+}
+
+.prose-essay h2 + *,
+.prose-essay h3 + * {
+  margin-top: 0.7em;
+}
+
+.prose-essay strong {
+  font-weight: 600;
 }
 
 .prose-essay a {
-  color: var(--accent-light);
+  color: var(--foreground);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-color: var(--faint);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--dur) var(--ease);
+}
+.prose-essay a:hover {
+  text-decoration-color: var(--foreground);
+}
+
+.prose-essay blockquote {
+  border-left: 2px solid var(--border-hi);
+  padding-left: 1.25em;
+  color: var(--muted);
+}
+
+.prose-essay hr {
+  border: 0;
+  border-top: 1px solid var(--border-md);
+  margin: 3em 0;
 }
 
 .prose-essay code {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-geist-mono), monospace;
   background: var(--surface-2);
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-  font-size: 0.9em;
+  padding: 0.12em 0.38em;
+  border-radius: 5px;
+  font-size: 0.86em;
 }
 
 .prose-essay pre {
-  background: var(--surface-2);
+  background: var(--surface);
   border: 1px solid var(--border-md);
   border-radius: 12px;
-  padding: 1.25em 1.5em;
-  margin: 2em 0;
+  padding: 1.1em 1.4em;
   overflow-x: auto;
+  line-height: 1.6;
 }
 
 .prose-essay pre code {
   background: none;
   padding: 0;
-  font-size: 0.85em;
+  font-size: 0.82em;
   white-space: pre;
 }
 
 .prose-essay table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2.5em 0;
   font-size: 0.9em;
+  line-height: 1.5;
 }
 
 .prose-essay th,
 .prose-essay td {
   text-align: left;
-  padding: 0.7em 1em;
+  padding: 0.7em 1em 0.7em 0;
   border-bottom: 1px solid var(--border-md);
+  vertical-align: top;
 }
 
 .prose-essay th {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-geist-mono), monospace;
   color: var(--muted);
-  font-weight: 500;
-  font-size: 0.85em;
-  letter-spacing: 0.02em;
+  font-weight: 400;
+  font-size: 0.82em;
 }
 
 .prose-essay ol,
 .prose-essay ul {
-  margin: 0 0 1.25em 1.25em;
-  line-height: 1.7;
+  padding-left: 1.25em;
 }
 
 .prose-essay ol {
@@ -202,26 +392,39 @@ body {
   list-style: disc;
 }
 
-.prose-essay li {
-  margin-bottom: 0.4em;
+.prose-essay li + li {
+  margin-top: 0.5em;
+}
+
+.prose-essay li::marker {
+  color: var(--faint);
 }
 
 .prose-essay img {
   max-width: 100%;
   height: auto;
-  border-radius: 1rem;
-  margin: 2.5em 0;
+  border-radius: var(--radius-card);
+}
+
+.prose-essay figure {
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
 }
 
 /* Embedded components inside an essay (callouts, cards) opt out of the
    prose list and link styling with .not-prose. */
-.prose-essay .not-prose ul {
-  list-style: none;
-  margin: 0 0 1.5rem;
+.prose-essay .not-prose {
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
-.prose-essay .not-prose li {
-  margin-bottom: 0;
+.prose-essay .not-prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose-essay .not-prose li + li {
+  margin-top: 0;
 }
 
 .prose-essay .not-prose a {
@@ -229,5 +432,5 @@ body {
 }
 
 .prose-essay .not-prose a.btn-primary {
-  color: var(--background-deep);
+  color: var(--background);
 }

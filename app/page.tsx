@@ -1,9 +1,9 @@
-import { getAllEssays } from "@/lib/essays";
-import EssayCard from "@/components/essay-card";
-import HeroGlobe from "@/components/hero-globe";
-import SubscribeForm from "@/components/subscribe-form";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getAllEssays } from "@/lib/essays";
+import { GUIDES } from "@/lib/site";
+import PostCard from "@/components/cards/post-card";
+import SubscribeForm from "@/components/subscribe-form";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -11,50 +11,74 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const essays = getAllEssays().slice(0, 4);
+  const essays = getAllEssays();
+  const featured = essays.slice(0, 2);
+  const more = essays.slice(2, 5);
 
   return (
-    <div className="max-w-5xl mx-auto px-6">
-      <section className="relative pt-28 pb-24 overflow-hidden">
-        <HeroGlobe />
-        <p className="relative font-mono text-sm text-muted mb-6">
-          operator.codes
-        </p>
-        <h1 className="relative font-[family-name:var(--font-display)] text-5xl sm:text-6xl font-normal tracking-tight leading-[1.08] max-w-3xl">
-          Systems, incentives, and infrastructure.
-          <br />
-          Written by someone who builds them.
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
+      <section className="pb-20 pt-16 sm:pb-28 sm:pt-28">
+        <p className="type-meta">Operator · Tyler Malin</p>
+        <h1 className="type-title mt-6 max-w-4xl text-[clamp(2.75rem,7vw,5.5rem)]">
+          Systems, incentives, and infrastructure.{" "}
+          <span className="italic text-muted">Written by someone who builds them.</span>
         </h1>
-        <p className="relative text-muted mt-8 max-w-xl text-lg leading-relaxed">
-          Analysis and frameworks on AI systems, climate infrastructure,
-          legal engineering, and protocol design, from Tyler Malin.
+        <p className="type-dek mt-7 max-w-2xl">
+          Essays on AI systems, legal engineering, digital assets, and climate
+          infrastructure, by Tyler Malin. New essays by email.
         </p>
-        <div className="relative mt-10">
+        <div className="mt-9">
           <SubscribeForm />
-          <Link
-            href="/build-sessions"
-            className="link-underline inline-block mt-5 font-mono text-xs text-muted"
-          >
-            Or book a Build Session
-          </Link>
         </div>
       </section>
 
-      <section className="py-24 border-t border-border">
-        <h2 className="font-mono text-sm text-muted mb-12">Latest essays</h2>
-        {essays.length === 0 ? (
-          <p className="text-muted">
-            Nothing published yet. Seed content lives in{" "}
-            <code className="font-mono">/content/essays</code>.
-          </p>
-        ) : (
-          <div className="flex flex-col gap-16">
-            {essays.map((essay) => (
-              <EssayCard key={essay.slug} essay={essay} headingLevel="h3" />
+      {featured.length > 0 && (
+        <section aria-labelledby="latest" className="border-t border-border pt-10">
+          <div className="flex items-baseline justify-between">
+            <h2 id="latest" className="text-[15px] font-medium text-muted">
+              Latest
+            </h2>
+            <Link href="/essays" className="link-underline text-[15px] text-muted hover:text-foreground">
+              All essays →
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-x-8 gap-y-14 md:grid-cols-2">
+            {featured.map((e) => (
+              <PostCard key={e.slug} essay={e} variant="featured" />
             ))}
           </div>
-        )}
-      </section>
+          {more.length > 0 && (
+            <div className="mt-16 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+              {more.map((e) => (
+                <PostCard key={e.slug} essay={e} variant="grid" />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {GUIDES.length > 0 && (
+        <section aria-labelledby="guides" className="mt-24 border-t border-border pt-10">
+          <h2 id="guides" className="text-[15px] font-medium text-muted">
+            Field guides
+          </h2>
+          <ul className="mt-6 divide-y divide-border border-y border-border">
+            {GUIDES.map((g) => (
+              <li key={g.slug}>
+                <a
+                  href={`/guides/${g.slug}`}
+                  className="group flex flex-col gap-1 py-6 sm:flex-row sm:items-baseline sm:justify-between"
+                >
+                  <span className="type-title text-[clamp(1.75rem,3.5vw,2.5rem)]">
+                    <span className="link-underline">{g.title}</span>
+                  </span>
+                  <span className="type-meta">{g.blurb}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

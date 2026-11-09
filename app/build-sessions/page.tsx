@@ -44,10 +44,10 @@ const domains = [
 export default function BuildSessionsPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-24">
-      <p className="font-mono text-sm text-muted mb-6">
-        operator.codes / build sessions
+      <p className="type-meta mb-6">
+        build sessions
       </p>
-      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight max-w-2xl leading-[1.1] mb-7">
+      <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] max-w-2xl leading-[1.1] mb-7">
         Real problems. Live systems. No budget required.
       </h1>
       <p className="text-muted max-w-xl mb-10 text-lg leading-relaxed">
