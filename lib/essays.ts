@@ -12,6 +12,8 @@ export type EssayMeta = {
   title: string;
   description: string;
   date: string;
+  /** Last substantive revision, ISO date. Optional. */
+  updated?: string;
   domain: string;
   tier: Tier;
   draft: boolean;
@@ -49,6 +51,7 @@ export function getEssayMeta(slug: string): EssayMeta | null {
     title: data.title ?? slug,
     description: data.description ?? "",
     date: data.date ?? "",
+    updated: data.updated,
     domain: data.domain ?? "general",
     tier: (data.tier as Tier) ?? "free",
     draft: data.draft === true,
@@ -67,6 +70,7 @@ export function getEssay(slug: string): Essay | null {
     title: data.title ?? slug,
     description: data.description ?? "",
     date: data.date ?? "",
+    updated: data.updated,
     domain: data.domain ?? "general",
     tier: (data.tier as Tier) ?? "free",
     draft: data.draft === true,

@@ -40,6 +40,7 @@ export async function generateMetadata({
       title: essay.title,
       description: essay.description,
       publishedTime: essay.date,
+      modifiedTime: essay.updated,
       authors: [AUTHOR.url],
       section: essay.domain,
       images: essay.image ? [{ url: essay.image }] : undefined,
@@ -76,7 +77,7 @@ export default async function EssayPage({
     headline: essay.title,
     description: essay.description,
     datePublished: essay.date,
-    dateModified: essay.date,
+    dateModified: essay.updated ?? essay.date,
     url: absoluteUrl(`/essays/${slug}`),
     mainEntityOfPage: absoluteUrl(`/essays/${slug}`),
     image: essay.image ? absoluteUrl(essay.image) : undefined,
@@ -130,6 +131,12 @@ export default async function EssayPage({
           </Link>
           <span className="mx-2 text-faint">·</span>
           {essay.readingTime}
+          {essay.updated && essay.updated !== essay.date && (
+            <>
+              <span className="mx-2 text-faint">·</span>
+              Updated <time dateTime={essay.updated}>{formatDate(essay.updated)}</time>
+            </>
+          )}
         </p>
         <div className="mt-6 flex justify-center border-y border-border py-3">
           <ShareBar

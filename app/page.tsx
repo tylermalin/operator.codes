@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { getAllEssays } from "@/lib/essays";
 import { GUIDES } from "@/lib/site";
@@ -68,24 +69,42 @@ export default function HomePage() {
 
       {GUIDES.length > 0 && (
         <section aria-labelledby="guides" className="mt-24 border-t border-border pt-10">
-          <h2 id="guides" className="type-meta text-foreground">
-            Field guides
-          </h2>
-          <ul className="mt-6 divide-y divide-border border-y border-border">
+          <div className="flex items-baseline justify-between">
+            <h2 id="guides" className="type-meta text-foreground">
+              Field guides
+            </h2>
+            <span className="type-meta">Interactive · sourced</span>
+          </div>
+          <div className="mt-8 grid gap-x-8 gap-y-14 md:grid-cols-2">
             {GUIDES.map((g) => (
-              <li key={g.slug}>
-                <a
-                  href={`/guides/${g.slug}`}
-                  className="group flex flex-col gap-1 py-6 sm:flex-row sm:items-baseline sm:justify-between"
-                >
-                  <span className="type-title text-[clamp(1.75rem,3.5vw,2.5rem)]">
-                    <span className="link-underline">{g.title}</span>
+              <a key={g.slug} href={`/guides/${g.slug}`} className="group block">
+                <div className="thumb aspect-[16/9]">
+                  <Image
+                    src={g.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1152px) 544px, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                  <span className="glass glass-ink absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-medium text-white">
+                    Field guide
                   </span>
-                  <span className="type-meta">{g.blurb}</span>
-                </a>
-              </li>
+                </div>
+                <p className="type-meta mt-5">
+                  {g.topic}
+                  <span className="mx-2 text-faint">·</span>
+                  {g.blurb}
+                </p>
+                <h3 className="type-title mt-2.5 text-[clamp(1.75rem,3vw,2.5rem)]">
+                  <span className="link-underline">{g.title}</span>
+                </h3>
+                <p className="type-dek mt-3 max-w-[58ch] text-[15.5px]">{g.description}</p>
+                <p className="mt-4 text-[15px] text-foreground">
+                  <span className="link-underline">Open the guide →</span>
+                </p>
+              </a>
             ))}
-          </ul>
+          </div>
         </section>
       )}
     </div>

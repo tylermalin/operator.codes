@@ -13,7 +13,7 @@ Each category gets one native guide built on the guide kit (`components/guide/ki
 | Climate infrastructure | The Fence Line | Own What You Host, Truth Is Infrastructure | Nov 9, 2026 | Built |
 | Digital assets | Who Verifies? | Custody Is a Verification Problem | **Mon Nov 23, 2026** | Spec below |
 | Legal engineering | The Contract Debugger | Legal Engineering Is Systems Design, The Law Firm AI Problem | **Mon Dec 7, 2026** | Spec below |
-| AI systems | The Authority Ledger | Your Agent Can Sign, AI Agents Need a Legal Body | **Fri Dec 18, 2026** | Spec below |
+| AI systems | The Authority Ledger | Your Agent Can Sign, AI Agents Need a Legal Body | **Fri Dec 18, 2026** | Three tools shipped inside the essay (Nov 9); guide page to follow |
 
 Order rule: a guide tied to a live deadline ships first. The SEC custody proposal closes for comment on **December 7, 2026**, so Who Verifies? goes out two weeks ahead of it.
 
@@ -66,6 +66,8 @@ Hours before and after AI, rate, and a fee model; shows when efficiency costs th
 
 ## AI systems: The Authority Ledger
 
+Shipped Nov 9 inside the redrafted essay: Who is bound (exposure by structure), Authority check (actual vs. apparent authority with a limits manifest), and Structure cost (Delaware and California taxes). The guide page lifts these into the kit and adds the items below.
+
 1. **Grant builder.** Scope, budget, counterparties, expiry for one agent; test proposed actions against it and get an authorized / not authorized record.
 2. **Who is bound.** The same agent action under three structures (no entity, attributed to you, Series LLC) and where liability lands. Sources verified: UETA, Restatement position via Quinn Emanuel, Delaware LLC Act series provision, Wyoming DAO LLC act.
 3. **Port Measured, Not Ranked** from its standalone page into the kit, so all guides share one look and one source standard.
@@ -79,4 +81,5 @@ Recorded so they don't come back:
 - Servers do not qualify for the § 48 investment tax credit, which covers energy property.
 - A private contract cannot freeze a county's permit processing. The enforceable version is a consent right in the company's own charter (Fence Line, covenant section 6).
 - "6 to 12 month fast-track," carrying-cost rates, and cost-of-capital ranges had no source; they appear only as labeled user inputs.
-- The Chandler/Mesa evaporative-cooling claim and the "Stanford e-corporation" attribution are unverified and unused.
+- The Chandler/Mesa evaporative-cooling claim is unverified and unused.
+- The "e-corporation" was not a Stanford design. It is the E-Corp framework Tyler Malin and Jamie Daves built at Everyone, Inc.; the essay now says so in first person.
