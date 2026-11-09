@@ -1,0 +1,27 @@
+name: IndexNow
+
+# After Vercel finishes a production deploy, submit the sitemap's URLs
+# so IndexNow engines recrawl new and updated pages right away.
+on:
+  deployment_status:
+
+# Vercel names the environment "Production – <project>", and two Vercel
+# projects deploy this repo, so one deploy fires this twice. The
+# concurrency group runs them one after the other; IndexNow treats a
+# repeat submission of the same URLs as harmless.
+concurrency:
+  group: indexnow-${{ github.event.deployment.sha }}
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      startsWith(github.event.deployment.environment, 'Production')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/indexnow.mjs

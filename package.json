@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-essays.mjs && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "weekly:draft": "tsx --env-file=.env.local scripts/create-weekly-draft.ts",
+    "check:essays": "node scripts/check-essays.mjs"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
@@ -36,6 +38,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   },
   "packageManager": "pnpm@12.5.1"

@@ -52,10 +52,10 @@ export default function ShareBar({ url, title }: { url: string; title: string })
   const linkedInHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 
   return (
-    <div className="flex items-center gap-5 font-mono text-xs text-muted mb-16">
+    <div className="flex items-center gap-4 text-sm text-muted">
       <span className="text-faint">Share</span>
       {canNativeShare ? (
-        <button onClick={handleNativeShare} className="link-underline">
+        <button onClick={handleNativeShare} className="link-underline hover:text-foreground">
           Share
         </button>
       ) : (
@@ -64,7 +64,7 @@ export default function ShareBar({ url, title }: { url: string; title: string })
             href={xHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline"
+            className="link-underline hover:text-foreground"
           >
             X
           </a>
@@ -72,13 +72,13 @@ export default function ShareBar({ url, title }: { url: string; title: string })
             href={linkedInHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline"
+            className="link-underline hover:text-foreground"
           >
             LinkedIn
           </a>
         </>
       )}
-      <button onClick={handleCopy} className="link-underline">
+      <button onClick={handleCopy} className="link-underline hover:text-foreground">
         {copied ? "Copied" : "Copy link"}
       </button>
     </div>

@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import KeyManager from "@/components/key-manager";
 import UpgradeButton from "@/components/upgrade-button";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  robots: { index: false, follow: false },
+};
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -32,7 +38,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-24">
-      <h1 className="text-3xl sm:text-4xl font-normal tracking-tight mb-2">
+      <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-2">
         Dashboard
       </h1>
       <p className="text-muted mb-12">{user.email}</p>
@@ -47,7 +53,7 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      <h2 className="font-mono text-sm text-muted mb-6">API keys</h2>
+      <h2 className="type-meta mb-6">API keys</h2>
       <KeyManager initialKeys={initialKeys ?? []} />
     </div>
   );

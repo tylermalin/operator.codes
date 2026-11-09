@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="A sourced, interactive field guide to AI search optimization: how answer engines choose sources, what the evidence says works, and a dated 90-day plan.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="canonical" href="https://operator.codes/guides/measured-not-ranked">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Operator">
+<meta property="og:title" content="Measured, Not Ranked">
+<meta property="og:description" content="A sourced, interactive field guide to AI search optimization: how answer engines choose sources, what the evidence says works, and a dated 90-day plan.">
+<meta property="og:url" content="https://operator.codes/guides/measured-not-ranked">
+<meta property="og:image" content="https://operator.codes/images/essays/measured-not-ranked/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Measured, Not Ranked">
+<meta name="twitter:description" content="A sourced, interactive field guide to AI search optimization: how answer engines choose sources, what the evidence says works, and a dated 90-day plan.">
+<meta name="twitter:image" content="https://operator.codes/images/essays/measured-not-ranked/hero.jpg">
+<meta name="author" content="Tyler Malin">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Measured, Not Ranked","description":"A sourced, interactive field guide to AI search optimization: how answer engines choose sources, what the evidence says works, and a dated 90-day plan.","datePublished":"2026-11-09","author":{"@type":"Person","name":"Tyler Malin","url":"https://operator.codes/about"},"publisher":{"@type":"Organization","name":"Operator","url":"https://operator.codes"},"mainEntityOfPage":"https://operator.codes/guides/measured-not-ranked"}</script>
+<title>Measured, Not Ranked</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@500;600&display=swap">
+<style>
+/* Quiet Grain: one grained cobalt field up top, stone paper ruled with black hairlines below, one corner bloom at the foot. */
+:root{
+  --stone:#e0e0db; --stone-raised:#e9e9e5; --ink:#000000; --ink-muted:#4a4a47; --rule:#1a1a1a; --rule-soft:#9a9a95;
+  --cobalt:#3d5a99; --haze:#8e9bbf; --mist:#c4c8d2; --focus:#000000;
+  --font-display:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --font-text:Archivo,"Helvetica Neue",Arial,sans-serif;
+  --space-1:4px; --space-2:8px; --space-3:16px; --space-4:24px; --space-5:38px; --space-6:64px; --space-7:112px; --space-8:176px;
+  --hairline:1px; --arrow-button:48px; --header-height:76px; --content-max:1280px;
+  --gutter:var(--space-5);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --stone:#121315; --stone-raised:#1b1c1f; --ink:#e6e6e1; --ink-muted:#a3a39e; --rule:#d6d6d1; --rule-soft:#4a4b4e;
+  --cobalt:#24396e; --haze:#33436b; --mist:#1a1f2c; --focus:#e6e6e1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --stone:#121315; --stone-raised:#1b1c1f; --ink:#e6e6e1; --ink-muted:#a3a39e; --rule:#d6d6d1; --rule-soft:#4a4b4e;
+  --cobalt:#24396e; --haze:#33436b; --mist:#1a1f2c; --focus:#e6e6e1; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:calc(var(--header-height) + env(safe-area-inset-top,0px))}
+body{background:var(--stone);color:var(--ink);font-family:var(--font-text);font-size:18px;line-height:1.45;letter-spacing:.02em;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--stone)}
+p{margin:0}
+h1,h2,h3{margin:0;font-family:var(--font-display);font-weight:500;letter-spacing:-.02em;text-wrap:balance}
+a{color:var(--ink);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+p a,li a,td a,.meta a{text-decoration:underline;text-decoration-color:var(--rule-soft);text-underline-offset:3px}
+p a:hover,li a:hover,td a:hover{text-decoration-color:var(--ink)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+b,strong{font-weight:700}
+em,i.v{font-style:italic}
+.num{font-variant-numeric:tabular-nums}
+.meta{font-size:15px;line-height:1.3;letter-spacing:.02em;color:var(--ink-muted)}
+.col{max-width:64ch}
+.band{padding-left:max(var(--gutter), env(safe-area-inset-left,0px));padding-right:max(var(--gutter), env(safe-area-inset-right,0px))}
+.inner{max-width:var(--content-max);margin:0 auto}
+.stack{display:flex;flex-direction:column;gap:var(--space-3)}
+.stack-lg{display:flex;flex-direction:column;gap:var(--space-4)}
+
+/* SiteHeader */
+.qg-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--stone);border-bottom:var(--hairline) solid var(--rule)}
+.qg-header .inner{display:flex;align-items:center;justify-content:space-between;height:var(--header-height);gap:var(--space-3)}
+.qg-wordmark{font-family:var(--font-display);font-size:18px;font-weight:600;line-height:1.2}
+.qg-wordmark span{font-weight:500;color:var(--ink-muted)}
+.qg-menu{width:44px;height:44px;display:grid;place-content:center end;gap:7px;background:none;border:0;padding:0;cursor:pointer}
+.qg-menu span{display:block;height:var(--hairline);background:var(--ink);width:32px;transition:width .15s ease-out}
+.qg-menu[aria-expanded="true"] span:last-child{width:20px;justify-self:end}
+.overlay{position:fixed;inset:calc(var(--header-height) + env(safe-area-inset-top,0px)) 0 0;z-index:19;background:var(--stone-raised);overflow:auto;padding-block:var(--space-4) calc(var(--space-6) + env(safe-area-inset-bottom,0px))}
+.overlay ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--space-5)}
+.overlay li{border-bottom:var(--hairline) solid var(--rule)}
+.overlay a{display:flex;align-items:baseline;gap:var(--space-3);padding:var(--space-3) 0;font-family:var(--font-display);font-size:34px;font-weight:600;line-height:1}
+.overlay a small{font-family:var(--font-text);font-size:15px;font-weight:400;color:var(--ink-muted);letter-spacing:.02em}
+
+/* GrainField */
+.qg-field{position:relative;overflow:hidden;color:var(--ink);background:radial-gradient(120% 70% at 62% 42%, var(--cobalt) 0%, var(--haze) 45%, var(--mist) 85%);background-size:140% 140%;animation:qg-drift 26s ease-in-out infinite alternate}
+.qg-field[data-drift="paused"]{animation-play-state:paused}
+.qg-field::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.38;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.4 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.qg-field[data-variant="corner"]{animation:none;background:radial-gradient(60% 120% at 100% 80%, var(--cobalt) 0%, var(--haze) 30%, var(--mist) 60%, var(--stone) 95%)}
+.qg-pause{position:absolute;z-index:2;right:max(var(--space-3), env(safe-area-inset-right,0px));bottom:var(--space-3);width:28px;height:28px;border-radius:9999px;border:0;background:var(--ink);color:var(--stone);font:700 11px/1 var(--font-text);cursor:pointer;display:grid;place-items:center}
+@keyframes qg-drift{from{background-position:30% 20%}to{background-position:70% 80%}}
+
+.hero .inner{position:relative;z-index:1;min-height:min(92svh,860px);display:grid;grid-template-rows:1fr auto;padding-block:var(--space-6) var(--space-5);gap:var(--space-6)}
+.hero-top{align-self:center;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:var(--space-6);align-items:end}
+.qg-ledger{display:flex;flex-direction:column;gap:var(--space-3);margin:0;padding:0;list-style:none}
+.qg-line{line-height:1.2}
+.qg-arrow{display:inline-block;margin:0 .3em}
+.qg-hero-rule{border:0;border-top:var(--hairline) solid var(--rule);margin:var(--space-4) 0}
+.qg-display{font-family:var(--font-display);font-size:70px;line-height:.96;font-weight:500;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.hero-stat{display:flex;flex-direction:column;gap:var(--space-2)}
+.hero-stat .n{font-family:var(--font-display);font-size:clamp(72px,11vw,148px);line-height:.85;font-weight:500;letter-spacing:-.04em}
+.hero-lede{max-width:40ch}
+.hero-foot{display:flex;justify-content:space-between;align-items:end;gap:var(--space-4);flex-wrap:wrap;border-top:var(--hairline) solid var(--rule);padding-top:var(--space-3)}
+
+/* ArrowButton */
+.qg-arrowbtn{display:inline-grid;place-items:center;width:var(--arrow-button);height:var(--arrow-button);border:var(--hairline) solid var(--rule);border-radius:9999px;color:var(--ink);background:transparent;font:400 18px/1 var(--font-text);cursor:pointer;transition:background-color .15s ease-out,color .15s ease-out;flex:none;text-decoration:none!important}
+.qg-arrowbtn:hover{background:var(--ink);color:var(--stone)}
+.qg-arrowbtn[data-dir="down"] .g{transform:rotate(90deg)}
+.arrowlink{display:inline-flex;align-items:center;gap:var(--space-3)}
+
+/* Sections */
+.sec{padding-block:var(--space-7) 0}
+.qg-sectionhead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-2) var(--space-4);padding-bottom:var(--space-4);border-bottom:var(--hairline) solid var(--rule);align-items:end}
+.qg-sectionhead h2{font-size:22.5px;line-height:1.17}
+.qg-sectionhead p{font-style:italic;grid-column:1/2}
+.qg-sectionhead .idx{font-family:var(--font-display);font-size:22.5px;color:var(--ink-muted);grid-row:1;grid-column:2}
+.statement{font-family:var(--font-display);font-size:clamp(30px,3.6vw,46px);line-height:1.05;font-weight:500;letter-spacing:-.02em;max-width:24ch;text-wrap:balance}
+.body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:var(--space-5);padding-top:var(--space-5)}
+.body > .aside{min-width:0}
+.body > .main{min-width:0;display:flex;flex-direction:column;gap:var(--space-4)}
+
+/* WorkRow ledger */
+.qg-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:var(--space-4);padding:var(--space-4) 0;border-bottom:var(--hairline) solid var(--rule)}
+.qg-row-text{display:grid;gap:var(--space-2);min-width:0}
+.qg-row-title{font-weight:700;line-height:1.2}
+.qg-row-sub{font-style:italic;line-height:1.3}
+.qg-row-right{text-align:right;line-height:1.2;white-space:nowrap}
+.rows{border-top:var(--hairline) solid var(--rule)}
+
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--space-5)}
+.two > div{min-width:0}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:var(--space-3) 0;border-bottom:var(--hairline) solid var(--rule-soft);line-height:1.35}
+.list li:last-child{border-bottom:0}
+.kicker{font-weight:700;padding-bottom:var(--space-2);border-bottom:var(--hairline) solid var(--rule)}
+
+/* Exhibits */
+.exhibit{display:flex;flex-direction:column;gap:var(--space-3);padding-block:var(--space-5) var(--space-4);border-bottom:var(--hairline) solid var(--rule);min-width:0}
+.ex-head{display:flex;justify-content:space-between;gap:var(--space-3);align-items:end;flex-wrap:wrap}
+.ex-head .t{display:grid;gap:var(--space-1);min-width:0}
+.ex-head h3{font-size:22.5px;line-height:1.17}
+.toggle{display:inline-flex;border:var(--hairline) solid var(--rule);flex-wrap:wrap}
+.toggle button{font:400 15px/1 var(--font-text);letter-spacing:.02em;padding:10px 14px;border:0;background:transparent;color:var(--ink);cursor:pointer;transition:background-color .15s ease-out,color .15s ease-out}
+.toggle button + button{border-left:var(--hairline) solid var(--rule)}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--stone)}
+.chart-wrap{position:relative}
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:540px}
+.legend{display:flex;flex-wrap:wrap;gap:var(--space-4);font-size:15px;color:var(--ink-muted)}
+.legend span{display:inline-flex;align-items:center;gap:var(--space-2)}
+.sw{width:26px;height:0;border-top:2px solid var(--ink);display:inline-block}
+.sw.d{border-top:2px dashed var(--ink-muted)}
+.sw.b{height:12px;border:0;background:var(--ink)}
+.sw.b2{height:12px;border:0;background:var(--ink-muted)}
+.sw.b3{height:12px;border:var(--hairline) solid var(--ink);background:transparent}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--stone);font-size:13px;padding:6px 8px;white-space:nowrap;transform:translate(-50%,-120%);letter-spacing:.02em}
+
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:16px;line-height:1.35}
+th,td{text-align:left;padding:12px 16px 12px 0;border-bottom:var(--hairline) solid var(--rule-soft);vertical-align:top}
+thead th{font-size:15px;font-weight:400;color:var(--ink-muted);border-bottom:var(--hairline) solid var(--rule)}
+td.n{white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* Instruments */
+.instrument{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:var(--hairline) solid var(--rule);border-bottom:var(--hairline) solid var(--rule);margin-top:var(--space-5)}
+.instrument > div{padding:var(--space-5) 0;min-width:0}
+.instrument > div:first-child{padding-right:var(--space-5);border-right:var(--hairline) solid var(--rule)}
+.instrument > div:last-child{padding-left:var(--space-5)}
+.controls{display:flex;flex-direction:column;gap:var(--space-4)}
+.field{display:flex;flex-direction:column;gap:var(--space-2)}
+.field label{font-size:15px;display:flex;justify-content:space-between;gap:var(--space-2)}
+.field label output{font-weight:700;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--ink)}
+input[type=number],select,textarea{font:400 16px/1.4 var(--font-text);letter-spacing:.02em;color:var(--ink);background:transparent;border:var(--hairline) solid var(--rule);border-radius:0;padding:10px 12px;width:100%}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
+select option{background:var(--stone-raised);color:var(--ink)}
+textarea{min-height:190px;resize:vertical}
+.example{font-size:15px;font-style:italic;color:var(--ink-muted)}
+.readout{display:flex;flex-direction:column;gap:var(--space-3)}
+.readout .big{font-family:var(--font-display);font-size:clamp(56px,7vw,92px);line-height:.9;font-weight:500;letter-spacing:-.03em}
+.meter{height:12px;border:var(--hairline) solid var(--rule);position:relative}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--ink);transition:width .2s ease-out}
+.kv{display:flex;justify-content:space-between;gap:var(--space-3);padding:var(--space-2) 0;border-bottom:var(--hairline) solid var(--rule-soft);font-size:16px}
+.kv b{font-variant-numeric:tabular-nums;text-align:right}
+.btn{font:400 16px/1 var(--font-text);letter-spacing:.02em;border:var(--hairline) solid var(--rule);background:transparent;color:var(--ink);padding:12px 16px;cursor:pointer;transition:background-color .15s ease-out,color .15s ease-out;display:inline-flex;gap:var(--space-2);align-items:center}
+.btn:hover,.btn.solid{background:var(--ink);color:var(--stone)}
+
+/* Pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:var(--hairline) solid var(--rule);border-bottom:var(--hairline) solid var(--rule)}
+.pipe button{font:inherit;letter-spacing:inherit;text-align:left;background:transparent;border:0;padding:var(--space-4) var(--space-3) var(--space-4) 0;cursor:pointer;display:grid;gap:var(--space-2);color:var(--ink);position:relative}
+.pipe button + button{border-left:var(--hairline) solid var(--rule);padding-left:var(--space-3)}
+.pipe button .k{font-size:15px;color:var(--ink-muted)}
+.pipe button .h{font-family:var(--font-display);font-size:22.5px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
+.pipe button[aria-pressed="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;background:var(--ink)}
+.pipe button + button[aria-pressed="true"]::after{left:-1px}
+.pipe-detail{padding:var(--space-4) 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:var(--space-5);border-bottom:var(--hairline) solid var(--rule)}
+
+/* Ledger */
+.chips{display:flex;gap:var(--space-4);flex-wrap:wrap;padding-top:var(--space-4)}
+.chips button{font:400 18px/1.2 var(--font-text);letter-spacing:.02em;background:none;border:0;padding:0 0 4px;color:var(--ink-muted);cursor:pointer;border-bottom:2px solid transparent}
+.chips button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.strength{display:inline-flex;gap:3px;vertical-align:middle}
+.strength i{width:9px;height:9px;border:var(--hairline) solid var(--ink)}
+.strength i.on{background:var(--ink)}
+.verdict-w{font-size:15px}
+
+/* Bots */
+.bot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-3);align-items:center;padding:var(--space-3) 0;border-bottom:var(--hairline) solid var(--rule-soft)}
+.bot .nm{font-weight:700;line-height:1.2}
+.bot .ds{font-size:15px;color:var(--ink-muted);font-style:italic;line-height:1.3}
+.switch{display:inline-flex;border:var(--hairline) solid var(--rule)}
+.switch button{font:400 14px/1 var(--font-text);letter-spacing:.02em;padding:8px 12px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.switch button + button{border-left:var(--hairline) solid var(--rule)}
+.switch button[aria-pressed="true"]{background:var(--ink);color:var(--stone)}
+pre.code{font:400 14px/1.5 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;border:var(--hairline) solid var(--rule);padding:var(--space-3);margin:0;overflow:auto;max-height:360px;white-space:pre;letter-spacing:0}
+.notes{display:flex;flex-direction:column}
+.notes div{padding:var(--space-2) 0;border-bottom:var(--hairline) solid var(--rule-soft);font-size:16px;line-height:1.35}
+
+/* Checks */
+.check{display:grid;grid-template-columns:52px minmax(0,1fr);gap:var(--space-2);padding:var(--space-2) 0;border-bottom:var(--hairline) solid var(--rule-soft);font-size:16px;line-height:1.35}
+.check .st{font-weight:700}
+.check.fail .st{color:var(--ink-muted);font-weight:400;font-style:italic}
+
+/* Rules */
+.rules{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:var(--space-5);padding-top:var(--space-5)}
+.rule-list{border-top:var(--hairline) solid var(--rule)}
+.rule-list button{font:400 17px/1.3 var(--font-text);letter-spacing:.02em;text-align:left;border:0;border-bottom:var(--hairline) solid var(--rule);background:transparent;color:var(--ink);padding:var(--space-3) var(--space-5) var(--space-3) 0;cursor:pointer;width:100%;position:relative}
+.rule-list button::after{content:"→";position:absolute;right:0;top:var(--space-3);opacity:0;transition:opacity .15s ease-out}
+.rule-list button[aria-pressed="true"]{font-weight:700}
+.rule-list button[aria-pressed="true"]::after,.rule-list button:hover::after{opacity:1}
+.rule-out{align-self:start;position:sticky;top:calc(var(--header-height) + env(safe-area-inset-top,0px) + var(--space-4));display:flex;flex-direction:column;gap:var(--space-3);padding-top:var(--space-3);border-top:var(--hairline) solid var(--rule)}
+.rule-out .r{font-family:var(--font-display);font-size:clamp(28px,3vw,40px);line-height:1.05;font-weight:500;letter-spacing:-.02em}
+
+/* Plan */
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:var(--hairline) solid var(--rule);margin-top:var(--space-5)}
+.phase{padding:var(--space-4) var(--space-4) var(--space-4) 0;display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.phase + .phase{border-left:var(--hairline) solid var(--rule);padding-left:var(--space-4)}
+.phase .due{font-size:15px;color:var(--ink-muted)}
+.phase h3{font-size:22.5px;line-height:1.17}
+.phase label{display:grid;grid-template-columns:20px minmax(0,1fr);gap:var(--space-2);font-size:16px;line-height:1.35;cursor:pointer;padding:var(--space-2) 0;border-top:var(--hairline) solid var(--rule-soft)}
+.phase input{margin-top:3px;accent-color:var(--ink)}
+.phase label:has(input:checked) span{color:var(--ink-muted);text-decoration:line-through}
+.prog{font-size:15px;color:var(--ink-muted)}
+
+/* Presence */
+.ptable input{width:90px;padding:6px 8px}
+.verdict{padding:var(--space-3) 0;border-top:var(--hairline) solid var(--rule);font-size:17px;line-height:1.35}
+
+/* Thesis */
+.thesis{font-family:var(--font-display);font-size:clamp(34px,4.6vw,58px);line-height:1;font-weight:500;letter-spacing:-.025em;max-width:20ch;text-wrap:balance;padding-block:var(--space-5)}
+
+/* Footer */
+.foot{margin-top:var(--space-7)}
+.foot .inner{position:relative;z-index:1;padding-block:var(--space-6) calc(var(--space-4) + env(safe-area-inset-bottom,0px))}
+.qg-footer{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3) var(--space-4);border-top:var(--hairline) solid var(--rule);padding-top:var(--space-4)}
+.qg-footer-meta{grid-column:1/-1;justify-self:end;text-align:right;display:grid;gap:var(--space-2)}
+
+@media (max-width:900px){
+  .hero-top,.body,.instrument,.rules,.phases,.two,.pipe-detail{grid-template-columns:minmax(0,1fr)}
+  .instrument > div:first-child{padding-right:0;border-right:0;border-bottom:var(--hairline) solid var(--rule)}
+  .instrument > div:last-child{padding-left:0}
+  .phase + .phase{border-left:0;padding-left:0;border-top:var(--hairline) solid var(--rule)}
+  .pipe{grid-template-columns:minmax(0,1fr)}
+  .pipe button + button{border-left:0;border-top:var(--hairline) solid var(--rule);padding-left:0}
+  .rule-out{position:static}
+  .overlay ol{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:600px){
+  :root{--gutter:var(--space-3)}
+  .qg-display{font-size:44px}
+  .sec{padding-block:var(--space-6) 0}
+  .overlay a{font-size:28px}
+  .qg-wordmark span{display:none}
+}
+@media (prefers-reduced-motion:reduce){.qg-field{animation:none!important}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="qg-header band">
+  <div class="inner">
+    <a class="qg-wordmark" href="#top">Measured, Not Ranked <span>· AI search field guide</span></a>
+    <button type="button" class="qg-menu" id="menuBtn" aria-expanded="false" aria-controls="overlay" aria-label="Open section menu"><span></span><span></span></button>
+  </div>
+</header>
+<nav class="overlay band" id="overlay" hidden aria-label="Sections">
+  <div class="inner">
+    <ol>
+      <li><a href="#summary">Summary <small>Risks and returns</small></a></li>
+      <li><a href="#shift">The shift <small>01</small></a></li>
+      <li><a href="#calc">Exposure <small>Calculator</small></a></li>
+      <li><a href="#how">Mechanism <small>02</small></a></li>
+      <li><a href="#works">Content <small>03</small></a></li>
+      <li><a href="#ledger">Ledger <small>04</small></a></li>
+      <li><a href="#access">Access <small>05 · Builder</small></a></li>
+      <li><a href="#check">Citability <small>Checker</small></a></li>
+      <li><a href="#measure">Measurement <small>06 · Tracker</small></a></li>
+      <li><a href="#rules">Rules <small>07</small></a></li>
+      <li><a href="#plan">90 days <small>Checklist</small></a></li>
+      <li><a href="#risks">Failure modes <small>08</small></a></li>
+      <li><a href="#thesis">Thesis <small>09</small></a></li>
+      <li><a href="#sources">Sources <small>27</small></a></li>
+    </ol>
+  </div>
+</nav>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="qg-field hero band" id="heroField">
+  <div class="inner">
+    <div class="hero-top">
+      <div>
+        <ul class="qg-ledger">
+          <li class="qg-line">Published<span class="qg-arrow">→</span><b>November 9, 2026</b></li>
+          <li class="qg-line">Written by<span class="qg-arrow">→</span><b>Tyler Malin • Beneficial Technology</b></li>
+          <li class="qg-line">Built on<span class="qg-arrow">→</span><b>27 sources • 6 tools</b></li>
+        </ul>
+        <hr class="qg-hero-rule">
+        <h1 class="qg-display">Measured, not ranked. How AI answer engines choose what to cite.</h1>
+      </div>
+      <div class="hero-stat">
+        <div class="n num">−39.8%</div>
+        <p class="hero-lede">Organic clicks lost where Google shows an AI Overview, from a randomized experiment on 1,065 users. Satisfaction did not change.</p>
+      </div>
+    </div>
+    <div class="hero-foot">
+      <p class="hero-lede"><i>What the evidence says moves a citation, what wastes the budget, and a dated 90-day plan.</i></p>
+      <a class="arrowlink" href="#summary"><span>Start reading</span><span class="qg-arrowbtn" data-dir="down" aria-hidden="true"><span class="g">→</span></span></a>
+    </div>
+  </div>
+  <button type="button" class="qg-pause" id="pause" aria-label="Pause background motion">II</button>
+</section>
+
+<!-- SUMMARY -->
+<section class="sec band" id="summary"><div class="inner">
+  <div class="qg-sectionhead"><h2>Executive summary</h2><span class="idx">00</span><p>Lead with the recommendation, then the risks</p></div>
+  <div class="body">
+    <div class="aside"><p class="statement">Treat AI search as SEO plus reputation plus verification.</p></div>
+    <div class="main">
+      <p class="col">Make sure the AI crawlers can reach you. Make your most exposed pages the clearest, best-sourced statement of their facts. Get referenced by credible third parties. Then measure how often you show up across many prompts, because a single "AI rank" is mostly noise.</p>
+      <div class="two">
+        <div>
+          <p class="kicker">Risks first</p>
+          <ul class="list">
+            <li>Most tactics on the market have no evidence behind them. Server logs show 97% of llms.txt files get no requests from AI crawlers, and the one controlled test of adding schema found no citation lift.</li>
+            <li>Manipulation is already happening and is being treated as an attack. Microsoft found 31 companies hiding prompt injections in "Summarize with AI" buttons.</li>
+            <li>Run the same brand-recommendation prompt twice and the two lists match less than once in 100 tries.</li>
+            <li>Where an AI Overview appears, organic clicks drop by roughly 40%.</li>
+          </ul>
+        </div>
+        <div>
+          <p class="kicker">Where it pays</p>
+          <ul class="list">
+            <li>Sourced claims can lift a lower-ranked page past the leader. In the founding GEO experiment, adding citations raised the fifth-ranked page's visibility 115% while the top page lost 30%.</li>
+            <li>Branded web mentions correlate with AI Overview visibility about three times as strongly as backlinks.</li>
+            <li>A brand cited inside an AI Overview gets 120% more organic clicks per impression than one left out.</li>
+            <li>Google's own guide says unique, first-hand content is the factor most likely to drive presence over time.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- SHIFT -->
+<section class="sec band" id="shift"><div class="inner">
+  <div class="qg-sectionhead"><h2>The shift</h2><span class="idx">01</span><p>The answer moved above the link</p></div>
+  <div class="body">
+    <div class="aside"><p class="statement">The clicks that remained were not better clicks.</p></div>
+    <div class="main">
+      <p class="col">Agarwal (Indian School of Business) and Sen (Carnegie Mellon) used a Chrome extension to randomly hide AI Overviews for 1,065 US desktop users between January 7 and February 10, 2026. When an Overview showed, outbound organic clicks fell 39.8% and zero-click searches rose 34.5%. Sponsored clicks held flat.</p>
+      <p class="col">Bounce rate, back-button returns and time on page matched across groups, which cuts against Google's claim that Overview clicks are higher quality. More than 95% of participants never noticed their results had changed.</p>
+    </div>
+  </div>
+
+  <div class="exhibit">
+    <div class="ex-head">
+      <div class="t"><span class="meta">Exhibit 1 · Seer Interactive · 53 brands · 5.47M queries</span><h3>Click-through rate with and without an AI Overview</h3></div>
+      <div class="toggle" role="group" aria-label="Channel"><button type="button" data-ch="organic" aria-pressed="true">Organic</button><button type="button" data-ch="paid" aria-pressed="false">Paid</button></div>
+    </div>
+    <div class="legend"><span><i class="sw"></i>No AI Overview</span><span><i class="sw d"></i>AI Overview shown</span></div>
+    <div class="chart-wrap"><div class="chart" id="ctrChart"></div><div class="tip" id="ctrTip" hidden></div></div>
+    <p class="meta col">Organic CTR on Overview queries hit 1.31% in December 2025, then recovered to 2.36% by February 2026. Seer calls it a possible new normal and warns against forecasting from two months. Hover or tap a point. <a href="https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-2026-update">Seer, April 2026</a></p>
+  </div>
+
+  <div class="exhibit">
+    <div class="ex-head"><div class="t"><span class="meta">Exhibit 2</span><h3>Four studies, four methods, one direction</h3></div></div>
+    <div class="rows">
+      <div class="qg-row"><div class="qg-row-text"><a class="qg-row-title" href="https://ppc.land/researchers-find-google-ai-overviews-cut-publisher-clicks-39-8/">Agarwal &amp; Sen, 2026 → causal</a><p class="qg-row-sub">Randomized field experiment, 1,065 users</p></div><div class="qg-row-right"><b class="num">−39.8%</b><br><span class="meta">organic clicks</span></div></div>
+      <div class="qg-row"><div class="qg-row-text"><a class="qg-row-title" href="https://ahrefs.com/blog/ai-overviews-reduce-clicks-update">Ahrefs, February 2026</a><p class="qg-row-sub">Search Console CTR against forecast, 300,000 keywords</p></div><div class="qg-row-right"><b class="num">−58%</b><br><span class="meta">position-1 CTR</span></div></div>
+      <div class="qg-row"><div class="qg-row-text"><a class="qg-row-title" href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/">Pew Research Center, July 2025</a><p class="qg-row-sub">Browsing panel of 900 US adults</p></div><div class="qg-row-right"><b class="num">8% vs 15%</b><br><span class="meta">visits with a click</span></div></div>
+      <div class="qg-row"><div class="qg-row-text"><a class="qg-row-title" href="https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-2026-update">Seer Interactive, April 2026</a><p class="qg-row-sub">Multi-brand CTR panel, 2.43B impressions</p></div><div class="qg-row-right"><b class="num">1.3% → 2.4%</b><br><span class="meta">Overview CTR</span></div></div>
+    </div>
+    <p class="meta col">Ahrefs says the damage doubled since April 2025. Seer saw a rebound in early 2026. Google disputed Pew's method. For planning, assume 40 to 60% fewer clicks on informational queries that trigger an Overview and treat any recovery as upside.</p>
+  </div>
+
+  <div class="body"><div class="aside"></div><div class="main"><p class="col">Demand is still growing. OpenAI reported 900 million weekly ChatGPT users in February 2026, up from 400 million a year earlier. Queries are getting longer too: Pew found 8% of one- or two-word searches produced an AI summary, against 53% of searches with ten or more words. People can now read and act on your content without visiting the page it came from.</p></div></div>
+</div></section>
+
+<!-- CALCULATOR -->
+<section class="sec band" id="calc"><div class="inner">
+  <div class="qg-sectionhead"><h2>Click exposure calculator</h2><span class="idx">Tool</span><p>How many of your clicks sit under an AI answer</p></div>
+  <div class="instrument">
+    <div class="controls">
+      <p class="col">Enter your monthly organic clicks and query mix. The calculator applies Seer's measured AI Overview trigger rates by intent and the click-loss rate you pick.</p>
+      <div class="field"><label for="cClicks">Monthly organic clicks</label><input type="number" id="cClicks" value="40000" min="0" step="1000"></div>
+      <div class="field"><label for="cInfo">Informational share <output id="oInfo">60%</output></label><input type="range" id="cInfo" min="0" max="100" value="60"></div>
+      <div class="field"><label for="cComm">Commercial share <output id="oComm">25%</output></label><input type="range" id="cComm" min="0" max="100" value="25"></div>
+      <div class="field"><label for="cTrans">Transactional share <output id="oTrans">15%</output></label><input type="range" id="cTrans" min="0" max="100" value="15"></div>
+      <div class="field"><label for="cScen">Click-loss assumption</label>
+        <select id="cScen">
+          <option value="0.398">Randomized experiment average (−39.8%)</option>
+          <option value="0.58">Ahrefs, position 1 (−58%)</option>
+          <option value="0.38">You are cited in the Overview (−38%, Seer)</option>
+          <option value="0.72">You are not cited in the Overview (−72%, Seer)</option>
+        </select>
+      </div>
+      <p class="example">Example inputs. Replace with your own.</p>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span class="meta">Estimated clicks lost per month</span>
+      <div class="big num" id="rLost">0</div>
+      <div class="meter"><i id="rBar" style="width:0%"></i></div>
+      <div class="kv"><span>Clicks on queries likely to show an Overview</span><b id="rExposed">0</b></div>
+      <div class="kv"><span>Share of total clicks lost</span><b id="rShare">0%</b></div>
+      <div class="kv"><span>Swing from being cited vs not cited</span><b id="rSwing">0</b></div>
+      <p class="meta">Trigger rates: informational 36%, commercial 8%, transactional 5% (Seer, 49,353 queries). Shares are normalized to 100%. Question and comparison pages trigger at 86% and 95%, so a library heavy in those formats sits above this estimate.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- HOW -->
+<section class="sec band" id="how"><div class="inner">
+  <div class="qg-sectionhead"><h2>How engines choose sources</h2><span class="idx">02</span><p>Ranking became one input among several</p></div>
+  <div class="body">
+    <div class="aside"><p class="statement">Engines retrieve passages, write one answer, and cite what supports it.</p></div>
+    <div class="main"><p class="col">Google's <a href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide">May 2026 guide</a> says its AI features run on its core ranking systems and names two techniques: retrieval-augmented generation and query fan-out. Select a stage.</p></div>
+  </div>
+  <div class="pipe" role="group" aria-label="Pipeline stages" id="pipe" style="margin-top:var(--space-5)"></div>
+  <div class="pipe-detail" id="pipeDetail" aria-live="polite"></div>
+
+  <div class="exhibit">
+    <div class="ex-head"><div class="t"><span class="meta">Exhibit 3 · Ahrefs</span><h3>Where AI Overview citations rank in organic results</h3></div></div>
+    <div class="chart" id="citeChart"></div>
+    <div class="legend"><span><i class="sw b"></i>Top 10</span><span><i class="sw b2"></i>Positions 11 to 100</span><span><i class="sw b3"></i>Not in top 100</span></div>
+    <p class="meta col">The samples count differently. July 2025 counted the top three citations per Overview; March 2026 counted every cited URL across 863,000 keywords, after Gemini 3 began powering Overviews. Part of the drop is method. Ranking for the head term no longer covers you, and ranking across the sub-questions does more. <a href="https://www.digitalapplied.com/blog/ai-overview-citation-studies-compared">Digital Applied reconciliation</a></p>
+  </div>
+
+  <div class="exhibit">
+    <div class="ex-head"><div class="t"><span class="meta">Exhibit 4 · Ahrefs · 75,000 brands · Spearman correlation</span><h3>What correlates with being mentioned in AI Overviews</h3></div></div>
+    <div class="chart" id="brandChart"></div>
+    <p class="meta col">The top three signals all live off your site. Brands in the top quartile of web mentions averaged 169 Overview mentions; the next quartile averaged 14. Big brands get mentioned for reasons that also make them visible, so read this as a map of the field. <a href="https://ahrefs.com/blog/ai-overview-brand-correlation/">Ahrefs, May 2025</a></p>
+  </div>
+</div></section>
+
+<!-- WORKS -->
+<section class="sec band" id="works"><div class="inner">
+  <div class="qg-sectionhead"><h2>What the GEO experiment tested</h2><span class="idx">03</span><p>The paper that named the field, read closely</p></div>
+  <div class="body">
+    <div class="aside"><p class="statement">Sourced claims beat keywords. Lower-ranked pages gained the most.</p></div>
+    <div class="main"><p class="col">Aggarwal, Murahari and colleagues at Princeton, Georgia Tech, the Allen Institute and IIT Delhi built a 10,000-query benchmark, fed the top five Google results to a GPT-3.5 answer engine, rewrote one source at a time with nine methods, and measured how much of the answer each source earned.</p></div>
+  </div>
+  <div class="exhibit">
+    <div class="ex-head">
+      <div class="t"><span class="meta">Exhibit 5 · GEO-bench · position-adjusted word count</span><h3 id="geoTitle">Visibility change by rewrite method</h3></div>
+      <div class="toggle" role="group" aria-label="View"><button type="button" data-geo="method" aria-pressed="true">By method</button><button type="button" data-geo="rank" aria-pressed="false">By search rank</button></div>
+    </div>
+    <div class="toggle" role="group" aria-label="Method" id="geoMethod" hidden style="align-self:flex-start"><button type="button" data-m="cite" aria-pressed="true">Cite sources</button><button type="button" data-m="quote" aria-pressed="false">Quotations</button><button type="button" data-m="stats" aria-pressed="false">Statistics</button></div>
+    <div class="chart" id="geoChart"></div>
+    <p class="meta col" id="geoNote"></p>
+  </div>
+  <div class="two" style="padding-top:var(--space-5)">
+    <div>
+      <p class="kicker">Read with care</p>
+      <ul class="list">
+        <li>It is a 2023 lab result on GPT-3.5 over five fixed sources. Production engines in 2026 retrieve far more widely.</li>
+        <li>The rewriting prompts allowed invented statistics and quotes, and the lab engine could not tell. Journalists, regulators and later models can. Use real data or none.</li>
+        <li>Effects vary by domain. Statistics helped most on law, government and opinion queries; quotations on people, society and history.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker">A citable passage</p>
+      <ul class="list">
+        <li>States one claim plainly near the top of its section, in a sentence that still makes sense when lifted out.</li>
+        <li>Carries a number, a date or a named source the model can attach to the claim.</li>
+        <li>Says something the model cannot produce on its own: first-party data, a measured result, a real decision and what followed.</li>
+        <li>Sits on a page that other credible sites also reference.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- LEDGER -->
+<section class="sec band" id="ledger"><div class="inner">
+  <div class="qg-sectionhead"><h2>Evidence ledger</h2><span class="idx">04</span><p>Every common tactic, graded</p></div>
+  <div class="body">
+    <div class="aside"><p class="meta">Squares show evidence strength, from one vendor correlation (one) to a controlled test or a platform statement backed by independent data (five).</p></div>
+    <div class="main">
+      <div class="chips" role="group" aria-label="Filter" id="ledgerFilter" style="padding-top:0">
+        <button type="button" data-f="all" aria-pressed="true">All</button>
+        <button type="button" data-f="works" aria-pressed="false">Works</button>
+        <button type="button" data-f="weak" aria-pressed="false">Unproven</button>
+        <button type="button" data-f="bad" aria-pressed="false">Backfires</button>
+      </div>
+      <div class="rows" id="ledgerRows"></div>
+      <p class="col">Answer engines can also be gamed in ways classic search could not. They read retrieved text as context, and models follow instructions found in text. Researchers at USC and Arizona State showed hidden, fluent text in a product description can push that product up an LLM's ranking. Microsoft's Defender team found more than 50 hidden prompt injections from 31 real companies across 14 industries. Treat anything you would not want a journalist to find in your page source as off limits.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ACCESS -->
+<section class="sec band" id="access"><div class="inner">
+  <div class="qg-sectionhead"><h2>Crawler access policy</h2><span class="idx">05</span><p>Search, live-fetch and training bots are separate switches</p></div>
+  <div class="instrument">
+    <div class="controls">
+      <p class="col">Blocking a search bot removes you from that engine's answers. Blocking a training bot does not. Set each one and copy the rules.</p>
+      <div class="toggle" role="group" aria-label="Presets" id="presets" style="align-self:flex-start">
+        <button type="button" data-p="visible" aria-pressed="true">Visible, no training</button>
+        <button type="button" data-p="all" aria-pressed="false">Allow all</button>
+        <button type="button" data-p="none" aria-pressed="false">Block all AI</button>
+      </div>
+      <div id="bots"></div>
+    </div>
+    <div class="stack">
+      <div class="notes" id="botWarns" aria-live="polite"></div>
+      <pre class="code" id="robotsOut"></pre>
+      <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:center"><button type="button" class="btn solid" id="copyRobots">Copy robots.txt rules →</button><span class="meta" id="copyMsg"></span></div>
+      <p class="meta">Google's AI Overviews and AI Mode are governed by Googlebot and snippet controls, so blocking Googlebot removes you from Search entirely. Check your CDN too: Cloudflare blocks AI crawlers by default on new domains, and since September 15, 2026 has blocked training and agent crawlers by default on ad-supported pages for new domains and free plans.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- CHECK -->
+<section class="sec band" id="check"><div class="inner">
+  <div class="qg-sectionhead"><h2>Citability check</h2><span class="idx">Tool</span><p>Does this passage give a model something to cite</p></div>
+  <div class="instrument">
+    <div class="controls">
+      <p class="col">Paste a paragraph from one of your pages. The checker looks for what the evidence ties to citation: a concrete number, a named source, a date, a plain lead sentence, a first-hand finding, and no marketing filler. It is a writing aid and does not simulate any engine.</p>
+      <div class="field"><label for="ckText">Passage</label><textarea id="ckText">Most companies say their onboarding is fast. In 2026 we tracked 412 new customer accounts and measured a median of 3.2 days from contract to first report, down from 9 days in 2024. The biggest single change was moving data mapping before the kickoff call, which cut back-and-forth email by 61% according to our support logs.</textarea></div>
+      <p class="example">Example passage. Replace with your own.</p>
+      <div><button type="button" class="btn" id="ckWeak">Try a weak example</button></div>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span class="meta">Citability score</span>
+      <div class="big num" id="ckScore">0/6</div>
+      <div class="meter"><i id="ckBar" style="width:0%"></i></div>
+      <div id="ckList"></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- MEASURE -->
+<section class="sec band" id="measure"><div class="inner">
+  <div class="qg-sectionhead"><h2>Measurement</h2><span class="idx">06</span><p>Track presence across many runs</p></div>
+  <div class="body">
+    <div class="aside"><p class="statement">Position is noise. Frequency is the signal.</p></div>
+    <div class="main">
+      <p class="col">SparkToro and Gumshoe.ai ran the same recommendation prompts repeatedly through ChatGPT, Claude and Google's AI. The chance of getting an identical brand list twice was under 1 in 100. Track how often you appear across a fixed prompt set, the way a pollster tracks share across many interviews.</p>
+      <p class="col">Search Console added a Generative AI report on June 3, 2026. It shows impressions in AI Overviews, AI Mode and Discover by page, country and device. It does not show clicks or the queries behind them.</p>
+    </div>
+  </div>
+  <div class="exhibit">
+    <div class="ex-head"><div class="t"><span class="meta">Presence tracker</span><h3>Log one month of prompt runs</h3></div></div>
+    <div class="tbl ptable"><table>
+      <thead><tr><th>Engine</th><th>Runs</th><th>Times mentioned</th><th>Presence</th></tr></thead>
+      <tbody id="pBody"></tbody>
+      <tfoot><tr><th>All engines</th><th class="num" id="pRuns"></th><th class="num" id="pHits"></th><th class="num" id="pAll"></th></tr></tfoot>
+    </table></div>
+    <p class="example">Example figures. Run 50 to 200 buyer-intent prompts, several times each per engine, and enter your counts.</p>
+    <div class="verdict" id="pVerdict" aria-live="polite"></div>
+  </div>
+  <div class="exhibit">
+    <div class="ex-head"><div class="t"><span class="meta">Exhibit 6 · Seer · organic clicks per 1M informational impressions</span><h3>Being cited still beats being left out</h3></div></div>
+    <div class="chart" id="citeClickChart"></div>
+    <p class="meta col">AI chatbots sent 0.28% of web traffic in March 2026 across 74,752 sites tracked by Ahrefs, against about 28% from Google. Ahrefs' own data showed AI visitors at 0.5% of traffic and 12.1% of signups. That is one company with a technical audience, so measure your own conversion rate before planning around it.</p>
+  </div>
+  <div class="tbl" style="padding-top:var(--space-4)"><table>
+    <thead><tr><th>Layer</th><th>What to measure</th><th>How</th></tr></thead>
+    <tbody>
+      <tr><td><b>Access</b></td><td>AI bot hits and status codes</td><td>Server or CDN logs, filtered by documented user agents and verified IP ranges</td></tr>
+      <tr><td><b>Presence</b></td><td>Share of prompts where you are mentioned or cited, per engine</td><td>Fixed prompt set, run monthly, tracker above</td></tr>
+      <tr><td><b>Google AI surfaces</b></td><td>AI impressions by page</td><td>Search Console Generative AI report</td></tr>
+      <tr><td><b>Traffic</b></td><td>Sessions from chatgpt.com, perplexity.ai, claude.ai, gemini.google.com, copilot</td><td>Analytics channel group with a referrer regex</td></tr>
+      <tr><td><b>Outcome</b></td><td>Conversion and pipeline per AI session</td><td>Same channel group, joined to the CRM</td></tr>
+      <tr><td><b>Accuracy</b></td><td>Whether answers describe you correctly</td><td>Monthly manual review. One study found 11% of AI Overview claims unsupported by the cited pages.</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- RULES -->
+<section class="sec band" id="rules"><div class="inner">
+  <div class="qg-sectionhead"><h2>Decision rules</h2><span class="idx">07</span><p>Pick the situation you are in</p></div>
+  <div class="rules">
+    <div class="rule-list" id="ruleList" role="group" aria-label="Situations"></div>
+    <div class="rule-out" id="ruleOut" aria-live="polite"></div>
+  </div>
+  <p class="meta col" style="padding-top:var(--space-4)">Operating rules built on the evidence above. The thresholds are judgment calls, stated so they can be tested and changed.</p>
+</div></section>
+
+<!-- PLAN -->
+<section class="sec band" id="plan"><div class="inner">
+  <div class="qg-sectionhead"><h2>The 90-day plan</h2><span class="idx">Checklist</span><p>Three phases, three hard dates, saved in this browser</p></div>
+  <div class="body">
+    <div class="aside"></div>
+    <div class="main"><p class="col">One person owns the presence number and has authority across engineering (access), content (citability), PR (third-party reputation) and analytics (measurement). When each team optimizes its own piece separately, the overall number does not move.</p></div>
+  </div>
+  <div class="phases" id="phases"></div>
+</div></section>
+
+<!-- RISKS -->
+<section class="sec band" id="risks"><div class="inner">
+  <div class="qg-sectionhead"><h2>Failure modes</h2><span class="idx">08</span><p>How AI search programs go wrong</p></div>
+  <div class="body">
+    <div class="aside"><p class="statement">The expensive mistake is counting activity as progress.</p></div>
+    <div class="main"><div class="tbl"><table>
+      <thead><tr><th>Failure mode</th><th>What it looks like</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td><b>Buying the checklist</b></td><td>llms.txt, AI schema, chunked pages and a rank tracker sold as a package</td><td>Hold each tactic to the evidence ledger. Demand a control group.</td></tr>
+        <tr><td><b>Fabricated evidence</b></td><td>Statistics and quotes added to look citable, without real sourcing</td><td>Every number traces to a source you can produce on request.</td></tr>
+        <tr><td><b>Scaled fan-out pages</b></td><td>Hundreds of near-duplicate pages, one per sub-question</td><td>Google classes this as scaled content abuse. Build fewer, deeper pages.</td></tr>
+        <tr><td><b>Prompt injection</b></td><td>Hidden instructions in page text, alt tags or "Summarize with AI" links</td><td>Ban it in writing for staff and agencies.</td></tr>
+        <tr><td><b>Accidental invisibility</b></td><td>A CDN default or blanket robots.txt rule blocks search bots</td><td>Monthly log check with separate training and search policies.</td></tr>
+        <tr><td><b>Vanity measurement</b></td><td>One "AI rank" or a screenshot of a flattering answer</td><td>Report presence frequency across a fixed prompt set, plus conversions.</td></tr>
+        <tr><td><b>Over-rotation</b></td><td>Dropping classic SEO for AI-only work</td><td>Google's AI features run on its core ranking systems.</td></tr>
+        <tr><td><b>Platform dependency</b></td><td>A model that needs clicks from answers that send fewer of them</td><td>Build owned channels: email, community, direct relationships.</td></tr>
+        <tr><td><b>Misrepresentation</b></td><td>An engine states your price or policy wrong</td><td>Monthly review. Fix the source pages and listings it draws from.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="meta col">Some risk sits above any one site. Publishers and platforms are renegotiating the terms of crawling through Cloudflare's pay-per-crawl model, EU and UK antitrust complaints, and suits like Penske Media's against Google. Plan for those rules to change over the next few years.</p></div>
+  </div>
+</div></section>
+
+<!-- THESIS -->
+<section class="sec band" id="thesis"><div class="inner">
+  <div class="qg-sectionhead"><h2>Thesis</h2><span class="idx">09</span><p>Why the evidence lines up the way it does</p></div>
+  <p class="thesis">An engine that answers in its own voice carries the risk of being wrong, so it favors sources it can safely repeat.</p>
+  <div class="body" style="padding-top:0">
+    <div class="aside"></div>
+    <div class="main">
+      <p class="col">For twenty-five years search rewarded the page that best matched a query and collected the most links. The engine only pointed, and the user judged. Answer engines took on the judging. One academic measurement already finds about one claim in nine unsupported by the pages an Overview cites, and every operator has reason to close that gap.</p>
+      <p class="col">Statistics and named sources lift visibility because they can be checked. Third-party mentions predict inclusion because they corroborate. First-hand content wins because the model does not already have it. Prompt injection is being catalogued as an attack because it corrupts the checking.</p>
+      <p class="col">The missing layer in AI search is provenance: a reliable way for a machine to know where a claim came from, who stands behind it and whether it held up. Organizations that publish measured, sourced and corroborated facts are building that layer for their own category. At scale, the incentives now reward accuracy and shown work, which good institutions valued long before search existed.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- SOURCES -->
+<section class="sec band" id="sources"><div class="inner">
+  <div class="qg-sectionhead"><h2>Sources</h2><span class="idx">27</span><p>Accessed November 9, 2026</p></div>
+  <div class="two" style="padding-top:var(--space-4)">
+    <div>
+      <p class="kicker">Platform documentation</p>
+      <ul class="list">
+        <li><a href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide">Google → Optimizing for generative AI features</a></li>
+        <li><a href="https://developers.google.com/search/docs/appearance/ai-features">Google → AI features and your website</a></li>
+        <li><a href="https://developers.openai.com/docs/gptbot">OpenAI → Crawlers overview</a></li>
+        <li><a href="https://support.claude.com/en/articles/8896518">Anthropic → Crawler controls</a></li>
+        <li><a href="https://docs.perplexity.ai/docs/resources/perplexity-crawlers.md">Perplexity → Crawlers</a></li>
+      </ul>
+      <p class="kicker" style="margin-top:var(--space-4)">Research</p>
+      <ul class="list">
+        <li><a href="https://arxiv.org/pdf/2311.09735v1.pdf">Aggarwal et al. → GEO (KDD 2024)</a></li>
+        <li><a href="https://arxiv.org/abs/2509.08919">Chen et al. → GEO: How to Dominate AI Search</a></li>
+        <li><a href="https://arxiv.org/pdf/2504.05804v2">Tang et al. → StealthRank</a></li>
+        <li><a href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/">Pew Research Center → AI summaries and clicks</a></li>
+        <li><a href="https://ppc.land/researchers-find-google-ai-overviews-cut-publisher-clicks-39-8/">Agarwal &amp; Sen experiment → via PPC Land</a></li>
+      </ul>
+      <p class="kicker" style="margin-top:var(--space-4)">Vendor studies</p>
+      <ul class="list">
+        <li><a href="https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-2026-update">Seer → AIO impact on CTR 2026</a></li>
+        <li><a href="https://ahrefs.com/blog/ai-overviews-reduce-clicks-update">Ahrefs → AI Overviews reduce clicks 58%</a></li>
+        <li><a href="https://ahrefs.com/blog/ai-overview-brand-correlation/">Ahrefs → 75K brands</a></li>
+        <li><a href="https://ahrefs.com/blog/schema-ai-citations/">Ahrefs → Schema and AI citations</a></li>
+        <li><a href="https://ahrefs.com/blog/ai-chatbot-traffic/">Ahrefs → AI chatbot traffic</a></li>
+        <li><a href="https://www.digitalapplied.com/blog/ai-overview-citation-studies-compared">Digital Applied → 15 studies compared</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker">Trade coverage</p>
+      <ul class="list">
+        <li><a href="https://www.searchenginejournal.com/google-ai-overview/518427/">Search Engine Journal → Citations from top pages drop to 38%</a></li>
+        <li><a href="https://www.searchenginejournal.com/microsoft-summarize-with-ai-buttons-used-to-poison-ai-recommendations/541183">Search Engine Journal → Recommendation poisoning</a></li>
+        <li><a href="https://searchengineland.com/ai-recommendation-lists-rarely-repeat-study-468076">Search Engine Land → SparkToro study</a></li>
+        <li><a href="https://ppc.land/llms-txt-adoption-rises-8-8x-but-97-of-files-get-zero-ai-requests/">PPC Land → llms.txt requests</a></li>
+        <li><a href="https://ppc.land/google-finally-gives-search-console-its-own-generative-ai-visibility-reports/">PPC Land → Search Console AI reports</a></li>
+        <li><a href="https://pasqualepillitteri.it/en/news/4116/search-console-generative-ai-report-ai-overviews-ai-mode">Pillitteri → Generative AI report limits</a></li>
+        <li><a href="https://www.techwyse.com/news/ai-search/schema-markup-ai-citations-ahrefs-study">TechWyse → Schema study</a></li>
+        <li><a href="https://www.nbcchicago.com/news/business/money-report/web-giant-cloudflare-to-block-ai-bots-from-scraping-content-by-default/3779850">CNBC via NBC Chicago → Cloudflare default blocking</a></li>
+        <li><a href="https://dev.to/simon_paxton/cloudflare-is-blocking-many-ai-crawlers-by-default-on-ad-supported-pages-not-charging-them-4hcm">DEV → Cloudflare September 2026 defaults</a></li>
+        <li><a href="https://www.eweek.com/news/chatgpt-hits-900m-weekly-users/">eWeek → ChatGPT 900M weekly users</a></li>
+        <li><a href="https://www.getpanto.ai/blog/openai-statistics">Panto → OpenAI statistics</a></li>
+      </ul>
+      <p class="meta" style="margin-top:var(--space-4)">Figures are quoted with study, date and sample. Studies that count different things are never averaged. The randomized experiment is cited through PPC Land's detailed report of the SSRN paper.</p>
+    </div>
+  </div>
+</div></section>
+
+</main>
+
+<footer class="qg-field foot band" data-variant="corner">
+  <div class="inner">
+    <div class="qg-footer">
+      <a href="#top">→Top</a>
+      <a href="https://operator.codes/essays/measured-not-ranked">→Operator essay</a>
+      <a href="https://operator.codes/subscribe">→Subscribe to Operator</a>
+      <a href="#plan">→90-day plan</a>
+      <a href="#sources">→Sources</a>
+      <a href="https://beneficial.technology">→Beneficial Technology</a>
+      <div class="qg-footer-meta meta"><span>Measured, Not Ranked · Tyler Malin</span><span>tyler@beneficial.technology</span><span>Updated November 9, 2026</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS="http://www.w3.org/2000/svg";
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+const fmt=n=>Math.round(n).toLocaleString("en-US");
+function press(group,btn){group.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b===btn?"true":"false"));}
+const F=()=>css("--font-text");
+
+/* Menu + motion */
+const mb=$("#menuBtn"),ov=$("#overlay");
+function setMenu(o){mb.setAttribute("aria-expanded",o?"true":"false");mb.setAttribute("aria-label",o?"Close section menu":"Open section menu");ov.hidden=!o;}
+mb.addEventListener("click",()=>setMenu(ov.hidden));
+ov.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!ov.hidden){setMenu(false);mb.focus();}});
+const hf=$("#heroField"),pz=$("#pause");
+pz.addEventListener("click",()=>{const p=hf.dataset.drift==="paused";hf.dataset.drift=p?"on":"paused";pz.textContent=p?"II":"▶";pz.setAttribute("aria-label",p?"Pause background motion":"Resume background motion");});
+
+/* Exhibit 1 */
+const months=["Jan 25","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan 26","Feb"];
+const ctr={organic:{none:[2.75,3.15,3.45,3.44,3.03,3.07,3.07,2.70,2.99,2.74,2.45,3.16,3.88,3.82],shown:[3.19,3.56,3.03,2.76,2.35,2.06,1.81,1.77,2.14,1.72,1.33,1.31,2.33,2.36]},
+paid:{none:[25.98,23.23,21.64,21.10,18.67,18.06,17.61,19.04,19.14,19.01,18.60,20.96,21.72,21.85],shown:[14.64,13.34,12.86,14.06,13.63,14.17,13.78,14.98,15.48,14.01,15.32,15.14,15.62,16.21]}};
+let ch="organic";
+function drawCTR(){
+  const box=$("#ctrChart");box.innerHTML="";
+  const W=820,H=320,L=50,R=70,T=16,B=38;const d=ctr[ch];const max=ch==="organic"?4.5:30;const step=ch==="organic"?1:5;
+  const x=i=>L+i*(W-L-R)/(months.length-1);const y=v=>T+(1-v/max)*(H-T-B);
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":`${ch} click-through rate with and without AI Overview, Jan 2025 to Feb 2026`});
+  for(let v=0;v<=max+0.001;v+=step){s.appendChild(el("line",{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:v===0?css("--rule"):css("--rule-soft"),"stroke-width":1}));
+    s.appendChild(el("text",{x:L-10,y:y(v)+5,"text-anchor":"end","font-size":13,fill:css("--ink-muted"),"font-family":F()},v+"%"));}
+  months.forEach((m,i)=>{if(i%2===0||i===months.length-1)s.appendChild(el("text",{x:x(i),y:H-12,"text-anchor":"middle","font-size":13,fill:css("--ink-muted"),"font-family":F()},m));});
+  [["none",css("--ink"),null],["shown",css("--ink-muted"),"6 5"]].forEach(([k,c,dash])=>{
+    const pts=d[k].map((v,i)=>`${x(i)},${y(v)}`).join(" ");
+    const pl=el("polyline",{points:pts,fill:"none",stroke:c,"stroke-width":2.5,"stroke-linejoin":"round"});if(dash)pl.setAttribute("stroke-dasharray",dash);s.appendChild(pl);
+    d[k].forEach((v,i)=>{const last=i===months.length-1;const dot=el("rect",{x:x(i)-(last?5:3.5),y:y(v)-(last?5:3.5),width:last?10:7,height:last?10:7,fill:k==="none"?c:css("--stone"),stroke:c,"stroke-width":1.5,tabindex:0});
+      const show=()=>{const tip=$("#ctrTip");const sc=s.getBoundingClientRect().width/W;tip.textContent=`${months[i]} · ${v.toFixed(2)}% · ${k==="none"?"no Overview":"Overview shown"}`;tip.style.left=(x(i)*sc-box.scrollLeft)+"px";tip.style.top=(y(v)*sc)+"px";tip.hidden=false;};
+      dot.addEventListener("mouseenter",show);dot.addEventListener("focus",show);dot.addEventListener("click",show);
+      dot.addEventListener("mouseleave",()=>$("#ctrTip").hidden=true);dot.addEventListener("blur",()=>$("#ctrTip").hidden=true);s.appendChild(dot);});
+    const lv=d[k][d[k].length-1];
+    s.appendChild(el("text",{x:x(months.length-1)+10,y:y(lv)+5,"font-size":14,"font-weight":700,fill:css("--ink"),"font-family":F()},lv.toFixed(2)+"%"));
+  });
+  box.appendChild(s);
+}
+document.querySelectorAll("[data-ch]").forEach(b=>b.addEventListener("click",()=>{ch=b.dataset.ch;press(b.parentElement,b);drawCTR();}));
+
+/* Horizontal bars, monochrome: strong = ink, soft = ink-muted, negative = hatched */
+function hbars(box,rows,opts){
+  box.innerHTML="";const W=820,rowH=38,L=opts.L||240,R=80,T=6;const H=T+rows.length*rowH+6;
+  const min=opts.min||0,max=opts.max;const sx=v=>L+(v-min)/(max-min)*(W-L-R);const z=sx(Math.max(0,min));
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":opts.label});
+  const defs=el("defs",{});const p=el("pattern",{id:"hatch"+box.id,width:6,height:6,patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"});
+  p.appendChild(el("rect",{width:6,height:6,fill:css("--stone")}));p.appendChild(el("line",{x1:0,y1:0,x2:0,y2:6,stroke:css("--ink"),"stroke-width":2}));defs.appendChild(p);s.appendChild(defs);
+  rows.forEach((r,i)=>{const yy=T+i*rowH;
+    s.appendChild(el("line",{x1:0,x2:W,y1:yy+rowH,y2:yy+rowH,stroke:css("--rule-soft"),"stroke-width":1}));
+    s.appendChild(el("text",{x:L-12,y:yy+rowH/2+5,"text-anchor":"end","font-size":15,fill:css("--ink"),"font-family":F()},r.label));
+    const a=Math.min(z,sx(r.v)),b=Math.max(z,sx(r.v));
+    const fill=r.v<0?`url(#hatch${box.id})`:(r.strong?css("--ink"):css("--ink-muted"));
+    s.appendChild(el("rect",{x:a,y:yy+9,width:Math.max(2,b-a),height:rowH-18,fill,stroke:r.v<0?css("--ink"):"none","stroke-width":1}));
+    s.appendChild(el("text",{x:r.v>=0?b+8:a-8,y:yy+rowH/2+5,"text-anchor":r.v>=0?"start":"end","font-size":15,"font-weight":r.strong?700:400,fill:css("--ink"),"font-family":F()},r.text));
+  });
+  s.appendChild(el("line",{x1:z,x2:z,y1:T,y2:T+rows.length*rowH,stroke:css("--rule"),"stroke-width":1}));
+  box.appendChild(s);
+}
+function drawCite(){
+  const box=$("#citeChart");box.innerHTML="";const W=820,H=160,L=190,R=10;
+  const rows=[{l:"Jul 2025 · top 3 cited",v:[76.1,9.5,14.4]},{l:"Mar 2026 · all cited",v:[37.9,31.2,31.0]}];
+  const fills=[css("--ink"),css("--ink-muted"),css("--stone")],txt=[css("--stone"),css("--stone"),css("--ink")];
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"Share of AI Overview citations by organic rank, July 2025 versus March 2026"});
+  rows.forEach((r,i)=>{const yy=18+i*68;let x=L;
+    s.appendChild(el("text",{x:L-12,y:yy+27,"text-anchor":"end","font-size":15,fill:css("--ink"),"font-family":F()},r.l));
+    r.v.forEach((v,j)=>{const w=v/100*(W-L-R);s.appendChild(el("rect",{x,y:yy,width:w,height:44,fill:fills[j],stroke:css("--ink"),"stroke-width":1}));
+      if(w>50)s.appendChild(el("text",{x:x+12,y:yy+28,"font-size":15,"font-weight":700,fill:txt[j],"font-family":F()},v.toFixed(1)+"%"));x+=w;});});
+  box.appendChild(s);
+}
+function drawBrand(){
+  const data=[["Branded web mentions",.664],["Branded anchors",.527],["Branded search volume",.392],["Domain Rating",.326],["Referring domains",.295],["Branded organic traffic",.274],["Backlinks",.218],["Branded ad traffic",.216]];
+  hbars($("#brandChart"),data.map((d,i)=>({label:d[0],v:d[1],text:d[1].toFixed(3),strong:i<3})),{max:.72,label:"Correlation of factors with AI Overview brand mentions"});
+}
+const geoMethods=[["Keyword stuffing",17.7],["Unique words",20.5],["Authoritative tone",21.3],["Easy to understand",22.0],["Technical terms",22.7],["Cite sources",24.6],["Fluency",24.7],["Statistics",25.2],["Quotations",27.2]];
+const geoRank={cite:[-30.3,2.5,20.4,15.5,115.1],quote:[-22.9,-7.0,3.5,25.1,99.7],stats:[-20.6,-3.9,8.1,10.0,97.9]};
+let geoView="method",geoM="cite";
+function drawGeo(){
+  const box=$("#geoChart");
+  if(geoView==="method"){
+    $("#geoTitle").textContent="Visibility change by rewrite method, against the unoptimized baseline";
+    hbars(box,geoMethods.map(([l,v])=>{const p=(v/19.3-1)*100;return {label:l,v:p,text:(p>0?"+":"")+p.toFixed(0)+"%",strong:p>=25};}),{min:-15,max:50,label:"GEO method visibility change"});
+    $("#geoNote").innerHTML="Quotations, statistics and citations raised visibility 28 to 41%. Keyword stuffing lowered it, and on Perplexity it ran about 10% below baseline. <a href=\"https://arxiv.org/pdf/2311.09735v1.pdf\">GEO paper, Table 1</a>";
+  }else{
+    $("#geoTitle").textContent="Visibility change by Google rank when every source is optimized";
+    hbars(box,geoRank[geoM].map((v,i)=>({label:"Rank "+(i+1),v,text:(v>0?"+":"")+v.toFixed(1)+"%",strong:v>50})),{min:-40,max:125,L:120,label:"GEO visibility change by rank"});
+    $("#geoNote").innerHTML="When every source applies the same method, lower-ranked pages gain the most and the top page loses share. Sourced claims can carry a specialist past an incumbent. <a href=\"https://arxiv.org/pdf/2311.09735v1.pdf\">GEO paper, Table 3</a>";
+  }
+}
+document.querySelectorAll("[data-geo]").forEach(b=>b.addEventListener("click",()=>{geoView=b.dataset.geo;press(b.parentElement,b);$("#geoMethod").hidden=geoView!=="rank";drawGeo();}));
+document.querySelectorAll("[data-m]").forEach(b=>b.addEventListener("click",()=>{geoM=b.dataset.m;press(b.parentElement,b);drawGeo();}));
+function drawCiteClick(){
+  hbars($("#citeClickChart"),[{label:"No AI Overview",v:33500,text:"33,500",strong:true},{label:"Overview, brand cited",v:20743,text:"20,743",strong:true},{label:"Overview, brand not cited",v:9445,text:"9,445",strong:false}],{max:36000,label:"Organic clicks per million informational impressions by AI Overview status"});
+}
+
+/* Calculator */
+const TR={info:.36,comm:.08,trans:.05};
+function calc(){
+  const clicks=Math.max(0,+$("#cClicks").value||0);const i=+$("#cInfo").value,c=+$("#cComm").value,t=+$("#cTrans").value;const sum=i+c+t||1;
+  $("#oInfo").textContent=i+"%";$("#oComm").textContent=c+"%";$("#oTrans").textContent=t+"%";
+  const exp=clicks*((i/sum)*TR.info+(c/sum)*TR.comm+(t/sum)*TR.trans);const lost=exp*(+$("#cScen").value);
+  $("#rLost").textContent=fmt(lost);$("#rExposed").textContent=fmt(exp);
+  const share=clicks?lost/clicks*100:0;$("#rShare").textContent=share.toFixed(1)+"%";$("#rBar").style.width=Math.min(100,share)+"%";
+  $("#rSwing").textContent=fmt(exp*(.72-.38))+" clicks";
+}
+["#cClicks","#cInfo","#cComm","#cTrans","#cScen"].forEach(s=>$(s).addEventListener("input",calc));
+
+/* Pipeline */
+const stages=[
+  ["Interpret","The model reads intent from a long, conversational prompt. Pew found AI summaries appear on 53% of searches with ten or more words."],
+  ["Fan out","It writes its own sub-queries. Google's example: a question about a weedy lawn becomes separate searches on herbicides, chemical-free removal and prevention. Google warns that building a page per sub-query to manipulate answers violates its scaled content abuse policy."],
+  ["Retrieve","Each sub-query pulls candidates from an index. Google uses its Search index. ChatGPT uses the index OAI-SearchBot builds, plus live fetches by ChatGPT-User. A page has to be crawlable and, for Google, snippet-eligible."],
+  ["Select passages","The system keeps specific statements that answer a facet. Ahrefs found 62% of AI Overview citations in March 2026 came from pages outside the top 10 for the main query, many reached through sub-queries."],
+  ["Cite","It writes one answer and links supporting sources. Pew found 88% of AI summaries cite three or more sources, and 1% of visits produce a click on one of them."]
+];
+let stage=1;
+function drawPipe(){
+  const p=$("#pipe");p.innerHTML="";
+  stages.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",i===stage?"true":"false");
+    b.innerHTML=`<span class="k">Stage ${i+1}</span><span class="h">${s[0]}</span>`;b.addEventListener("click",()=>{stage=i;drawPipe();});p.appendChild(b);});
+  $("#pipeDetail").innerHTML=`<p class="qg-line">Stage ${stage+1}<span class="qg-arrow">→</span><b>${stages[stage][0]}</b></p><p class="col">${stages[stage][1]}</p>`;
+}
+
+/* Ledger */
+const ledger=[
+  {f:"works",n:"Rank across the query cluster",s:4,e:"seoClarity: a position-1 URL appears in the Overview 43% of the time, falling to 7% at position 20.",m:"Rankings still feed retrieval. Cover the sub-questions with depth"},
+  {f:"works",n:"Citable facts with real sources",s:3,e:"GEO paper: quotations, statistics and citations lifted visibility 28 to 41% in a controlled lab engine.",m:"Specific, attributable claims get lifted into answers"},
+  {f:"works",n:"Earned media and brand mentions",s:4,e:"Ahrefs: mentions correlate at 0.664 vs 0.218 for backlinks. Chen et al.: AI search favors earned media over brand-owned content.",m:"PR and expert coverage now count as search work"},
+  {f:"works",n:"First-hand, non-commodity content",s:4,e:"Google's guide calls it the factor most likely to influence presence over time.",m:"Generic tips content is what the model can already write"},
+  {f:"works",n:"Video presence",s:3,e:"Ahrefs: YouTube was 5.6% of all Overview citations and 18.2% of those from pages outside the top 100.",m:"Video can earn citations without ranking"},
+  {f:"works",n:"Open access to search bots",s:5,e:"Google, OpenAI, Anthropic and Perplexity all document search bots; blocking them removes you from answers.",m:"Check robots.txt and CDN settings monthly"},
+  {f:"weak",n:"llms.txt",s:5,e:"Ahrefs logs on 137,000 domains: 97% of files got zero requests in May 2026. Google says Search ignores the file.",m:"Fine for developer docs read by coding agents"},
+  {f:"weak",n:"Adding schema for AI",s:5,e:"Ahrefs tracked 1,885 pages adding JSON-LD against controls: no change on AI Mode or ChatGPT, −4.6% on Overviews.",m:"Keep schema for rich results, not as a citation lever"},
+  {f:"weak",n:"Chunking and AI-only rewrites",s:4,e:"Google says its systems handle multi-topic pages and synonyms, with no ideal page length.",m:"No evidence of benefit"},
+  {f:"bad",n:"One page per fan-out query",s:5,e:"Google classifies pages built per query variation to manipulate AI answers as scaled content abuse.",m:"Penalty risk"},
+  {f:"bad",n:"Keyword stuffing",s:3,e:"GEO paper: about 10% below baseline on Perplexity.",m:"Lowers visibility"},
+  {f:"bad",n:"Hidden prompt injection",s:4,e:"StealthRank showed it works in the lab. Microsoft found 31 companies doing it and catalogs it as an attack.",m:"Expect exclusion when detection lands"},
+  {f:"bad",n:"Inauthentic mentions",s:4,e:"Google says its spam systems also feed the generative features.",m:"Wasted spend, plus risk"}
+];
+const VL={works:"Works",weak:"Unproven",bad:"Backfires"};
+let lf="all";
+function drawLedger(){
+  const box=$("#ledgerRows");box.innerHTML="";
+  ledger.filter(x=>lf==="all"||x.f===lf).forEach(x=>{const d=document.createElement("div");d.className="qg-row";
+    d.innerHTML=`<div class="qg-row-text"><span class="qg-row-title">${x.n}</span><p style="font-size:16px;line-height:1.35">${x.e}</p><p class="qg-row-sub">${x.m}</p></div><div class="qg-row-right"><span class="verdict-w">Verdict<span class="qg-arrow">→</span><b>${VL[x.f]}</b></span><br><span class="strength" aria-label="Evidence strength ${x.s} of 5">${[1,2,3,4,5].map(k=>`<i class="${k<=x.s?"on":""}"></i>`).join("")}</span></div>`;
+    box.appendChild(d);});
+}
+document.querySelectorAll("#ledgerFilter button").forEach(b=>b.addEventListener("click",()=>{lf=b.dataset.f;press(b.parentElement,b);drawLedger();}));
+
+/* Bots */
+const bots=[
+  {id:"Googlebot",op:"Google",type:"search",d:"Search plus AI Overviews and AI Mode"},
+  {id:"Google-Extended",op:"Google",type:"training",d:"Training and grounding in other Google systems"},
+  {id:"OAI-SearchBot",op:"OpenAI",type:"search",d:"ChatGPT search index"},
+  {id:"ChatGPT-User",op:"OpenAI",type:"user",d:"Live fetch when a user asks; robots.txt may not apply"},
+  {id:"GPTBot",op:"OpenAI",type:"training",d:"Model training"},
+  {id:"Claude-SearchBot",op:"Anthropic",type:"search",d:"Claude search index"},
+  {id:"Claude-User",op:"Anthropic",type:"user",d:"Live fetch when a user asks"},
+  {id:"ClaudeBot",op:"Anthropic",type:"training",d:"Model training"},
+  {id:"PerplexityBot",op:"Perplexity",type:"search",d:"Perplexity search index"},
+  {id:"Perplexity-User",op:"Perplexity",type:"user",d:"Live fetch; generally ignores robots.txt"}
+];
+const presets={visible:b=>b.type!=="training",all:()=>true,none:b=>b.id==="Googlebot"};
+let allow={};
+function setPreset(p){bots.forEach(b=>allow[b.id]=presets[p](b));drawBots();}
+function drawBots(){
+  const box=$("#bots");box.innerHTML="";
+  bots.forEach(b=>{const r=document.createElement("div");r.className="bot";
+    r.innerHTML=`<div><div class="nm">${b.id}</div><div class="ds">${b.op} · ${b.d}</div></div><div class="switch" role="group" aria-label="${b.id}"><button type="button" aria-pressed="${allow[b.id]}">Allow</button><button type="button" aria-pressed="${!allow[b.id]}">Block</button></div>`;
+    const [a,bl]=r.querySelectorAll("button");a.addEventListener("click",()=>{allow[b.id]=true;drawBots();});bl.addEventListener("click",()=>{allow[b.id]=false;drawBots();});box.appendChild(r);});
+  let out="# AI crawler policy, generated "+new Date().toISOString().slice(0,10)+"\n";let cur="";
+  bots.forEach(b=>{if(b.op!==cur){out+=`\n# ${b.op}\n`;cur=b.op;}out+=`User-agent: ${b.id}\n${allow[b.id]?"Allow":"Disallow"}: /\n`;});
+  $("#robotsOut").textContent=out;
+  const w=[];
+  if(!allow["Googlebot"])w.push("<b>Googlebot blocked →</b> the site leaves Google Search, AI Overviews and AI Mode.");
+  bots.filter(b=>b.type==="search"&&b.id!=="Googlebot"&&!allow[b.id]).forEach(b=>w.push(`<b>${b.id} blocked →</b> ${b.op}'s answers cannot cite your pages.`));
+  bots.filter(b=>b.type==="user"&&!allow[b.id]).forEach(b=>w.push(`<b>${b.id} →</b> <i>acts for a user; its operator says robots.txt may not stop it, so use a firewall rule if you mean it.</i>`));
+  if(!w.length)w.push("<b>Search and live-fetch bots open →</b> <i>training bots follow your setting. Confirm your CDN is not overriding this.</i>");
+  $("#botWarns").innerHTML=w.map(t=>`<div>${t}</div>`).join("");
+}
+document.querySelectorAll("#presets button").forEach(b=>b.addEventListener("click",()=>{press(b.parentElement,b);setPreset(b.dataset.p);}));
+$("#copyRobots").addEventListener("click",()=>{const t=$("#robotsOut").textContent;const msg=$("#copyMsg");
+  const sel=()=>{const r=document.createRange();r.selectNodeContents($("#robotsOut"));const s=getSelection();s.removeAllRanges();s.addRange(r);msg.textContent="Selected. Press Ctrl or Cmd + C.";};
+  try{navigator.clipboard.writeText(t).then(()=>msg.textContent="Copied.",sel);}catch(e){sel();}});
+
+/* Citability */
+const fluff=/\b(best-in-class|world-class|cutting-edge|seamless(ly)?|revolutionary|game-changing|industry-leading|leading provider|innovative|robust|unlock|unleash|synerg\w*|next-generation|state-of-the-art)\b/i;
+const FH_VERB="(measured|tested|tracked|found|ran|run|surveyed|analy[sz]ed|built|interviewed|audited|reviewed|saw|seen|observed|recovered|launched|shipped|deployed|collected|compared|benchmarked|studied|helped|worked|led|managed|logged|counted|cut|reduced|raised|grew|doubled|tripled|learned|discovered|piloted|ran|built|filed|litigated|negotiated|advised|recorded|calculated|modeled|modelled)";
+function firstHand(t){
+  const a=new RegExp("\\b(we|i|our team|my team)\\b(\\s+[a-z']+){0,2}?\\s+"+FH_VERB+"\\b","i");
+  const b=new RegExp("\\b(we've|we have|we'd|i've|i have|i'd)\\s+(also\\s+|personally\\s+|repeatedly\\s+)?"+FH_VERB+"\\b","i");
+  const c=/\b(our|my)\s+(own\s+)?(data|logs|audits?|analysis|research|surveys?|tests?|experiments?|clients?|customers?|results|benchmarks?|study|studies|records|pilots?|portfolio|fieldwork|measurements?|numbers|dataset|cases?|engagements?)\b/i;
+  const d=/\b(first-hand|firsthand|in my experience|in our experience|in practice we|when we)\b/i;
+  return a.test(t)||b.test(t)||c.test(t)||d.test(t);
+}
+function check(){
+  const t=$("#ckText").value.trim();const sents=t.split(/(?<=[.!?])\s+/).filter(Boolean);const words=t.split(/\s+/).filter(Boolean);
+  const first=(sents[0]||"").split(/\s+/).filter(Boolean).length;const avg=sents.length?words.length/sents.length:0;
+  const tests=[
+    [/(\d+(\.\d+)?\s?%|\b\d{2,}\b|\d+(\.\d+)?\s?(days|hours|x|times|percent|million|billion|k)\b)/i.test(t),"Concrete number","A specific figure the model can attach to the claim"],
+    [/(according to|per |source:|study|survey|report(ed)?|logs|data from|https?:\/\/|\bfound\b)/i.test(t),"Named source","Says where the claim comes from"],
+    [/\b(19|20)\d{2}\b|\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(t),"Date","Lets the model judge how current it is"],
+    [first>0&&first<=28,"Plain lead","Opening sentence of 28 words or fewer, so it can be lifted out"],
+    [firstHand(t),"First-hand finding","Something you did, saw or measured, e.g. \"we tracked\", \"I've seen\", \"our audit found\", \"across our clients\""],
+    [!fluff.test(t)&&avg>0&&avg<=28,"No filler","No hype words, and sentences average 28 words or fewer"]
+  ];
+  const n=t?tests.filter(x=>x[0]).length:0;
+  $("#ckScore").textContent=`${n}/6`;$("#ckBar").style.width=(n/6*100)+"%";
+  $("#ckList").innerHTML=tests.map(([p,h,d])=>{const ok=p&&t;return `<div class="check ${ok?"pass":"fail"}"><span class="st">${ok?"Pass":"Miss"}</span><span><b>${h}</b><span class="qg-arrow">→</span><i>${d}</i></span></div>`;}).join("");
+}
+$("#ckText").addEventListener("input",check);
+$("#ckWeak").addEventListener("click",()=>{$("#ckText").value="Our innovative, best-in-class platform helps forward-thinking teams unlock seamless onboarding experiences that drive results and delight customers across every stage of the journey, making us the leading choice for modern businesses.";check();});
+
+/* Presence */
+const engines=[["ChatGPT",100,24],["Google AI Overviews and AI Mode",100,31],["Perplexity",100,12],["Claude",100,18],["Gemini",100,9]];
+function drawPresence(){
+  const tb=$("#pBody");tb.innerHTML="";
+  engines.forEach((e,i)=>{const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${e[0]}</td><td><input type="number" min="0" id="pr${i}" value="${e[1]}" aria-label="${e[0]} runs"></td><td><input type="number" min="0" id="ph${i}" value="${e[2]}" aria-label="${e[0]} mentions"></td><td class="n" id="pp${i}"></td>`;tb.appendChild(tr);});
+  tb.querySelectorAll("input").forEach(x=>x.addEventListener("input",pres));pres();
+}
+function pres(){let R=0,H=0;
+  engines.forEach((e,i)=>{const r=Math.max(0,+$("#pr"+i).value||0),h=Math.min(r,Math.max(0,+$("#ph"+i).value||0));R+=r;H+=h;$("#pp"+i).innerHTML=r?`<b>${(h/r*100).toFixed(0)}%</b>`:"<i>no runs</i>";});
+  const p=R?H/R*100:0;$("#pRuns").textContent=fmt(R);$("#pHits").textContent=fmt(H);$("#pAll").textContent=p.toFixed(1)+"%";
+  $("#pVerdict").innerHTML=p>=20?`Presence<span class="qg-arrow">→</span><b>${p.toFixed(1)}%, at or above the 20% rule.</b> <i>Keep the on-site program and re-run monthly.</i>`:`Presence<span class="qg-arrow">→</span><b>${p.toFixed(1)}%, under the 20% rule.</b> <i>If this holds after 90 days, move budget from on-site rewrites to earned media and expert coverage.</i>`;
+}
+
+/* Rules */
+const rules=[
+  ["AI bots get 403s or challenge pages in our logs","Fix access before any content work.","Every operator documents its search bots. A blocked bot cannot retrieve, so nothing downstream matters until logs show 200s.","Google, OpenAI, Anthropic, Perplexity docs"],
+  ["The page targets a question, comparison or review query","Assume an AI answer will appear. Optimize for citation as well as rank.","Seer measured AI Overview trigger rates of 95% for comparisons, 86% for reviews and questions, and 81% for best-of queries.","Seer, April 2026"],
+  ["The page targets a transactional or local query","Prioritize classic SEO plus Merchant Center and Business Profile data.","Transactional queries trigger Overviews 5% of the time, and Google says product and business data feed its AI responses directly.","Seer; Google AI guide"],
+  ["We cannot say what on this page is original","Do not publish it. Merge or cut.","Google's guide singles out commodity content as low value; the model can already produce it.","Google AI guide"],
+  ["A claim has no number, date or named source","Add one from real data or soften the claim. Never invent evidence.","Sourced claims drove the GEO lift, and the paper's lab prompts permitted fabrication that real readers will catch.","GEO paper"],
+  ["A vendor pitches a tactic with no controlled test","Cap it at 10% of budget and run it with a control group.","Two widely sold tactics, llms.txt and AI schema, failed their first real tests.","Ahrefs log and schema studies"],
+  ["We are deciding on training crawlers","Block if your content is the product. Allow if broad model familiarity is worth more than licensing value.","Training bots are separate from search bots at Google, OpenAI and Anthropic, so blocking them does not remove you from answers.","Operator crawler docs"],
+  ["Presence on our prompt set is under 20% after 90 days","Shift budget from on-site rewrites to earned media and expert coverage.","Off-site mentions are the strongest correlate of AI visibility, and AI search leans toward earned media.","Ahrefs 75K brands; Chen et al. 2025"]
+];
+let ri=0;
+function drawRules(){
+  const l=$("#ruleList");l.innerHTML="";
+  rules.forEach((r,i)=>{const b=document.createElement("button");b.type="button";b.textContent=r[0];b.setAttribute("aria-pressed",i===ri?"true":"false");b.addEventListener("click",()=>{ri=i;drawRules();});l.appendChild(b);});
+  const r=rules[ri];$("#ruleOut").innerHTML=`<span class="meta">Rule ${ri+1} of ${rules.length}</span><p class="r">${r[1]}</p><p style="font-size:16px;line-height:1.4">${r[2]}</p><p class="qg-line meta">Basis<span class="qg-arrow">→</span><b>${r[3]}</b></p>`;
+}
+
+/* Plan */
+const plan=[
+  ["Access and baseline","Due November 23, 2026",["Pull 7 days of logs and confirm 200s for every search and live-fetch bot","Audit robots.txt and CDN bot settings; set training policy on purpose","Build a fixed set of 50 to 200 buyer-intent prompts and run each 5 times per engine","Set up the AI referral channel group and the Search Console Generative AI report"]],
+  ["Citable content","Due December 23, 2026",["Pick the 20 question, comparison and review pages with the most impressions","Rewrite each so its main claim leads, with a verifiable number or named source","Move key facts out of scripts, tabs and images into server-rendered text","Publish one first-party data asset others will want to cite"]],
+  ["Earned reach and re-measure","Due February 6, 2027",["Pitch the data asset to the outlets your prompt set shows the engines already cite","Publish video versions of the top explanatory content","Re-run the prompt set and compare presence, AI impressions, sessions and conversions","Apply the decision rules to set next quarter's budget split"]]
+];
+let done={};try{done=JSON.parse(localStorage.getItem("mnr-plan")||"{}")||{};}catch(e){done={};}
+function drawPlan(){
+  const box=$("#phases");box.innerHTML="";
+  plan.forEach((p,i)=>{const c=document.createElement("div");c.className="phase";const n=p[2].filter((_,j)=>done[i+"-"+j]).length;
+    c.innerHTML=`<span class="due">Phase ${i+1}<span class="qg-arrow">→</span><b>${p[1]}</b></span><h3>${p[0]}</h3><div>`+p[2].map((t,j)=>`<label><input type="checkbox" id="pl${i}-${j}" ${done[i+"-"+j]?"checked":""}><span>${t}</span></label>`).join("")+`</div><span class="prog">${n} of ${p[2].length} done</span>`;
+    c.querySelectorAll("input").forEach(inp=>inp.addEventListener("change",()=>{done[inp.id.slice(2)]=inp.checked;try{localStorage.setItem("mnr-plan",JSON.stringify(done));}catch(e){}drawPlan();}));
+    box.appendChild(c);});
+}
+
+function drawAll(){drawCTR();drawCite();drawBrand();drawGeo();drawCiteClick();}
+drawPipe();drawLedger();setPreset("visible");check();drawPresence();drawRules();drawPlan();calc();drawAll();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll);}catch(e){}
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawAll);
+})();
+</script>
+
+</body>
+</html>

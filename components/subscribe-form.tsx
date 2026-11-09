@@ -1,59 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useId, useState } from "react";
+import { useSubscribe } from "@/components/subscribe/use-subscribe";
+import Toast, { SUBSCRIBED_MESSAGE } from "@/components/subscribe/toast";
 
+// Inline subscribe: field + primary button on one line, stacking on
+// narrow screens. Used on the home page, /subscribe, and the end of
+// every free essay. Confirms with the same toast as the header button,
+// and swaps the form for a short line so the page reflects the state.
 export default function SubscribeForm() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
-    "idle",
-  );
+  const [toast, setToast] = useState(false);
+  const { status, error, subscribe } = useSubscribe();
+  const id = useId();
+  const dismiss = useCallback(() => setToast(false), []);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setStatus("loading");
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (!res.ok) throw new Error();
-      setStatus("done");
-    } catch {
-      setStatus("error");
-    }
-  }
-
-  if (status === "done") {
-    return (
-      <p className="text-accent-light font-mono text-sm">
-        You&apos;re on the list.
-      </p>
-    );
+    if (await subscribe(email)) setToast(true);
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3 max-w-sm">
-      <input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@company.com"
-        className="flex-1 bg-surface border border-border-md rounded-full px-5 py-3 text-sm placeholder:text-faint transition-colors focus:border-accent-border"
-      />
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        className="btn-primary rounded-full px-6 py-3 text-sm font-medium disabled:opacity-50"
-      >
-        {status === "loading" ? "..." : "Subscribe"}
-      </button>
-      {status === "error" && (
-        <p className="text-red text-xs absolute mt-14">
-          Something broke. Try again.
+    <>
+      {status === "done" ? (
+        <p className="text-[15px] text-muted">
+          Subscribed as <span className="text-foreground">{email}</span>.
         </p>
+      ) : (
+        <form onSubmit={onSubmit} className="w-full max-w-md">
+          <div className="flex flex-col gap-2.5 sm:flex-row">
+            <label htmlFor={`${id}-email`} className="sr-only">
+              Email address
+            </label>
+            <input
+              id={`${id}-email`}
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
+              aria-invalid={status === "error"}
+              aria-describedby={error ? `${id}-error` : undefined}
+              className="field h-11 w-full shrink-0 rounded-full px-5 text-[15px] sm:w-auto sm:flex-1"
+            />
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="btn-primary h-11 rounded-full px-6 text-[15px]"
+            >
+              {status === "loading" ? "Subscribing…" : "Subscribe"}
+            </button>
+          </div>
+          {error && (
+            <p id={`${id}-error`} role="alert" className="mt-2.5 px-1 text-sm text-red">
+              {error}
+            </p>
+          )}
+        </form>
       )}
-    </form>
+      {toast && <Toast message={SUBSCRIBED_MESSAGE} onDismiss={dismiss} />}
+    </>
   );
 }

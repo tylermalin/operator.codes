@@ -1,21 +1,31 @@
 import type { Metadata } from "next";
-import { Syne, DM_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { EB_Garamond, Inter, Geist_Mono } from "next/font/google";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
 import "./globals.css";
 
-const syne = Syne({
+// Two faces, clear jobs: EB Garamond for titles and essay text, Inter
+// for summaries, UI, and uppercase metadata. Geist Mono only for code.
+// See docs/design-system.md.
+const serif = EB_Garamond({
   subsets: ["latin"],
-  variable: "--font-syne",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "variable",
+  style: ["normal", "italic"],
+  variable: "--font-garamond",
+  display: "swap",
 });
 
-const dmMono = DM_Mono({
+const sans = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-mono",
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const mono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,9 +36,18 @@ export const metadata: Metadata = {
   },
   description:
     "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design, from Tyler Malin.",
+  authors: [{ name: "Tyler Malin", url: "https://operator.codes/about" }],
+  creator: "Tyler Malin",
+  publisher: "Operator",
+  // Canonical is set per page, never here: a root canonical would be
+  // inherited by every page that forgets its own and point them all at
+  // the home page. Same reason og:url is left out of the defaults.
+  alternates: {
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     type: "website",
-    url: "https://operator.codes/",
+    siteName: "Operator",
     title: "Operator · Tyler Malin",
     description:
       "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design.",
@@ -44,10 +63,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${syne.variable} ${dmMono.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body>
         <Nav />
-        <main className="pt-14 min-h-screen">{children}</main>
+        <main className="pt-16 min-h-screen">{children}</main>
         <Footer />
         <Analytics />
       </body>

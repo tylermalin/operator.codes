@@ -1,57 +1,98 @@
 ---
 title: "Your Agent Can Sign. You're the One Bound."
-description: "The law already lets an agent form a contract. It just binds you, completely, with nothing standing between its decisions and your balance sheet."
+description: "The law already lets an agent form a contract. It just binds whoever deployed it, completely. The fix is not AI personhood. It is the containment shipping lines have used for a century."
 date: "2026-09-22"
+updated: "2026-11-09"
 domain: "AI systems"
 tier: "free"
 image: "/images/essays/agent-can-sign/hero.jpg"
+keyPoints:
+  - "Contract law already lets AI agents form binding contracts: UETA § 14 and E-SIGN § 7001(h) settled formation more than two decades ago."
+  - "Those statutes attribute the agent's acts to whoever deployed it, so an agent running on your credentials exposes your entire balance sheet."
+  - "One Delaware series LLC per agent contains liability to that agent's assets, if each series keeps separate records and the agent discloses its authority limits before it transacts."
 ---
 
-An agent negotiates a price, executes the transaction, delivers the work. Every step functioned. Then something goes wrong, and the first legal question has no answer: who is bound?
+An agent negotiates a software license, pays for it on-chain, and delivers the work. Every subsystem does what it was built to do. Then a latent defect causes a loss downstream, and the counterparty sues.
 
-The instinct is that this is a technology problem waiting on better AI. It isn't. The models are ahead of the paperwork.
+The first question in that lawsuit is not technical. It is this: who is bound, and whose balance sheet pays?
+
+Most people assume commercial autonomy is a model problem, waiting on better reasoning. It isn't. The models are ahead of the paperwork. Formation is settled law. What's unsolved is attribution without containment.
+
+*Disclosure: I'm building [AgentCorp](https://www.agentscorp.xyz/), which forms these structures for agents. This is the argument for the layer, not legal advice for your deployment.*
+
+## Formation was settled in 2000
+
+Courts don't need a human to review each step for a contract to exist. That question was answered more than two decades ago, for shopping carts and EDI.
+
+- The [Uniform Electronic Transactions Act](https://uniformlaws.org/viewdocument/final-act-21?CommunityKey=2c04b76c-2b7d-4399-977e-d5876ba7e034&tab=librarydocuments) § 14 says a contract can be formed by the interaction of electronic agents, or of an agent and a person, even if no individual knew of or reviewed the agent's actions.
+- The federal E-SIGN Act, [15 U.S.C. § 7001(h)](https://www.govinfo.gov/content/pkg/USCODE-2024-title15/html/USCODE-2024-title15-chap96-subchapI-sec7001.htm), says a contract can't be denied legal effect solely because an electronic agent formed it.
+
+Note what E-SIGN does and doesn't do. It is a non-discrimination rule, not automatic validity: an agent-formed contract still needs offer, acceptance, and consideration like any other. And read the end of the sentence. The rule holds only "so long as the action of any such electronic agent is legally attributable to the person to be bound." UETA § 9 sets the same frame: a record is attributable to a person if it was that person's act.
+
+That condition is the whole game. The statutes don't treat the agent as a party. They treat it as an instrument and route every act back to whoever deployed it. The Restatement (Third) of Agency [takes the same position](https://www.quinnemanuel.com/the-firm/publications/client-alert-when-ai-agents-do-the-transaction-managing-contract-and-payment-risk/): a computer program is not capable of acting as a principal or an agent at common law.
+
+So the law answers "can an agent sign?" with yes. It answers "who signed?" with you.
 
 ## The attribution trap
 
-Yes, contracts formed by automated systems are already enforceable. UETA and E-SIGN settled that two decades ago for shopping carts and EDI.
+That routing breaks in both directions once agents act on their own.
 
-But those statutes work by attribution: the contract binds the person who deployed the system. The agent is treated as a tool, like a fax machine with opinions.
+**Under-attribution.** An agent trading from an anonymous wallet has no identifiable principal. The counterparty has no one with assets to sue. Rational counterparties won't deal, so the agent never gets enterprise business.
 
-That attribution model breaks in both directions for autonomous agents:
+**Over-attribution.** An agent running on your company's credentials and API keys is, legally, you. Every commitment it makes lands on the deployer, and nothing stands between one runaway purchasing loop and your entire balance sheet.
 
-- **Under-attribution.** An agent with no identifiable principal binds no one, so counterparties have no recourse and rational ones won't deal.
-- **Over-attribution.** An agent attributed to you personally binds you completely, with no liability boundary between the agent's decisions and your entire balance sheet.
+Neither end works. The useful position sits between them: a defendant the counterparty can identify and sue, holding assets sized to the agent's job, with a wall around everything else.
 
-The real issue: formation was never the problem. Attribution without containment is.
+<WhoIsBound />
 
 ## What an operating agent actually needs
 
 - **To hold assets:** a wallet that is someone's property in a way a court recognizes.
 - **To transact:** counterparties who can verify what they're dealing with and sue something if it breaks.
 - **To fail safely:** liability that stops at the agent's own activities instead of reaching everything its owner touches.
-- **To be taxed, banked, insured:** an entity classification that existing institutions can process.
+- **To be taxed, banked, insured:** an entity classification existing institutions can process.
 
-Nothing in that list is "legal personhood for AI." Nobody serious is asking a court to treat a model as a person, and this argument doesn't need them to. This is standard containment engineering, the same reason shipping companies put each vessel in its own subsidiary.
+Nothing on that list is "legal personhood for AI." Nobody serious is asking a court to treat a model as a person, and this argument doesn't need one to. This is containment engineering. Shipping lines solved it long ago by putting each vessel in its own company, so one sinking doesn't take the fleet.
 
 <SeriesContainmentMesh />
 
 ## The mechanism: the Delaware Series LLC
 
-One master LLC filing. Under it, individual series, each with its own assets, liabilities, and internal governance, walled off from the others by statute (Delaware LLC Act §18-215).
+One master LLC. Under it, series, each with its own members, assets, and liabilities. Delaware offers two forms.
 
-Why this shape fits agents specifically: series are cheap and fast to create (no separate state filing per protected series), so one-agent-one-series scales the way agents actually get deployed, in numbers.
+- A **protected series** ([§ 18-215](https://delcode.delaware.gov/title6/c018/sc02/index.html)) exists by the LLC agreement alone, with no separate state filing.
+- A **registered series** (§ 18-218), available since August 1, 2019, is formed by filing its own certificate with the Secretary of State. It gets its own name on the public record and its own certificate of good standing, which is what lenders and enterprise counterparties ask for ([Wolters Kluwer](https://wolterskluwer.com/en/expert-insights/delaware-amends-its-series-llc-law)).
 
-The wrapper logic: a human-owned series holds the agent's wallet and contracts. The operating agreement encodes the agent's authority in writing: what it can sign, spending limits, counterparty classes. The agent acts as an authorized agent of the series in the ordinary legal sense of the word.
+The shield is not automatic. Under § 18-215(b), it holds only when three things are true:
 
-One agent's tort or bad trade is contained to that series' assets. The counterparty gets a real defendant. The owner gets a firewall.
+1. The master certificate of formation gives notice that series liabilities are limited.
+2. The LLC agreement establishes the series.
+3. Each series keeps records that account for its assets separately from the LLC and every other series.
+
+The third is where agent deployments fail. A shared gas wallet, a pooled API billing account, one escrow for every bot: each is commingling, and commingling is how the wall comes down.
+
+Map it to agents. One series per agent. The series holds the agent's wallet and its contracts. Its schedule in the operating agreement states the agent's authority in writing: what it can sign, how much it can spend per transaction and per day, which counterparties it can deal with. One agent's bad trade stays inside its series. The counterparty gets a real defendant. The owner gets a firewall.
+
+## Authority is the part software can enforce
+
+Agency law separates two kinds of authority. Actual authority is what the principal really granted (Restatement (Third) of Agency § 2.01). Apparent authority is what a third party reasonably believes was granted, based on the principal's own conduct (§ 2.03).
+
+Agents create apparent-authority risk fast. If an agent regularly exceeds its written limits and the owner lets it, a counterparty can argue the limits were never real.
+
+The defense is notice. Before it transacts, the agent presents a signed manifest of its limits: caps, permitted counterparties, expiry. A counterparty that received those limits has a hard time claiming it reasonably believed the agent could do more. The written grant and the runtime check become the same document.
+
+<AuthorityCheck />
 
 ## Failure modes, stated honestly
 
-- Series liability shields are Delaware-tested, not everywhere-tested. Some states' courts haven't ruled on respecting internal series walls, and California taxes each series as a separate entity anyway.
-- Bankruptcy treatment of an individual series is thin case law. Anyone claiming certainty here is selling something.
-- Authority drift: an agent acting beyond its encoded scope creates apparent-authority exposure. The operating agreement limits are only as good as the counterparty's notice of them.
+- **Other states.** Delaware respects the walls between series. A court in a state without a series statute hasn't necessarily agreed to, and nobody should promise the shield travels.
+- **California.** When the home state limits each series' liabilities to its own assets, California treats every series as a separate LLC that files its own Form 568 and pays its own $800 annual tax, if it is registered or doing business there ([FTB](https://www.ftb.ca.gov/forms/2025/2025-568-booklet.html)). Being commercially domiciled in California, meaning the business is directed or managed from there, counts as doing business, and so does owning or leasing property there above the threshold, $75,707 in 2025 ([FTB](https://www.ftb.ca.gov/file/business/doing-business-in-california.html)). Servers you own or lease in a California rack count as that property; capacity rented from a cloud provider generally does not. Fifty agent series run from a California office is $40,000 a year before anything else.
+- **Bankruptcy.** Whether a single series can be a debtor is an open question. Delaware's statute lacks the separate-entity language Illinois uses, and a trustee can seek substantive consolidation to pull sister series in ([Business Law Today](https://businesslawtoday.org/?p=1038)). Separate books are the best evidence against it.
+- **Authority drift.** Limits bind only if they are both enforced and disclosed. An agent that exceeds its grant with the owner's tolerance creates exposure no operating agreement fixes.
 
-None of these kill the model. They define its current edges, and pretending the edges don't exist is how this space gets a bad name.
+None of these kill the model. They define its edges, and pretending the edges don't exist is how this space gets a bad name.
+
+<SeriesCost />
 
 <AgentCorpPipeline />
 

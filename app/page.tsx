@@ -1,53 +1,189 @@
-import { getAllEssays } from "@/lib/essays";
-import EssayCard from "@/components/essay-card";
-import HeroGlobe from "@/components/hero-globe";
-import SubscribeForm from "@/components/subscribe-form";
 import Link from "next/link";
+import Image from "next/image";
+import type { Metadata } from "next";
+import { getAllEssays } from "@/lib/essays";
+import { AUTHOR, GUIDES, SITE_DESCRIPTION, SITE_NAME, absoluteUrl } from "@/lib/site";
+import { TOPIC_INTROS, getTopics } from "@/lib/topics";
+import PostCard from "@/components/cards/post-card";
+import SubscribeForm from "@/components/subscribe-form";
+import BlurWords from "@/components/blur-words";
+import AuthorAvatar from "@/components/author-avatar";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { url: "/" },
+};
 
 export default function HomePage() {
-  const essays = getAllEssays().slice(0, 4);
+  const essays = getAllEssays();
+  const featured = essays.slice(0, 2);
+  const more = essays.slice(2, 5);
+  const topics = getTopics(essays);
+
+  // The site's entity graph: the publication, who publishes it, and the
+  // person behind it, linked by @id so every page's Article can point
+  // back to one record instead of restating it.
+  const home = absoluteUrl("/");
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${home}#website`,
+        url: home,
+        name: SITE_NAME,
+        description: SITE_DESCRIPTION,
+        inLanguage: "en-US",
+        publisher: { "@id": `${home}#organization` },
+        author: { "@id": `${AUTHOR.url}#person` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${home}#organization`,
+        name: SITE_NAME,
+        url: home,
+        logo: absoluteUrl("/brand/operator-logo.png"),
+        founder: { "@id": `${AUTHOR.url}#person` },
+        publishingPrinciples: absoluteUrl("/standards"),
+        correctionsPolicy: absoluteUrl("/standards#corrections"),
+      },
+      {
+        "@type": "Person",
+        "@id": `${AUTHOR.url}#person`,
+        name: AUTHOR.name,
+        url: AUTHOR.url,
+        image: absoluteUrl(AUTHOR.image),
+        jobTitle: AUTHOR.jobTitle,
+        sameAs: AUTHOR.sameAs,
+      },
+    ],
+  };
 
   return (
-    <div className="max-w-5xl mx-auto px-6">
-      <section className="relative pt-28 pb-24 overflow-hidden">
-        <HeroGlobe />
-        <p className="relative font-mono text-sm text-muted mb-6">
-          operator.codes
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
+      <div className="masthead pt-12 sm:pt-16">
+        <p className="type-title text-[clamp(2.75rem,8vw,5.5rem)] uppercase tracking-[0.08em]">
+          Operator
         </p>
-        <h1 className="relative font-[family-name:var(--font-display)] text-5xl sm:text-6xl font-normal tracking-tight leading-[1.08] max-w-3xl">
-          Systems, incentives, and infrastructure.
-          <br />
-          Written by someone who builds them.
+      </div>
+      <section className="pb-20 pt-10 text-center sm:pb-24">
+        <h1 className="type-title mx-auto max-w-[24ch] text-[clamp(1.875rem,3.6vw,2.875rem)]">
+          <BlurWords text="Systems, incentives, and infrastructure." />{" "}
+          <BlurWords
+            text="Written by someone who builds them."
+            className="italic text-muted"
+            start={280}
+          />
         </h1>
-        <p className="relative text-muted mt-8 max-w-xl text-lg leading-relaxed">
-          Analysis and frameworks on AI systems, climate infrastructure,
-          legal engineering, and protocol design, from Tyler Malin.
+        <p className="type-dek fade-up mx-auto mt-5 max-w-[52ch]" style={{ animationDelay: "750ms" }}>
+          Essays on AI systems, legal engineering, digital assets, and climate
+          infrastructure, by Tyler Malin. New essays by email.
         </p>
-        <div className="relative mt-10">
+        <div className="fade-up mt-8 flex justify-center" style={{ animationDelay: "950ms" }}>
           <SubscribeForm />
-          <Link
-            href="/build-sessions"
-            className="link-underline inline-block mt-5 font-mono text-xs text-muted"
-          >
-            Or book a Build Session
-          </Link>
         </div>
+        <Link
+          href="/about"
+          className="fade-up mt-10 inline-flex items-center gap-3 text-left"
+          style={{ animationDelay: "1100ms" }}
+        >
+          <AuthorAvatar size={44} />
+          <span>
+            <span className="link-underline block text-[15px] text-foreground">{AUTHOR.name}</span>
+            <span className="block text-[13px] text-muted">
+              Founder, Beneficial Technology · Creator of AgentCorp
+            </span>
+          </span>
+        </Link>
       </section>
 
-      <section className="py-24 border-t border-border">
-        <h2 className="font-mono text-sm text-muted mb-12">Latest essays</h2>
-        {essays.length === 0 ? (
-          <p className="text-muted">
-            Nothing published yet. Seed content lives in{" "}
-            <code className="font-mono">/content/essays</code>.
-          </p>
-        ) : (
-          <div className="flex flex-col gap-16">
-            {essays.map((essay) => (
-              <EssayCard key={essay.slug} essay={essay} headingLevel="h3" />
+      {featured.length > 0 && (
+        <section aria-labelledby="latest" className="border-t border-border pt-10">
+          <div className="flex items-baseline justify-between">
+            <h2 id="latest" className="type-meta text-foreground">
+              Latest essays
+            </h2>
+            <Link href="/essays" className="type-meta link-underline hover:text-foreground">
+              All essays →
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-x-8 gap-y-14 md:grid-cols-2">
+            {featured.map((e) => (
+              <PostCard key={e.slug} essay={e} variant="featured" priority />
             ))}
           </div>
-        )}
+          {more.length > 0 && (
+            <div className="mt-16 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+              {more.map((e) => (
+                <PostCard key={e.slug} essay={e} variant="grid" />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {GUIDES.length > 0 && (
+        <section aria-labelledby="guides" className="mt-24 border-t border-border pt-10">
+          <div className="flex items-baseline justify-between">
+            <h2 id="guides" className="type-meta text-foreground">
+              Field guides
+            </h2>
+            <span className="type-meta">Interactive · sourced</span>
+          </div>
+          <div className="mt-8 grid gap-x-8 gap-y-14 md:grid-cols-2">
+            {GUIDES.map((g) => (
+              <a key={g.slug} href={`/guides/${g.slug}`} className="group block">
+                <div className="thumb aspect-[16/9]">
+                  <Image
+                    src={g.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1152px) 544px, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                  <span className="glass glass-ink absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-medium text-white">
+                    Field guide
+                  </span>
+                </div>
+                <p className="type-meta mt-5">
+                  {g.topic}
+                  <span className="mx-2 text-faint">·</span>
+                  {g.blurb}
+                </p>
+                <h3 className="type-title mt-2.5 text-[clamp(1.75rem,3vw,2.5rem)]">
+                  <span className="link-underline">{g.title}</span>
+                </h3>
+                <p className="type-dek mt-3 max-w-[58ch] text-[15.5px]">{g.description}</p>
+                <p className="mt-4 text-[15px] text-foreground">
+                  <span className="link-underline">Open the guide →</span>
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section aria-labelledby="topics" className="mt-24 border-t border-border pt-10">
+        <h2 id="topics" className="type-meta text-foreground">
+          Topics
+        </h2>
+        <ul className="mt-8 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+          {topics.map((t) => (
+            <li key={t.slug}>
+              <Link href={`/topics/${t.slug}`} className="group block">
+                <span className="type-title text-[26px]">
+                  <span className="link-underline">{t.label}</span>
+                </span>
+                <span className="type-meta ml-2 text-faint">{t.count}</span>
+                <span className="mt-2 block text-[15px] leading-relaxed text-muted">{TOPIC_INTROS[t.slug]}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   );

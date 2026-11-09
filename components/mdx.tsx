@@ -4,6 +4,10 @@ import {
   AgentCorpPipeline,
 } from "@/components/figures/agent-can-sign";
 import { ControlBoundary } from "@/components/figures/own-what-you-host";
+import { GuideCallout } from "@/components/guide-callout";
+import { WhoIsBound, AuthorityCheck, SeriesCost } from "@/components/figures/agent-interactives";
+import { SeedPosition, TermSheetCheck, RunwayToA, SeedChecklist } from "@/components/figures/seed-interactives";
+import { HopCounter, WallFilter, PilotPlan } from "@/components/figures/lkg-interactives";
 
 // The registration point for anything an essay embeds beyond prose:
 // illustrations, figures, charts, interactives. Add a component here,
@@ -47,4 +51,15 @@ export const mdxComponents = {
   SeriesContainmentMesh,
   AgentCorpPipeline,
   ControlBoundary,
+  GuideCallout,
+  WhoIsBound,
+  AuthorityCheck,
+  SeriesCost,
+  SeedPosition,
+  TermSheetCheck,
+  RunwayToA,
+  SeedChecklist,
+  HopCounter,
+  WallFilter,
+  PilotPlan,
 };

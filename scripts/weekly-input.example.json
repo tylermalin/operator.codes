@@ -1,0 +1,12 @@
+{
+  "newsItems": [
+    {
+      "title": "Example: a real headline goes here",
+      "url": "https://example.com/the-actual-article",
+      "source": "Publication name",
+      "blurb": "One or two sentences on why this matters to Operator's readers, in Tyler's voice. Not a summary of the article, a reason to care."
+    }
+  ],
+  "since": "2026-09-15",
+  "until": "2026-09-22"
+}

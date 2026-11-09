@@ -34,7 +34,7 @@ export default function ApplyPage() {
   if (status === "done") {
     return (
       <div className="max-w-2xl mx-auto px-6 py-32 text-center">
-        <h1 className="text-3xl sm:text-4xl font-normal tracking-tight mb-5">
+        <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-5">
           Application sent.
         </h1>
         <p className="text-muted text-lg">
@@ -46,7 +46,7 @@ export default function ApplyPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-24">
-      <h1 className="text-4xl sm:text-5xl font-normal tracking-tight mb-4">
+      <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-4">
         Apply for a session
       </h1>
       <p className="text-muted mb-12 text-lg leading-relaxed">
