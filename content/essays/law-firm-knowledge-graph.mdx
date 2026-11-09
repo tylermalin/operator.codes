@@ -68,7 +68,9 @@ RETURN c.text, m.title, p.name, oc.name, d.dms_uri
 
 Every condition is explicit. Nothing is inferred from proximity.
 
-A note on the buzzword. "GraphRAG" is often used for any of this, but [Microsoft's paper that coined it](https://arxiv.org/abs/2404.16130) describes something narrower: building a graph from a corpus, summarizing clusters of related entities, and using those summaries to answer broad questions like "what are the main themes here?" It reports better comprehensiveness and diversity on that kind of question. Partner questions are a different kind. They need filters and joins. In practice, the useful pattern is hybrid. Similarity search finds the starting points. The graph walks from there under exact constraints. The model writes the answer from what the walk returns.
+A note on the buzzword. "GraphRAG" gets used for almost any mix of graphs and retrieval. The term predates Microsoft ([NebulaGraph used it in September 2023](https://www.nebula-graph.io/posts/graph-RAG)), but [Microsoft's 2024 paper](https://arxiv.org/abs/2404.16130) made it famous, and its headline contribution is specific. A model extracts entities and relationships, a clustering algorithm groups them into communities, and the system writes a summary of each community in advance. That lets it answer broad questions like "what are the main themes in these documents?", where the paper reports more comprehensive and more diverse answers than standard retrieval. Microsoft's open-source GraphRAG also has a [local search mode](https://microsoft.github.io/graphrag/query/overview) for questions about specific entities, which mixes graph data with text passages.
+
+Neither is built for the partner's question above. That question needs exact filters, signed versions only, and a wall enforced on every hop. In practice, the useful pattern is hybrid. Similarity search finds the starting points. The graph walks from there under exact constraints. The model writes the answer from what the walk returns.
 
 ## The ethical wall is the real spec
 

@@ -89,6 +89,7 @@ Recorded so they don't come back (essay: Law Firm AI Has a Links Problem):
 - "SALF (Standards for Legal Frameworks)" does not appear to exist. The matter-labeling standard is SALI's Legal Matter Specification Standard; the essay cites SALI.
 - The evaluation radar and weighted scores (vector RAG 2.5 to 5.2, graph 9.0 to 10.0) had no source or method. Dropped.
 - "Deterministic, mathematically grounded" overstated what a graph does. It constrains retrieval, not generation; the essay says so and keeps the verification step.
-- Microsoft's GraphRAG paper (arXiv 2404.16130) is about community summaries for global sensemaking questions, not filtered multi-hop traversal. The essay draws the distinction.
+- Microsoft's GraphRAG paper (arXiv 2404.16130) is about community summaries for global sensemaking questions, not filtered multi-hop traversal. The essay draws the distinction. Microsoft did not coin the term (NebulaGraph used it in Sept 2023), and its library also has an entity-level local search; both now stated.
+- SALI stands for Standards Advancement for the Legal Industry. Google's AI Overview (checked Nov 9, 2026) expanded it as "Standards for Legal Frameworks," which is wrong.
 - "12 to 16 weeks" and the four-quarter roadmap had no source. The pilot plan is labeled as Operator framework, with dates computed from the reader's start date.
 - Added the sources the draft lacked: Stanford RegLab/HAI hallucination study (17% / 34%), Lost in the Middle, ABA Formal Opinion 512's ethical wall passage, NY Rule 1.10(c)(2) and NYC Bar Formal Opinion 2026-1.
