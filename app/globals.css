@@ -251,6 +251,119 @@ body {
   border-color: var(--border-hi);
 }
 
+/* ---- Liquid glass ----
+   Glass only reads when there is something behind it to refract, so it
+   is used over imagery (card thumbnails, essay heroes) and floating
+   layers (popover, toast), never on flat ink where it would just be a
+   border. Gradient stroke via a masked ::before. */
+.glass,
+.glass-strong {
+  /* No position here: callers set relative/absolute/fixed with Tailwind,
+     and an unlayered rule would override those utilities. The ::before
+     stroke needs any positioned ancestor, which every caller is. */
+  isolation: isolate;
+  background: rgba(255, 255, 255, 0.06);
+  background-blend-mode: luminosity;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+.glass-strong {
+  background: rgba(22, 22, 25, 0.72);
+  -webkit-backdrop-filter: blur(40px) saturate(1.3);
+  backdrop-filter: blur(40px) saturate(1.3);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.14);
+}
+.glass::before,
+.glass-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.14) 22%,
+    rgba(255, 255, 255, 0) 42%,
+    rgba(255, 255, 255, 0) 58%,
+    rgba(255, 255, 255, 0.14) 78%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Ink-tinted glass for labels over imagery. Clear glass with white
+   text fails on light artwork, which most essay heroes are. */
+.glass-ink {
+  background: rgba(11, 11, 12, 0.62);
+}
+
+/* ---- Card thumbnail ---- */
+.thumb {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: border-color var(--dur) var(--ease);
+}
+.group:hover .thumb {
+  border-color: var(--border-hi);
+}
+.thumb img {
+  transition: transform 600ms var(--ease);
+}
+@media (hover: hover) {
+  .group:hover .thumb img {
+    transform: scale(1.025);
+  }
+}
+
+/* ---- Entrance (home hero headline only) ----
+   Word-by-word blur-in, once, on load. CSS only; the reduced-motion
+   rule above collapses it to an instant render. */
+@keyframes word-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(0.35em);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+.word-in {
+  display: inline-block;
+  opacity: 0;
+  animation: word-in 700ms var(--ease) forwards;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+.fade-up {
+  opacity: 0;
+  animation: fade-up 800ms var(--ease) forwards;
+}
+
 /* ---- Toast ---- */
 @keyframes toast-in {
   from {

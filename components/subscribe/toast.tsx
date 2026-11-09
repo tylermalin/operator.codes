@@ -22,7 +22,7 @@ export default function Toast({
     <div
       role="status"
       aria-live="polite"
-      className="toast fixed z-[60] bottom-6 right-4 left-4 sm:left-auto sm:right-6 sm:w-[380px] flex items-start gap-3 rounded-2xl border border-accent-border bg-surface px-5 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+      className="toast fixed z-[60] bottom-6 right-4 left-4 sm:left-auto sm:right-6 sm:w-[380px] flex items-start gap-3 glass-strong rounded-2xl px-5 py-4"
     >
       <svg
         aria-hidden

@@ -7,8 +7,9 @@ Monochrome on near-black. The words carry the page. Tokens live in
 
 1. **One primary action per view.** Primary is paper on ink (`.btn-primary`). Everything else is outlined (`.btn-secondary`) or a plain link.
 2. **Color means state.** Moss (`--accent`) appears only for success and focus. No colored links, no colored buttons, no gradients for decoration.
-3. **Nothing moves unless the reader asks.** Hover changes a border or an underline. The only entrance animation is the toast.
-4. **Real text, not pictures of text.** Card thumbnails are typeset HTML (`TitlePlate`), so titles stay crisp, searchable, and free.
+3. **Nothing moves unless the reader asks, with one exception.** Hover changes a border, an underline, or a 2.5% image zoom. The home hero headline blurs in word by word once on load (`BlurWords`, CSS only); the toast slides in. `prefers-reduced-motion` turns both off.
+4. **Every essay has an image, and cards use it.** `scripts/check-essays.mjs` runs before every build and fails it if an essay has no `image`, the file is missing, or it is over 1 MB. `TitlePlate` is only a fallback.
+6. **Glass needs something behind it.** `.glass` / `.glass-strong` (liquid glass: blurred fill, gradient stroke) are used over imagery and on floating layers only. Over light art, add `.glass-ink` so white text stays legible.
 5. **Copy states facts.** UI copy never promises what the system doesn't do. The subscribe toast says a welcome email is coming because there is no confirm step.
 
 ## Tokens
@@ -79,8 +80,8 @@ The archive was a single column of text rows with mixed illustration thumbnails.
 ### Components
 | Component | File | Notes |
 |---|---|---|
-| `TitlePlate` | `components/cards/title-plate.tsx` | Topic pill + serif title on an ink plate with grain. 16:10. Light position derived from the slug, so plates are stable but never identical. Title size scales with the card through container units. |
-| `PostCard` | `components/cards/post-card.tsx` | `variant="featured"`: plate, large title, two-line dek, meta. `variant="grid"`: plate, title, meta. The whole card is one link. |
+| `TitlePlate` | `components/cards/title-plate.tsx` | Fallback only, for an essay without an image. Topic pill + serif title on an ink plate with grain. |
+| `PostCard` | `components/cards/post-card.tsx` | Thumbnail is the essay hero image, 16:9, with the topic in an ink-glass pill top left. `variant="featured"`: large title, two-line dek, meta, `priority` loading. `variant="grid"`: title, meta. The whole card is one link. |
 | `TopicChips` | `components/cards/topic-chips.tsx` | `All` + one chip per essay `domain`. Plain links to `/essays?topic=slug`. Active chip inverts. |
 
 ### Layout
@@ -89,15 +90,15 @@ The archive was a single column of text rows with mixed illustration thumbnails.
 - Filtered views keep `/essays` as their canonical URL.
 
 ### Accessibility
-- Plates are `aria-hidden`. The visible title under the plate is the link's name.
+- Thumbnails have empty `alt`; the visible title under them is the link's name.
 - Chips are a `nav` with `aria-current="page"` on the active one.
 - Hover shows an underline on the title and brightens the plate border. Nothing else moves.
 
 ### Do and don't
 | Do | Don't |
 |---|---|
-| Let the plate carry the title in serif, and the card heading repeat it in sans | Put a different headline on the plate than on the card |
-| Keep essay hero illustrations inside the essay and in social cards | Mix photos and plates in one grid |
+| Give every essay a hero image at 16:9, under 1 MB | Ship an essay without one (the build will stop you) |
+| Reuse the first figure as the hero when it tells the story | Worry about duplication: the essay page skips the hero when the body already shows it |
 | Add a topic by setting `domain` in frontmatter | Hardcode topic lists |
 
 ---
@@ -105,5 +106,14 @@ The archive was a single column of text rows with mixed illustration thumbnails.
 ## Retired
 - `HeroGlobe` (ambient particle canvas) and the page-wide radial gradient: decoration that competed with the words.
 - `EssayCard` (row layout): replaced by `PostCard`.
+- Typeset plates as the default thumbnail: replaced by essay images; kept as fallback.
 - Gradient primary button with glow and hover lift: replaced by the flat inverted pill.
 - Syne and DM Mono: replaced by Instrument Serif, Geist, Geist Mono.
+
+---
+
+## Reviewed and declined (from the "liquid glass agency" landing prompt, Nov 2026)
+- **Background videos** on third-party CDN URLs: unknown license, several MB per view, and they compete with reading.
+- **Stat cards and a logo trust bar**: invented numbers and placeholder brands. Operator only shows claims it can source.
+- **Italic serif for every heading**: kept for emphasis (the home hero's second sentence); roman stays the default because long essay titles read faster upright.
+- **Framer Motion**: the one entrance needed is done in CSS, so no client animation library ships.

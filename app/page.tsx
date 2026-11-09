@@ -4,6 +4,7 @@ import { getAllEssays } from "@/lib/essays";
 import { GUIDES } from "@/lib/site";
 import PostCard from "@/components/cards/post-card";
 import SubscribeForm from "@/components/subscribe-form";
+import BlurWords from "@/components/blur-words";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -20,14 +21,18 @@ export default function HomePage() {
       <section className="pb-20 pt-16 sm:pb-28 sm:pt-28">
         <p className="type-meta">Operator · Tyler Malin</p>
         <h1 className="type-title mt-6 max-w-4xl text-[clamp(2.75rem,7vw,5.5rem)]">
-          Systems, incentives, and infrastructure.{" "}
-          <span className="italic text-muted">Written by someone who builds them.</span>
+          <BlurWords text="Systems, incentives, and infrastructure." />{" "}
+          <BlurWords
+            text="Written by someone who builds them."
+            className="italic text-muted"
+            start={280}
+          />
         </h1>
-        <p className="type-dek mt-7 max-w-2xl">
+        <p className="type-dek fade-up mt-7 max-w-2xl" style={{ animationDelay: "750ms" }}>
           Essays on AI systems, legal engineering, digital assets, and climate
           infrastructure, by Tyler Malin. New essays by email.
         </p>
-        <div className="mt-9">
+        <div className="fade-up mt-9" style={{ animationDelay: "950ms" }}>
           <SubscribeForm />
         </div>
       </section>
@@ -44,7 +49,7 @@ export default function HomePage() {
           </div>
           <div className="mt-8 grid gap-x-8 gap-y-14 md:grid-cols-2">
             {featured.map((e) => (
-              <PostCard key={e.slug} essay={e} variant="featured" />
+              <PostCard key={e.slug} essay={e} variant="featured" priority />
             ))}
           </div>
           {more.length > 0 && (

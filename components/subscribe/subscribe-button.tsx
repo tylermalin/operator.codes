@@ -89,7 +89,7 @@ export default function SubscribeButton({
           id={panelId}
           role="dialog"
           aria-label="Subscribe to Operator"
-          className="absolute right-0 top-[calc(100%+10px)] z-[55] w-[min(340px,calc(100vw-2rem))] rounded-2xl border border-border-md bg-surface p-3 shadow-[0_16px_48px_rgba(0,0,0,0.55)]"
+          className="absolute right-0 top-[calc(100%+10px)] z-[55] w-[min(340px,calc(100vw-2rem))] glass-strong rounded-2xl p-3"
         >
           <form onSubmit={onSubmit} className="flex flex-col gap-2.5">
             <label htmlFor={`${panelId}-email`} className="sr-only">

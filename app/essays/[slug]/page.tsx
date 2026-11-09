@@ -137,7 +137,9 @@ export default async function EssayPage({
         </div>
       </header>
 
-      {essay.image && (
+      {/* Skip the hero when the essay body already shows the same image
+          as its first figure, so the reader never sees it twice. */}
+      {essay.image && !essay.content.includes(essay.image) && (
         <Image
           src={essay.image}
           alt=""

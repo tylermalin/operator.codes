@@ -49,7 +49,7 @@ export default async function EssaysPage({
       {featured.length > 0 && (
         <section aria-label="Featured" className="mt-10 grid gap-x-8 gap-y-14 md:grid-cols-2">
           {featured.map((e) => (
-            <PostCard key={e.slug} essay={e} variant="featured" headingLevel="h2" />
+            <PostCard key={e.slug} essay={e} variant="featured" headingLevel="h2" priority />
           ))}
         </section>
       )}
