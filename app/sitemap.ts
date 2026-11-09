@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const essayEntries: MetadataRoute.Sitemap = essays.map((e) => ({
     url: absoluteUrl(`/essays/${e.slug}`),
-    lastModified: e.date,
+    lastModified: e.updated ?? e.date,
     priority: 0.8,
   }));
 

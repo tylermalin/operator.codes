@@ -12,6 +12,8 @@ export const AUTHOR = {
   name: "Tyler Malin",
   url: `${SITE_URL}/about`,
   jobTitle: "Founder, Beneficial Technology",
+  image: "/brand/tyler-malin.jpg",
+  avatar: "/brand/tyler-malin-160.jpg",
   // Profiles and sites that independently confirm who the author is.
   sameAs: [
     "https://x.com/tylermalin",
@@ -27,13 +29,21 @@ export const GUIDES = [
   {
     slug: "own-what-you-host",
     title: "The Fence Line",
-    blurb: "Hosting hyperscale data centers · 4 tools · 12 sources",
+    description:
+      "Where host communities have stopped or paused data centers, what a permitting fight costs the capital side, and a builder that turns property-line limits into draft covenant language.",
+    topic: "Climate infrastructure",
+    image: "/images/essays/own-what-you-host/hero.jpg",
+    blurb: "4 tools · 12 sources",
     date: "2026-11-09",
   },
   {
     slug: "measured-not-ranked",
     title: "Measured, Not Ranked",
-    blurb: "Interactive guide to AI search · 6 tools · 27 sources",
+    description:
+      "How AI answer engines choose what to cite, what the evidence says works and what wastes the budget, and a 90-day plan with hard dates.",
+    topic: "AI systems",
+    image: "/images/essays/measured-not-ranked/hero.jpg",
+    blurb: "6 tools · 27 sources",
     date: "2026-11-09",
   },
 ];

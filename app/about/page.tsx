@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { AUTHOR, SITE_NAME, absoluteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
   description:
     "Tyler Malin: founder of Beneficial Technology, creator of AgentCorp, co-founder of Mālama Labs, and former named partner at a New York labor law firm. Writes Operator.",
   alternates: { canonical: "/about" },
-  openGraph: { type: "profile", url: "/about" },
+  openGraph: { type: "profile", url: "/about", images: [{ url: "/brand/tyler-malin.jpg", width: 768, height: 768 }] },
 };
 
 // This page is the entity record answer engines draw on for "who is
@@ -29,6 +30,7 @@ export default function AboutPage() {
       "@type": "Person",
       name: AUTHOR.name,
       url: AUTHOR.url,
+      image: absoluteUrl(AUTHOR.image),
       jobTitle: AUTHOR.jobTitle,
       sameAs: [
         ...AUTHOR.sameAs,
@@ -49,12 +51,21 @@ export default function AboutPage() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <p className="type-meta mb-6">
-        About
-      </p>
-      <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)] mb-12">
-        Tyler Malin
-      </h1>
+      <div className="mb-12 flex flex-col-reverse gap-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="type-meta mb-6">About</p>
+          <h1 className="type-title text-[clamp(2.75rem,6vw,4.5rem)]">Tyler Malin</h1>
+          <p className="type-dek mt-3">Founder, Beneficial Technology · Creator of AgentCorp</p>
+        </div>
+        <Image
+          src={AUTHOR.image}
+          alt="Tyler Malin"
+          width={768}
+          height={768}
+          priority
+          className="h-auto w-40 shrink-0 rounded-[14px] border border-border-md sm:w-52"
+        />
+      </div>
       <div className="prose-essay">
         <p>
           Twenty-plus years building at the intersection of technology,

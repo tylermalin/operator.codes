@@ -12,6 +12,7 @@ import ShareBar from "@/components/share-bar";
 import EssaySubscribeCta from "@/components/essay-subscribe-cta";
 import { AUTHOR, SITE_NAME, absoluteUrl } from "@/lib/site";
 import { formatDate, topicLabel, topicSlug } from "@/lib/topics";
+import AuthorAvatar from "@/components/author-avatar";
 
 // Gating depends on per-request session state, so this route can't be
 // statically generated. Named as a real tradeoff in the plan: every
@@ -40,6 +41,7 @@ export async function generateMetadata({
       title: essay.title,
       description: essay.description,
       publishedTime: essay.date,
+      modifiedTime: essay.updated,
       authors: [AUTHOR.url],
       section: essay.domain,
       images: essay.image ? [{ url: essay.image }] : undefined,
@@ -76,7 +78,7 @@ export default async function EssayPage({
     headline: essay.title,
     description: essay.description,
     datePublished: essay.date,
-    dateModified: essay.date,
+    dateModified: essay.updated ?? essay.date,
     url: absoluteUrl(`/essays/${slug}`),
     mainEntityOfPage: absoluteUrl(`/essays/${slug}`),
     image: essay.image ? absoluteUrl(essay.image) : undefined,
@@ -86,6 +88,7 @@ export default async function EssayPage({
       "@type": "Person",
       name: AUTHOR.name,
       url: AUTHOR.url,
+      image: absoluteUrl(AUTHOR.image),
       sameAs: AUTHOR.sameAs,
     },
     publisher: {
@@ -124,12 +127,21 @@ export default async function EssayPage({
         {essay.description && (
           <p className="type-dek mx-auto mt-5 max-w-[52ch]">{essay.description}</p>
         )}
-        <p className="type-meta mt-6">
-          <Link href="/about" rel="author" className="link-underline text-foreground">
-            {AUTHOR.name}
+        <p className="type-meta mt-6 flex flex-wrap items-center justify-center gap-y-1">
+          <Link href="/about" rel="author" className="inline-flex items-center gap-2.5 text-foreground">
+            <AuthorAvatar />
+            <span className="link-underline">{AUTHOR.name}</span>
           </Link>
           <span className="mx-2 text-faint">·</span>
           {essay.readingTime}
+          {essay.updated && essay.updated !== essay.date && (
+            <>
+              <span className="mx-2 text-faint">·</span>
+              <span>
+                Updated <time dateTime={essay.updated}>{formatDate(essay.updated)}</time>
+              </span>
+            </>
+          )}
         </p>
         <div className="mt-6 flex justify-center border-y border-border py-3">
           <ShareBar
