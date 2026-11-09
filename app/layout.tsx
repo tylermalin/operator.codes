@@ -25,9 +25,18 @@ export const metadata: Metadata = {
   },
   description:
     "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design, from Tyler Malin.",
+  authors: [{ name: "Tyler Malin", url: "https://operator.codes/about" }],
+  creator: "Tyler Malin",
+  publisher: "Operator",
+  // Canonical is set per page, never here: a root canonical would be
+  // inherited by every page that forgets its own and point them all at
+  // the home page. Same reason og:url is left out of the defaults.
+  alternates: {
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     type: "website",
-    url: "https://operator.codes/",
+    siteName: "Operator",
     title: "Operator · Tyler Malin",
     description:
       "Analysis and frameworks on AI systems, climate infrastructure, legal engineering, and protocol design.",

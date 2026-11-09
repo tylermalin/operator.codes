@@ -3,6 +3,12 @@ import EssayCard from "@/components/essay-card";
 import HeroGlobe from "@/components/hero-globe";
 import SubscribeForm from "@/components/subscribe-form";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { url: "/" },
+};
 
 export default function HomePage() {
   const essays = getAllEssays().slice(0, 4);
