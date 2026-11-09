@@ -5,11 +5,18 @@ name: IndexNow
 on:
   deployment_status:
 
+# Vercel names the environment "Production – <project>", and two Vercel
+# projects deploy this repo, so one deploy fires this twice. The
+# concurrency group drops the duplicate; resubmitting is harmless anyway.
+concurrency:
+  group: indexnow-${{ github.event.deployment.sha }}
+  cancel-in-progress: false
+
 jobs:
   submit:
     if: >-
       github.event.deployment_status.state == 'success' &&
-      github.event.deployment.environment == 'Production'
+      startsWith(github.event.deployment.environment, 'Production')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
