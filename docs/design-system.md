@@ -133,3 +133,20 @@ The archive was a single column of text rows with mixed illustration thumbnails.
 - **Stat cards and a logo trust bar**: invented numbers and placeholder brands. Operator only shows claims it can source.
 - **Italic serif for every heading**: kept for emphasis (the home hero's second sentence); roman stays the default because long essay titles read faster upright.
 - **Framer Motion**: the one entrance needed is done in CSS, so no client animation library ships.
+
+---
+
+## Pattern: Interactive guides
+
+Native guides live at `app/guides/<slug>` and use the guide kit in `components/guide/kit.tsx`. Roadmap and sourcing rules: `docs/guides-roadmap.md`.
+
+| Component | Use |
+|---|---|
+| `Section` | Numbered section: meta label, Garamond heading, Inter dek |
+| `Stat` | Big Garamond figure with label and a **required** source |
+| `Cite` | Superscript `[n]` linking to the source list |
+| `ToolFrame` | Bordered surface with a labeled header for each tool |
+| `Note` | Small muted text under a tool: inputs vs. data, framework vs. fact, limits of the model |
+| `Sources` | Numbered list; anchors match `Cite` |
+
+Source registries (`lib/guides/<guide>.ts`) are typed with `satisfies SourceRegistry`, so a `Stat` or `Cite` with an unknown id fails the build. Guide pages emit Article JSON-LD with every source URL as a `citation`.

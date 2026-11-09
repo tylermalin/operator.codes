@@ -20,9 +20,16 @@ export const AUTHOR = {
   ],
 };
 
-// Interactive guides are static pages in public/guides, mapped to clean
-// URLs in next.config.ts. Listed here so the sitemap includes them.
+// Interactive guides. Native guides live at app/guides/<slug> and use the
+// guide kit; older standalone ones are static pages in public/guides,
+// mapped in next.config.ts. Listed here for the sitemap and home page.
 export const GUIDES = [
+  {
+    slug: "own-what-you-host",
+    title: "The Fence Line",
+    blurb: "Hosting hyperscale data centers · 4 tools · 12 sources",
+    date: "2026-11-09",
+  },
   {
     slug: "measured-not-ranked",
     title: "Measured, Not Ranked",

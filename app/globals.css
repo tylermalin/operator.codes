@@ -231,7 +231,8 @@ body {
 .chip:hover {
   border-color: var(--border-hi);
 }
-.chip[aria-current="page"] {
+.chip[aria-current="page"],
+.chip[aria-pressed="true"] {
   background: var(--foreground);
   border-color: var(--foreground);
   color: var(--background);
