@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SOURCES, CASES } from "@/lib/guides/fence-line";
 import { AUTHOR, SITE_NAME, absoluteUrl } from "@/lib/site";
 import { Cite, Section, Sources, Stat, ToolFrame } from "@/components/guide/kit";
+import AuthorAvatar from "@/components/author-avatar";
 import Radar from "@/components/guide/fence-line/radar";
 import Envelope from "@/components/guide/fence-line/envelope";
 import Delay from "@/components/guide/fence-line/delay";
@@ -66,9 +67,10 @@ export default function FenceLineGuide() {
         </p>
         <h1 className="type-title mt-5 text-[clamp(3rem,8vw,5.5rem)]">{TITLE}</h1>
         <p className="type-dek mx-auto mt-5 max-w-[56ch]">{DEK}</p>
-        <p className="type-meta mt-6">
-          <Link href="/about" rel="author" className="link-underline text-foreground">
-            {AUTHOR.name}
+        <p className="type-meta mt-6 flex flex-wrap items-center justify-center gap-y-1">
+          <Link href="/about" rel="author" className="inline-flex items-center gap-2.5 text-foreground">
+            <AuthorAvatar />
+            <span className="link-underline">{AUTHOR.name}</span>
           </Link>
           <span className="mx-2 text-faint">·</span>
           Updated Nov 9, 2026

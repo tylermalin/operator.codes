@@ -12,6 +12,8 @@ export const AUTHOR = {
   name: "Tyler Malin",
   url: `${SITE_URL}/about`,
   jobTitle: "Founder, Beneficial Technology",
+  image: "/brand/tyler-malin.jpg",
+  avatar: "/brand/tyler-malin-160.jpg",
   // Profiles and sites that independently confirm who the author is.
   sameAs: [
     "https://x.com/tylermalin",

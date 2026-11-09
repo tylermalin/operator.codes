@@ -2,10 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { getAllEssays } from "@/lib/essays";
-import { GUIDES } from "@/lib/site";
+import { AUTHOR, GUIDES } from "@/lib/site";
 import PostCard from "@/components/cards/post-card";
 import SubscribeForm from "@/components/subscribe-form";
 import BlurWords from "@/components/blur-words";
+import AuthorAvatar from "@/components/author-avatar";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -40,6 +41,19 @@ export default function HomePage() {
         <div className="fade-up mt-8 flex justify-center" style={{ animationDelay: "950ms" }}>
           <SubscribeForm />
         </div>
+        <Link
+          href="/about"
+          className="fade-up mt-10 inline-flex items-center gap-3 text-left"
+          style={{ animationDelay: "1100ms" }}
+        >
+          <AuthorAvatar size={44} />
+          <span>
+            <span className="link-underline block text-[15px] text-foreground">{AUTHOR.name}</span>
+            <span className="block text-[13px] text-muted">
+              Founder, Beneficial Technology · Creator of AgentCorp
+            </span>
+          </span>
+        </Link>
       </section>
 
       {featured.length > 0 && (
