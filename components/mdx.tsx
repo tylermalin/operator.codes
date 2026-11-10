@@ -8,6 +8,7 @@ import { GuideCallout } from "@/components/guide-callout";
 import { WhoIsBound, AuthorityCheck, SeriesCost } from "@/components/figures/agent-interactives";
 import { SeedPosition, TermSheetCheck, RunwayToA, SeedChecklist } from "@/components/figures/seed-interactives";
 import { HopCounter, WallFilter, PilotPlan } from "@/components/figures/lkg-interactives";
+import { DriftCheck } from "@/components/figures/lexops-interactives";
 
 // The registration point for anything an essay embeds beyond prose:
 // illustrations, figures, charts, interactives. Add a component here,
@@ -62,4 +63,5 @@ export const mdxComponents = {
   HopCounter,
   WallFilter,
   PilotPlan,
+  DriftCheck,
 };
